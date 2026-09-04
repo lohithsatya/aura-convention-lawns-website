@@ -68,7 +68,7 @@ function aura_customize_register($wp_customize) {
     ));
 
     // Phone
-    $wp_customize->add_setting('aura_phone', array('default' => '+91 98765 43210'));
+    $wp_customize->add_setting('aura_phone', array('default' => '+91 77779 98789'));
     $wp_customize->add_control('aura_phone', array(
         'label'    => __('Phone Number', 'aura-convention-lawns'),
         'section'  => 'aura_contact_section',
@@ -76,7 +76,7 @@ function aura_customize_register($wp_customize) {
     ));
 
     // WhatsApp
-    $wp_customize->add_setting('aura_whatsapp', array('default' => '919876543210'));
+    $wp_customize->add_setting('aura_whatsapp', array('default' => '917777998789'));
     $wp_customize->add_control('aura_whatsapp', array(
         'label'    => __('WhatsApp Number (no plus or spaces)', 'aura-convention-lawns'),
         'section'  => 'aura_contact_section',

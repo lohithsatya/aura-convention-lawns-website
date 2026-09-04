@@ -1,9 +1,467 @@
 /*
-   AURA CONVENTION & LAWNS - Interactive Scripts
-   Features: Sticky navbar, Mobile menu, Form validation, WhatsApp direct routing, Gallery Lightbox
+   AURA CONVENTION & LAWNS - Interactive Scripts & Comprehensive Dynamic CMS
+   Features:
+   - Dynamic Site Configuration (localStorage persistence)
+   - Secret Admin Portal on URL hash /#admin (No public buttons)
+   - Persistent Login & Master Password Reset
+   - Full "About Our Venue" Content & Grid Card Editor
+   - Full "Halls & Spaces" Dynamic CRUD (Add, Edit, Remove Hall Cards)
+   - Main Website 6-Image Rule (First 6 images on homepage, all in modal)
+   - Clean Fullscreen Lightbox (Zero broken icons or document flow leakage)
+   - Automatic Redirect on "Save & Apply Changes"
+   - Photo Gallery Manager with Client-Side Auto-Compression
+   - Direct WhatsApp & Inquiry Routing
 */
 
+// Default fallback configuration for Aura Convention & Lawns
+const DEFAULT_AURA_CONFIG = {
+  about: {
+    title: "Crafting Unforgettable Celebrations",
+    intro: "Nestled amidst serene surroundings in Telecom Nagar Extension, Gachibowli, Aura Convention & Lawns is thoughtfully designed to make your once-in-a-lifetime moments truly extraordinary. With royal architectural grandeur, opulent modern interiors, and heartfelt service, we turn your wedding dreams into beautiful, unforgettable realities.",
+    image: "assets/images/about_venue_entrance.jpg",
+    features: [
+      {
+        title: "Serene Location",
+        badge: "★ LUSH GREEN RETREAT",
+        desc: "Tranquil green surroundings in Telecom Nagar Extension, conveniently located just 5 mins from ORR Gachibowli."
+      },
+      {
+        title: "Royal Ambiance",
+        badge: "★ CRYSTAL CHANDELIERS",
+        desc: "Pillars and grand halls with soaring ceilings, opulent floral stages, and traditional-yet-modern royal aesthetics."
+      },
+      {
+        title: "5-Star Hospitality",
+        badge: "★ ATTENTIVE CARE",
+        desc: "Dedicated event directors, seasoned banquet managers, and warm hospitality staff ensuring flawless execution."
+      },
+      {
+        title: "Grand Celebrations",
+        badge: "★ FLAWLESS EXECUTION",
+        desc: "Comprehensive event coordination from grand mandap design and royal catering to valet management."
+      }
+    ]
+  },
+  contact: {
+    phone: "+91 77779 98789",
+    phoneRaw: "+917777998789",
+    whatsapp: "917777998789",
+    email: "info@auraconvention.com",
+    address: "Telecom Nagar Extension, Gachibowli, Hyderabad, Telangana 500032"
+  },
+  stats: {
+    area: "35,000+",
+    capacity: "1,000+",
+    parking: "50+"
+  },
+  halls: [
+    {
+      title: "Grand Ballroom",
+      badge: "1,500 GUESTS",
+      guests: "1,500 Guests",
+      area: "12,000 sq.ft",
+      image: "assets/images/hall_grand_stage.jpg",
+      desc: "Majestic high-ceiling indoor banquet hall featuring crystal chandeliers, grand stage, acoustic walls, and integrated royal lighting for lavish wedding receptions."
+    },
+    {
+      title: "Lotus Hall",
+      badge: "500 GUESTS",
+      guests: "500 Guests",
+      area: "4,500 sq.ft",
+      image: "assets/images/expo_canopy.jpg",
+      desc: "An intimate, elegant banquet space designed for engagement ceremonies, sangeet gatherings, pre-wedding festivities, and corporate banquets."
+    },
+    {
+      title: "Aura Royal Lawns",
+      badge: "2,000 GUESTS",
+      guests: "2,000 Guests",
+      area: "20,000 sq.ft",
+      image: "assets/images/lawn_night_stage.jpg",
+      desc: "Expansive open-air manicured lawns surrounded by lush greenery and ambient fairy lighting. Ideal for grand wedding receptions, outdoor mandaps, and cultural expos."
+    }
+  ],
+  gallery: [
+    { src: "assets/images/hall_grand_stage.jpg", title: "Aura Grand Ballroom Stage", span: "1" },
+    { src: "assets/images/lawn_night_stage.jpg", title: "Outdoor Floral Mandap", span: "1" },
+    { src: "assets/images/expo_canopy.jpg", title: "Festival Canopy Pavilion", span: "1" },
+    { src: "assets/images/art_craft_exhibition.jpg", title: "Art & Craft Expo Wall", span: "1" },
+    { src: "assets/images/about_venue_entrance.jpg", title: "Grand Entrance Courtyard", span: "2" },
+    { src: "assets/images/catering_grand_feast.jpg", title: "Royal Wedding Buffet Spread", span: "2" }
+  ],
+  admin: {
+    user: "admin",
+    pass: "aura@2026"
+  }
+};
+
+// Global gallery deletion handler
+window.deleteGalleryItem = function(idx) {
+  const cfg = getSiteConfig();
+  if (!cfg.gallery || !Array.isArray(cfg.gallery)) {
+    cfg.gallery = [...DEFAULT_AURA_CONFIG.gallery];
+  }
+  if (idx >= 0 && idx < cfg.gallery.length) {
+    const deletedItem = cfg.gallery[idx];
+    const itemTitle = deletedItem?.title || ('Photo #' + (idx + 1));
+    cfg.gallery.splice(idx, 1);
+    saveSiteConfig(cfg);
+    hydrateDOM(cfg);
+    if (typeof renderAdminGalleryList === 'function') {
+      renderAdminGalleryList(cfg.gallery);
+    }
+    if (typeof showAdminToast === 'function') {
+      showAdminToast(`✓ Deleted image: "${itemTitle}"`);
+    }
+  }
+};
+
+// Storage helper functions
+function getSiteConfig() {
+  try {
+    const saved = localStorage.getItem('aura_venue_config');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.contact) {
+        if (parsed.contact.phone && parsed.contact.phone.includes('98765')) {
+          parsed.contact.phone = '+91 77779 98789';
+          parsed.contact.phoneRaw = '+917777998789';
+          parsed.contact.whatsapp = '917777998789';
+        }
+      }
+      return { 
+        ...DEFAULT_AURA_CONFIG, 
+        ...parsed,
+        about: { ...DEFAULT_AURA_CONFIG.about, ...(parsed.about || {}) },
+        contact: { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) },
+        stats: { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) },
+        halls: (parsed.halls && Array.isArray(parsed.halls) && parsed.halls.length) ? parsed.halls : DEFAULT_AURA_CONFIG.halls,
+        gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length > 0) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
+        admin: { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) }
+      };
+    }
+  } catch (e) {
+    console.warn('Could not read saved aura config:', e);
+  }
+  return JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG));
+}
+
+function saveSiteConfig(cfg) {
+  try {
+    localStorage.setItem('aura_venue_config', JSON.stringify(cfg));
+    return true;
+  } catch (e) {
+    console.error('Could not save aura config to localStorage:', e);
+    alert('Warning: Browser storage limit reached. Please remove older uploaded images or use web URLs.');
+    return false;
+  }
+}
+
+// Compress client-uploaded images to prevent localStorage quota issues
+function compressImage(file, maxWidth, callback) {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = (event) => {
+    const img = new Image();
+    img.src = event.target.result;
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+      callback(dataUrl);
+    };
+  };
+}
+
+// Hydrate DOM with active configuration
+function hydrateDOM(cfg) {
+  if (!cfg) return;
+
+  // 1. About Our Venue section
+  if (cfg.about) {
+    document.querySelectorAll('[data-aura="aboutTitle"]').forEach(el => {
+      el.textContent = cfg.about.title;
+    });
+    document.querySelectorAll('[data-aura="aboutIntro"]').forEach(el => {
+      el.innerHTML = cfg.about.intro;
+    });
+    const aboutImg = document.querySelector('.about-img-cover');
+    if (aboutImg && cfg.about.image) {
+      aboutImg.src = cfg.about.image;
+    }
+
+    // Render About Features Grid
+    const featGrid = document.getElementById('auraAboutFeaturesGrid') || document.querySelector('.about-features-grid');
+    if (featGrid && cfg.about.features && cfg.about.features.length) {
+      let fHtml = '';
+      cfg.about.features.forEach((f, idx) => {
+        const icons = [
+          `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>`,
+          `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16M4 6h16M6 6v16M10 6v16M14 6v16M18 6v16M12 2 4 6h16l-8-4z"/></svg>`,
+          `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="m12 11-2 2-1-1"/></svg>`,
+          `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>`
+        ];
+        const iconSvg = icons[idx % icons.length];
+
+        fHtml += `
+          <div class="feature-card-rich">
+            <div class="feature-top">
+              <div class="feature-icon-circle">${iconSvg}</div>
+              <div class="feature-title-wrap">
+                <h4>${f.title}</h4>
+                <span class="feature-pill-gold">${f.badge}</span>
+              </div>
+            </div>
+            <p>${f.desc}</p>
+          </div>`;
+      });
+      featGrid.innerHTML = fHtml;
+    }
+  }
+
+  // Helper to extract clean international digits
+  function toCleanDigits(val) {
+    let d = String(val || '').replace(/\D/g, '');
+    if (d.length === 10) d = '91' + d;
+    return d || '917777998789';
+  }
+
+  const activeWaDigits = toCleanDigits(cfg.contact.whatsapp || cfg.contact.phone);
+  const activeDialDigits = toCleanDigits(cfg.contact.phoneRaw || cfg.contact.phone);
+
+  // 1. Update ALL phone text displays
+  document.querySelectorAll('[data-aura="phone"]').forEach(el => {
+    el.textContent = cfg.contact.phone;
+  });
+
+  // 2. Update ALL tel: call buttons and links
+  document.querySelectorAll('a[href^="tel:"], [data-aura-href="tel"]').forEach(el => {
+    el.href = `tel:+${activeDialDigits}`;
+  });
+
+  // 3. Update ALL email text displays
+  document.querySelectorAll('[data-aura="email"]').forEach(el => {
+    el.textContent = cfg.contact.email;
+  });
+
+  // 4. Update ALL mailto: buttons and links
+  document.querySelectorAll('a[href^="mailto:"], [data-aura-href="mailto"]').forEach(el => {
+    el.href = `mailto:${cfg.contact.email}`;
+  });
+
+  // 5. Update Address text displays
+  document.querySelectorAll('[data-aura="address"]').forEach(el => {
+    el.textContent = cfg.contact.address;
+  });
+
+  // 6. Update EVERY WhatsApp link, button, and floating widget on the page!
+  document.querySelectorAll('a[href*="wa.me"], [data-aura-href="whatsapp"], .btn-whatsapp, .aura-floating-wa').forEach(el => {
+    let rawHref = el.getAttribute('href') || '';
+    let customText = '';
+    if (rawHref.includes('text=')) {
+      const match = rawHref.match(/[?&]text=([^&]+)/);
+      if (match) customText = match[1];
+    }
+    if (!customText && el.getAttribute('data-wa-text')) {
+      customText = encodeURIComponent(el.getAttribute('data-wa-text'));
+    }
+    if (!customText) {
+      customText = encodeURIComponent("Hi, I would like to inquire about booking Aura Convention & Lawns.");
+    }
+    el.href = `https://wa.me/${activeWaDigits}?text=${customText}`;
+  });
+
+  // 3. Stats counters
+  document.querySelectorAll('[data-aura-stat="area"]').forEach(el => {
+    el.textContent = cfg.stats.area;
+  });
+  document.querySelectorAll('[data-aura-stat="capacity"]').forEach(el => {
+    el.textContent = cfg.stats.capacity;
+  });
+  document.querySelectorAll('[data-aura-stat="parking"]').forEach(el => {
+    el.textContent = cfg.stats.parking;
+  });
+
+  // 4. Halls & Spaces Dynamic Rendering
+  const hallsGrid = document.getElementById('auraHallsGrid') || document.querySelector('.halls-grid');
+  if (hallsGrid && cfg.halls && cfg.halls.length) {
+    let hHtml = '';
+    cfg.halls.forEach((h, idx) => {
+      hHtml += `
+        <div class="hall-card">
+          <div class="hall-image">
+            <img src="${h.image || 'assets/images/hall_grand_stage.jpg'}" alt="${h.title}">
+            <span class="hall-badge-tag">${h.badge || (h.guests ? h.guests.toUpperCase() : 'EVENT SPACE')}</span>
+          </div>
+          <div class="hall-body">
+            <h3 class="hall-title">${h.title}</h3>
+            <div class="hall-specs">
+              <div class="spec-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>${h.guests}</span>
+              </div>
+              <div class="spec-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                <span>${h.area}</span>
+              </div>
+            </div>
+            <p class="hall-desc">${h.desc}</p>
+            <a href="#contact" class="hall-link">
+              VIEW DETAILS & PRICING
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>`;
+    });
+    hallsGrid.innerHTML = hHtml;
+  }
+
+  // 5. MAIN WEBSITE GALLERY: Strictly first 6 images!
+  const galleryContainer = document.getElementById('auraGalleryGrid') || document.querySelector('.gallery-grid-ref');
+  if (galleryContainer && cfg.gallery && cfg.gallery.length) {
+    const homeImages = cfg.gallery.slice(0, 6);
+    const top4 = homeImages.slice(0, 4);
+    const bottom2 = homeImages.slice(4, 6);
+
+    let html = '';
+    if (top4.length) {
+      html += '<div class="gallery-row-top">';
+      top4.forEach(item => {
+        html += `
+          <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
+            <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>`;
+      });
+      html += '</div>';
+    }
+
+    if (bottom2.length) {
+      html += '<div class="gallery-row-bottom">';
+      bottom2.forEach(item => {
+        html += `
+          <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
+            <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>`;
+      });
+      html += '</div>';
+    }
+
+    galleryContainer.innerHTML = html;
+  }
+
+  // 6. Pre-populate Full Gallery Modal
+  renderFullGalleryModalGrid(cfg.gallery);
+}
+
+// ==============================================================================
+// PROPER LIGHTBOX CONTROLLER (Never renders broken inline icons)
+// ==============================================================================
+window.openLightbox = function(src) {
+  const modal = document.getElementById('lightboxModal');
+  const img = document.getElementById('lightboxImg');
+  if (modal && img && src) {
+    img.src = src;
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+};
+
+window.closeLightbox = function() {
+  const modal = document.getElementById('lightboxModal');
+  const img = document.getElementById('lightboxImg');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    if (img) img.src = '';
+    document.body.style.overflow = 'auto';
+  }
+};
+
+function setupLightbox() {
+  const modal = document.getElementById('lightboxModal');
+  const btnClose = document.getElementById('btnLightboxClose');
+  const backdrop = document.querySelector('.lightbox-backdrop');
+
+  if (btnClose) btnClose.addEventListener('click', closeLightbox);
+  if (backdrop) backdrop.addEventListener('click', closeLightbox);
+}
+
+// ==============================================================================
+// FULL GALLERY MODAL CONTROLLER (Zero Scrolling - Shows ALL Images)
+// ==============================================================================
+function renderFullGalleryModalGrid(gallery) {
+  const grid = document.getElementById('fullGalleryAllGrid');
+  const counter = document.getElementById('fullGalleryCounter');
+  if (!grid) return;
+
+  const items = gallery || [];
+  if (counter) {
+    counter.textContent = `Showing ${items.length} Photos`;
+  }
+
+  if (!items.length) {
+    grid.innerHTML = '<p style="color: #999; font-size: 0.9rem; text-align: center; grid-column: 1/-1;">No photos available in gallery.</p>';
+    return;
+  }
+
+  let html = '';
+  items.forEach((item, idx) => {
+    html += `
+      <div class="full-gallery-item-card" onclick="openLightbox('${item.src}')">
+        <img src="${item.src}" alt="${item.title || 'Aura Celebration Photo'}" loading="lazy">
+        <div class="full-gallery-item-overlay">
+          <span>${item.title || 'Aura Photo ' + (idx + 1)}</span>
+        </div>
+      </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function setupFullGalleryModal() {
+  const btnOpen = document.getElementById('btnOpenFullGallery');
+  const modal = document.getElementById('auraFullGalleryModal');
+  const btnClose = document.getElementById('btnFullGalleryClose');
+  const backdrop = document.querySelector('.aura-full-gallery-backdrop');
+
+  if (btnOpen && modal) {
+    btnOpen.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const cfg = getSiteConfig();
+      renderFullGalleryModalGrid(cfg.gallery);
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    });
+  }
+
+  function closeFullGalleryModal() {
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+  }
+
+  if (btnClose) btnClose.addEventListener('click', closeFullGalleryModal);
+  if (backdrop) backdrop.addEventListener('click', closeFullGalleryModal);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  const currentConfig = getSiteConfig();
+  hydrateDOM(currentConfig);
+  setupLightbox();
+  setupFullGalleryModal();
+
   // 1. Header scroll effect
   const header = document.querySelector('.site-header');
   window.addEventListener('scroll', () => {
@@ -33,88 +491,650 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Gallery Lightbox
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  const lightboxModal = document.getElementById('lightboxModal');
-  const lightboxImg = document.getElementById('lightboxImg');
-  const lightboxClose = document.querySelector('.lightbox-close');
-
-  if (galleryItems.length && lightboxModal && lightboxImg) {
-    galleryItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const img = item.querySelector('img');
-        if (img) {
-          lightboxImg.src = img.src;
-          lightboxModal.classList.add('active');
-        }
-      });
-    });
-
-    if (lightboxClose) {
-      lightboxClose.addEventListener('click', () => {
-        lightboxModal.classList.remove('active');
-      });
-    }
-
-    lightboxModal.addEventListener('click', (e) => {
-      if (e.target === lightboxModal) {
-        lightboxModal.classList.remove('active');
-      }
-    });
-  }
-
-  // 4. Inquiry Form & WhatsApp Routing
+  // 3. Inquiry Form Submission & WhatsApp Routing
   const inquiryForm = document.getElementById('inquiryForm');
-  const whatsappBtn = document.getElementById('whatsappInquireBtn');
-  const successMsg = document.getElementById('formSuccessMsg');
-
-  // WhatsApp number for Aura Convention & Lawns
-  const VENUE_PHONE = '919876543210'; 
-
-  function buildWhatsAppMessage() {
-    const name = document.getElementById('guestName')?.value || 'Guest';
-    const phone = document.getElementById('guestPhone')?.value || 'Not provided';
-    const email = document.getElementById('guestEmail')?.value || 'Not provided';
-    const eventType = document.getElementById('eventType')?.value || 'Event';
-    const eventDate = document.getElementById('eventDate')?.value || 'Upcoming';
-    const guestCount = document.getElementById('guestCount')?.value || 'Flexible';
-    const message = document.getElementById('guestMessage')?.value || 'Please share hall availability and package details.';
-
-    const text = `*New Booking Inquiry - Aura Convention & Lawns*\n\n` +
-      `*Name:* ${name}\n` +
-      `*Phone:* ${phone}\n` +
-      `*Email:* ${email}\n` +
-      `*Event Type:* ${eventType}\n` +
-      `*Event Date:* ${eventDate}\n` +
-      `*Estimated Guests:* ${guestCount}\n` +
-      `*Message:* ${message}`;
-
-    return encodeURIComponent(text);
-  }
+  const formSuccess = document.getElementById('formSuccess');
 
   if (inquiryForm) {
     inquiryForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
-      // Simulate form submission
-      if (successMsg) {
-        successMsg.style.display = 'block';
-        successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
+      const cfg = getSiteConfig();
+      const name = inquiryForm.querySelector('[name="name"]')?.value || 'Guest';
+      const phone = inquiryForm.querySelector('[name="phone"]')?.value || 'Not provided';
+      const email = inquiryForm.querySelector('[name="email"]')?.value || 'Not provided';
+      const eventType = inquiryForm.querySelector('[name="event_type"]')?.value || 'Event';
+      const eventDate = inquiryForm.querySelector('[name="event_date"]')?.value || 'Upcoming';
+      const guests = inquiryForm.querySelector('[name="guests"]')?.value || 'Flexible';
+      const message = inquiryForm.querySelector('[name="message"]')?.value || 'Please share hall availability and package details.';
 
-      // Also trigger WhatsApp option after 1 second
+      if (formSuccess) formSuccess.style.display = 'block';
+
+      const text = `*New Booking Inquiry - Aura Convention & Lawns*\n\n` +
+        `*Name:* ${name}\n` +
+        `*Phone:* ${phone}\n` +
+        `*Email:* ${email}\n` +
+        `*Event Type:* ${eventType}\n` +
+        `*Event Date:* ${eventDate}\n` +
+        `*Estimated Guests:* ${guests}\n` +
+        `*Message:* ${message}`;
+
       setTimeout(() => {
-        const waUrl = `https://api.whatsapp.com/send?phone=${VENUE_PHONE}&text=${buildWhatsAppMessage()}`;
+        let activeWa = String(cfg.contact.whatsapp || cfg.contact.phone || '').replace(/\D/g, '');
+        if (activeWa.length === 10) activeWa = '91' + activeWa;
+        if (!activeWa) activeWa = '917777998789';
+        const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(text)}`;
         window.open(waUrl, '_blank');
-      }, 800);
+      }, 700);
     });
   }
 
-  if (whatsappBtn) {
-    whatsappBtn.addEventListener('click', (e) => {
+  // ==========================================================================
+  // 4. SECRET ADMIN PORTAL (/#admin) ROUTER & PERSISTENT SESSION
+  // ==========================================================================
+  function getAdminPortalEl() {
+    return document.getElementById('auraAdminPortal');
+  }
+  function getAdminLoginCardEl() {
+    return document.getElementById('adminLoginCard');
+  }
+  function getAdminDashboardEl() {
+    return document.getElementById('adminDashboard');
+  }
+  function getAdminLoginFormEl() {
+    return document.getElementById('adminLoginForm');
+  }
+  function getAdminLoginErrorEl() {
+    return document.getElementById('adminLoginError');
+  }
+
+  function checkAdminRoute() {
+    const rawHash = (window.location.hash || '').toLowerCase().trim();
+    if (rawHash === '#admin' || rawHash === '#/admin' || rawHash === '#admin/' || rawHash.startsWith('#admin')) {
+      openAdminPortal();
+    } else {
+      closeAdminPortal();
+    }
+  }
+
+  window.addEventListener('hashchange', checkAdminRoute);
+  window.addEventListener('load', checkAdminRoute);
+
+  function openAdminPortal() {
+    const portal = getAdminPortalEl();
+    if (!portal) {
+      console.warn('auraAdminPortal element not found in DOM');
+      return;
+    }
+    portal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    // Ensure tab and form listeners are wired
+    bindAdminInteractions();
+
+    // PERSISTENT LOGIN (localStorage): Don't force logout on tab close!
+    const isAuth = localStorage.getItem('aura_admin_logged_in') === 'true';
+    if (isAuth) {
+      showDashboard();
+    } else {
+      showLogin();
+    }
+  }
+  window.openAdminPortal = openAdminPortal;
+
+  window.closeAdminPortal = function() {
+    const portal = getAdminPortalEl();
+    if (portal) {
+      portal.style.display = 'none';
+    }
+    document.body.style.overflow = 'auto';
+    const rawHash = (window.location.hash || '').toLowerCase().trim();
+    if (rawHash.includes('admin')) {
+      history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
+  };
+
+  function showLogin() {
+    const loginCard = getAdminLoginCardEl();
+    const dashboard = getAdminDashboardEl();
+    if (loginCard) loginCard.style.display = 'block';
+    if (dashboard) dashboard.style.display = 'none';
+  }
+
+  function showDashboard() {
+    const loginCard = getAdminLoginCardEl();
+    const dashboard = getAdminDashboardEl();
+    if (loginCard) loginCard.style.display = 'none';
+    if (dashboard) dashboard.style.display = 'flex';
+    populateAdminFields();
+  }
+
+  let adminBound = false;
+  function bindAdminInteractions() {
+    if (adminBound) return;
+    adminBound = true;
+    setupAdminFormsAndTabs();
+  }
+
+  function setupAdminFormsAndTabs() {
+    const adminLoginForm = getAdminLoginFormEl();
+    const adminLoginError = getAdminLoginErrorEl();
+    if (adminLoginForm) {
+    adminLoginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const waUrl = `https://api.whatsapp.com/send?phone=${VENUE_PHONE}&text=${buildWhatsAppMessage()}`;
-      window.open(waUrl, '_blank');
+      const cfg = getSiteConfig();
+      const u = document.getElementById('adminUser')?.value.trim();
+      const p = document.getElementById('adminPass')?.value.trim();
+
+      if (u === cfg.admin.user && p === cfg.admin.pass) {
+        localStorage.setItem('aura_admin_logged_in', 'true');
+        if (adminLoginError) adminLoginError.style.display = 'none';
+        showDashboard();
+        showAdminToast('✓ Welcome to Aura Admin Console');
+      } else {
+        if (adminLoginError) {
+          adminLoginError.textContent = 'Invalid credentials. If forgotten, click Reset Password below.';
+          adminLoginError.style.display = 'block';
+        }
+      }
     });
+  }
+
+  // Forgot Password Toggle
+  const btnToggleForgot = document.getElementById('btnToggleForgot');
+  const adminForgotBox = document.getElementById('adminForgotBox');
+  if (btnToggleForgot && adminForgotBox) {
+    btnToggleForgot.addEventListener('click', () => {
+      adminForgotBox.style.display = adminForgotBox.style.display === 'none' ? 'block' : 'none';
+    });
+  }
+
+  // Reset Password Form (Recovery Key: aura2026)
+  const adminResetForm = document.getElementById('adminResetForm');
+  if (adminResetForm) {
+    adminResetForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const key = document.getElementById('resetKey')?.value.trim();
+      const newPass = document.getElementById('resetNewPass')?.value.trim();
+
+      if (key === 'aura2026' || key === 'aura@2026' || key.toLowerCase() === 'reset') {
+        const cfg = getSiteConfig();
+        cfg.admin.pass = newPass;
+        saveSiteConfig(cfg);
+        localStorage.setItem('aura_admin_logged_in', 'true');
+        showDashboard();
+        showAdminToast('✓ Password reset successfully! You are logged in.');
+      } else {
+        alert('Invalid Recovery Key. Use "aura2026" or contact your site developer.');
+      }
+    });
+  }
+
+  // Populate Admin Inputs from Configuration
+  function populateAdminFields() {
+    const cfg = getSiteConfig();
+    
+    // 1. About section fields
+    const aboutTitle = document.getElementById('cfgAboutTitle');
+    const aboutImg = document.getElementById('cfgAboutImage');
+    const aboutIntro = document.getElementById('cfgAboutIntro');
+    if (aboutTitle) aboutTitle.value = cfg.about.title;
+    if (aboutImg) aboutImg.value = cfg.about.image;
+    if (aboutIntro) aboutIntro.value = cfg.about.intro;
+    renderAdminAboutFeatures(cfg.about.features);
+
+    // 2. Contact fields
+    const phoneInput = document.getElementById('cfgPhone');
+    const waInput = document.getElementById('cfgWhatsapp');
+    const emailInput = document.getElementById('cfgEmail');
+    const addrInput = document.getElementById('cfgAddress');
+    if (phoneInput) phoneInput.value = cfg.contact.phone;
+    if (waInput) waInput.value = cfg.contact.whatsapp;
+    if (emailInput) emailInput.value = cfg.contact.email;
+    if (addrInput) addrInput.value = cfg.contact.address;
+
+    // 3. Stats fields
+    const areaInput = document.getElementById('cfgArea');
+    const capInput = document.getElementById('cfgCapacity');
+    const parkInput = document.getElementById('cfgParking');
+    if (areaInput) areaInput.value = cfg.stats.area;
+    if (capInput) capInput.value = cfg.stats.capacity;
+    if (parkInput) parkInput.value = cfg.stats.parking;
+
+    // 4. Halls Manager List (Dynamic CRUD)
+    renderAdminHallsList(cfg.halls);
+
+    // 5. Gallery Manager List
+    renderAdminGalleryList(cfg.gallery);
+  }
+
+  // ==========================================
+  // HALLS & SPACES CRUD IN ADMIN
+  // ==========================================
+  function renderAdminHallsList(halls) {
+    const list = document.getElementById('adminHallsList');
+    if (!list) return;
+
+    if (!halls || !halls.length) {
+      list.innerHTML = '<p style="color: #999; font-size: 0.82rem;">No halls in spaces list.</p>';
+      return;
+    }
+
+    let html = '';
+    halls.forEach((h, idx) => {
+      html += `
+        <div class="admin-about-card-row">
+          <button type="button" class="btn-admin-del card-del-btn" onclick="deleteHallCard(${idx})">&times; Remove Hall</button>
+          
+          <div class="admin-grid-2col" style="margin-bottom: 8px;">
+            <div class="admin-form-group" style="margin-bottom: 6px;">
+              <label>Hall Name</label>
+              <input type="text" value="${h.title}" onchange="updateHallField(${idx}, 'title', this.value)">
+            </div>
+            <div class="admin-form-group" style="margin-bottom: 6px;">
+              <label>Capacity Badge</label>
+              <input type="text" value="${h.badge}" onchange="updateHallField(${idx}, 'badge', this.value)">
+            </div>
+          </div>
+
+          <div class="admin-grid-2col" style="margin-bottom: 8px;">
+            <div class="admin-form-group" style="margin-bottom: 6px;">
+              <label>Guests Display</label>
+              <input type="text" value="${h.guests}" onchange="updateHallField(${idx}, 'guests', this.value)">
+            </div>
+            <div class="admin-form-group" style="margin-bottom: 6px;">
+              <label>Area (Sq.Ft)</label>
+              <input type="text" value="${h.area}" onchange="updateHallField(${idx}, 'area', this.value)">
+            </div>
+          </div>
+
+          <div class="admin-form-group" style="margin-bottom: 6px;">
+            <label>Image URL / Path</label>
+            <input type="text" value="${h.image || ''}" onchange="updateHallField(${idx}, 'image', this.value)">
+          </div>
+
+          <div class="admin-form-group" style="margin-bottom: 0;">
+            <label>Hall Description</label>
+            <input type="text" value="${h.desc}" onchange="updateHallField(${idx}, 'desc', this.value)">
+          </div>
+        </div>`;
+    });
+    list.innerHTML = html;
+  }
+
+  window.updateHallField = function(idx, field, val) {
+    const cfg = getSiteConfig();
+    if (cfg.halls && cfg.halls[idx]) {
+      cfg.halls[idx][field] = val;
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+    }
+  };
+
+  window.deleteHallCard = function(idx) {
+    const cfg = getSiteConfig();
+    if (cfg.halls && cfg.halls.length > idx) {
+      cfg.halls.splice(idx, 1);
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+      renderAdminHallsList(cfg.halls);
+      showAdminToast('✓ Hall card removed!');
+    }
+  };
+
+  const btnAddHallCard = document.getElementById('btnAddHallCard');
+  if (btnAddHallCard) {
+    btnAddHallCard.addEventListener('click', () => {
+      const titleInput = document.getElementById('newHallTitle');
+      const badgeInput = document.getElementById('newHallBadge');
+      const guestsInput = document.getElementById('newHallGuests');
+      const areaInput = document.getElementById('newHallArea');
+      const imageInput = document.getElementById('newHallImage');
+      const descInput = document.getElementById('newHallDesc');
+
+      const title = titleInput?.value.trim() || 'Royal Banquet Space';
+      const guests = guestsInput?.value.trim() || '500 Guests';
+      const badge = badgeInput?.value.trim() || guests.toUpperCase();
+      const area = areaInput?.value.trim() || '5,000 sq.ft';
+      const image = imageInput?.value.trim() || 'assets/images/expo_canopy.jpg';
+      const desc = descInput?.value.trim() || 'Lavish celebration space with ambient lighting and royal infrastructure.';
+
+      const cfg = getSiteConfig();
+      if (!cfg.halls) cfg.halls = [];
+      cfg.halls.push({ title, badge, guests, area, image, desc });
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+      renderAdminHallsList(cfg.halls);
+
+      if (titleInput) titleInput.value = '';
+      if (badgeInput) badgeInput.value = '';
+      if (guestsInput) guestsInput.value = '';
+      if (areaInput) areaInput.value = '';
+      if (imageInput) imageInput.value = '';
+      if (descInput) descInput.value = '';
+      showAdminToast('✓ Added new Hall / Space card to grid!');
+    });
+  }
+
+  // ==========================================
+  // ABOUT SECTION FEATURES CRUD IN ADMIN
+  // ==========================================
+  function renderAdminAboutFeatures(features) {
+    const list = document.getElementById('adminAboutFeaturesList');
+    if (!list) return;
+
+    if (!features || !features.length) {
+      list.innerHTML = '<p style="color: #999; font-size: 0.82rem;">No feature cards in About section.</p>';
+      return;
+    }
+
+    let html = '';
+    features.forEach((f, idx) => {
+      html += `
+        <div class="admin-about-card-row">
+          <button type="button" class="btn-admin-del card-del-btn" onclick="deleteAboutFeature(${idx})">&times; Remove Card</button>
+          <div class="admin-grid-2col" style="margin-bottom: 8px;">
+            <div class="admin-form-group" style="margin-bottom: 6px;">
+              <label>Card Title</label>
+              <input type="text" value="${f.title}" onchange="updateAboutFeatureField(${idx}, 'title', this.value)">
+            </div>
+            <div class="admin-form-group" style="margin-bottom: 6px;">
+              <label>Badge Pill</label>
+              <input type="text" value="${f.badge}" onchange="updateAboutFeatureField(${idx}, 'badge', this.value)">
+            </div>
+          </div>
+          <div class="admin-form-group" style="margin-bottom: 0;">
+            <label>Card Description</label>
+            <input type="text" value="${f.desc}" onchange="updateAboutFeatureField(${idx}, 'desc', this.value)">
+          </div>
+        </div>`;
+    });
+    list.innerHTML = html;
+  }
+
+  window.updateAboutFeatureField = function(idx, field, val) {
+    const cfg = getSiteConfig();
+    if (cfg.about.features && cfg.about.features[idx]) {
+      cfg.about.features[idx][field] = val;
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+    }
+  };
+
+  window.deleteAboutFeature = function(idx) {
+    const cfg = getSiteConfig();
+    if (cfg.about.features && cfg.about.features.length > idx) {
+      cfg.about.features.splice(idx, 1);
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+      renderAdminAboutFeatures(cfg.about.features);
+      showAdminToast('✓ Feature card removed from About section!');
+    }
+  };
+
+  const btnAddFeatureCard = document.getElementById('btnAddFeatureCard');
+  if (btnAddFeatureCard) {
+    btnAddFeatureCard.addEventListener('click', () => {
+      const titleInput = document.getElementById('newCardTitle');
+      const badgeInput = document.getElementById('newCardBadge');
+      const descInput = document.getElementById('newCardDesc');
+
+      const title = titleInput?.value.trim() || 'Premium Amenity';
+      const badge = badgeInput?.value.trim() || '★ LUXURY SERVICE';
+      const desc = descInput?.value.trim() || 'Dedicated facilities ensuring an unmatched event experience.';
+
+      const cfg = getSiteConfig();
+      if (!cfg.about.features) cfg.about.features = [];
+      cfg.about.features.push({ title, badge, desc });
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+      renderAdminAboutFeatures(cfg.about.features);
+
+      if (titleInput) titleInput.value = '';
+      if (badgeInput) badgeInput.value = '';
+      if (descInput) descInput.value = '';
+      showAdminToast('✓ Added new feature card to About section!');
+    });
+  }
+
+  // ==========================================
+  // GALLERY PHOTOS CRUD IN ADMIN
+  // ==========================================
+  function renderAdminGalleryList(items) {
+    const listContainer = document.getElementById('adminGalleryList');
+    if (!listContainer) return;
+
+    const galleryItems = (items && Array.isArray(items) && items.length > 0)
+      ? items
+      : (DEFAULT_AURA_CONFIG.gallery || []);
+
+    if (!galleryItems || !galleryItems.length) {
+      listContainer.innerHTML = '<p style="color: #999; font-size: 0.85rem; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 6px;">No images currently in gallery. Use the form below to add photos.</p>';
+      return;
+    }
+
+    let html = '';
+    galleryItems.forEach((item, idx) => {
+      const isHome = idx < 6;
+      const title = item.title || ('Gallery Image #' + (idx + 1));
+      const badge = isHome 
+        ? `<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(74, 222, 128, 0.15); color: #4ADE80; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.72rem; border: 1px solid rgba(74, 222, 128, 0.3);">● Live on Homepage (#${idx + 1})</span>`
+        : `<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(197, 160, 89, 0.15); color: #C5A059; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.72rem; border: 1px solid rgba(197, 160, 89, 0.3);">○ View Gallery Modal</span>`;
+
+      html += `
+        <div class="admin-gallery-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: rgba(4, 15, 9, 0.85); border: 1px solid rgba(197, 160, 89, 0.25); border-radius: 8px; margin-bottom: 10px; gap: 14px; transition: border-color 0.2s ease;">
+          <img src="${item.src}" class="admin-gallery-item-thumb" alt="thumb" style="width: 64px; height: 48px; object-fit: cover; border-radius: 6px; border: 1.5px solid rgba(197, 160, 89, 0.4); flex-shrink: 0;">
+          <div class="admin-gallery-item-details" style="flex: 1; min-width: 0;">
+            <div style="font-weight: 600; color: #FFFFFF; font-size: 0.88rem; margin-bottom: 4px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${title}</div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              ${badge}
+              <span style="font-size: 0.72rem; color: #8FA698; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 200px;">${item.src}</span>
+            </div>
+          </div>
+          <button type="button" class="btn-admin-del" onclick="deleteGalleryItem(${idx})" title="Delete '${title}' from gallery" style="background: rgba(220, 53, 69, 0.25); border: 1px solid rgba(220, 53, 69, 0.6); color: #FFA0A0; padding: 7px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: all 0.2s ease;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            Delete Image
+          </button>
+        </div>`;
+    });
+    listContainer.innerHTML = html;
+  }
+
+  window.deleteGalleryItem = function(idx) {
+    const cfg = getSiteConfig();
+    if (cfg.gallery && cfg.gallery.length > idx) {
+      cfg.gallery.splice(idx, 1);
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+      renderAdminGalleryList(cfg.gallery);
+      showAdminToast('✓ Photo removed from gallery!');
+    }
+  };
+
+  const addPhotoBtn = document.getElementById('btnAddGalleryPhoto');
+  if (addPhotoBtn) {
+    addPhotoBtn.addEventListener('click', () => {
+      const urlInput = document.getElementById('newPhotoUrl');
+      const fileInput = document.getElementById('newPhotoFile');
+      const titleInput = document.getElementById('newPhotoTitle');
+      const spanInput = document.getElementById('newPhotoSpan');
+
+      const title = titleInput?.value.trim() || 'Aura Celebration';
+      const span = spanInput?.value || '1';
+
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        compressImage(fileInput.files[0], 1200, (compressedDataUrl) => {
+          const cfg = getSiteConfig();
+          cfg.gallery.push({ src: compressedDataUrl, title: title, span: span });
+          saveSiteConfig(cfg);
+          hydrateDOM(cfg);
+          renderAdminGalleryList(cfg.gallery);
+          fileInput.value = '';
+          if (titleInput) titleInput.value = '';
+          showAdminToast('✓ Photo uploaded & added to gallery collection!');
+        });
+      } else if (urlInput && urlInput.value.trim()) {
+        const cfg = getSiteConfig();
+        cfg.gallery.push({ src: urlInput.value.trim(), title: title, span: span });
+        saveSiteConfig(cfg);
+        hydrateDOM(cfg);
+        renderAdminGalleryList(cfg.gallery);
+        urlInput.value = '';
+        if (titleInput) titleInput.value = '';
+        showAdminToast('✓ Photo URL added to gallery collection!');
+      } else {
+        alert('Please enter an image URL or choose an image file.');
+      }
+    });
+  }
+
+  // ==========================================
+  // ADMIN SECURITY (Change Password)
+  // ==========================================
+  const adminChangePassForm = document.getElementById('adminChangePassForm');
+  if (adminChangePassForm) {
+    adminChangePassForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const p1 = document.getElementById('newAdminPass')?.value.trim();
+      const p2 = document.getElementById('confirmAdminPass')?.value.trim();
+
+      if (!p1) {
+        alert('Password cannot be empty.');
+        return;
+      }
+      if (p1 !== p2) {
+        alert('Passwords do not match. Please re-enter.');
+        return;
+      }
+
+      const cfg = getSiteConfig();
+      cfg.admin.pass = p1;
+      saveSiteConfig(cfg);
+      showAdminToast('✓ Admin password updated successfully!');
+      adminChangePassForm.reset();
+    });
+  }
+
+  const btnResetPassDefault = document.getElementById('btnResetPassDefault');
+  if (btnResetPassDefault) {
+    btnResetPassDefault.addEventListener('click', () => {
+      if (confirm('Reset admin password to factory default: "aura@2026"?')) {
+        const cfg = getSiteConfig();
+        cfg.admin.pass = 'aura@2026';
+        saveSiteConfig(cfg);
+        showAdminToast('✓ Password reset to factory default: "aura@2026"');
+      }
+    });
+  }
+
+  // Save All Changes Button: Automatically redirects to live updated website!
+  const btnSaveAdmin = document.getElementById('btnSaveAdmin');
+  if (btnSaveAdmin) {
+    btnSaveAdmin.addEventListener('click', () => {
+      const cfg = getSiteConfig();
+
+      // Read about inputs
+      cfg.about.title = document.getElementById('cfgAboutTitle')?.value.trim() || cfg.about.title;
+      cfg.about.image = document.getElementById('cfgAboutImage')?.value.trim() || cfg.about.image;
+      cfg.about.intro = document.getElementById('cfgAboutIntro')?.value.trim() || cfg.about.intro;
+
+      // Read contact inputs
+      cfg.contact.phone = document.getElementById('cfgPhone')?.value.trim() || cfg.contact.phone;
+      const userWaInput = document.getElementById('cfgWhatsapp')?.value.trim();
+      if (userWaInput) {
+        cfg.contact.whatsapp = userWaInput.replace(/\D/g, '');
+      } else {
+        // Automatically derive clean international digits from phone
+        let pDigits = cfg.contact.phone.replace(/\D/g, '');
+        if (pDigits.length === 10) pDigits = '91' + pDigits;
+        cfg.contact.whatsapp = pDigits || '917777998789';
+      }
+      let rawPhone = cfg.contact.phone.replace(/\D/g, '');
+      if (rawPhone.length === 10) rawPhone = '91' + rawPhone;
+      cfg.contact.phoneRaw = '+' + rawPhone;
+      cfg.contact.email = document.getElementById('cfgEmail')?.value.trim() || cfg.contact.email;
+      cfg.contact.address = document.getElementById('cfgAddress')?.value.trim() || cfg.contact.address;
+
+      // Read stats inputs
+      cfg.stats.area = document.getElementById('cfgArea')?.value.trim() || cfg.stats.area;
+      cfg.stats.capacity = document.getElementById('cfgCapacity')?.value.trim() || cfg.stats.capacity;
+      cfg.stats.parking = document.getElementById('cfgParking')?.value.trim() || cfg.stats.parking;
+
+      saveSiteConfig(cfg);
+      hydrateDOM(cfg);
+      
+      // Automatically redirect to the updated live website!
+      closeAdminPortal();
+      showAdminToast('✓ All changes saved & applied live on website!');
+    });
+  }
+
+  // Reset to Defaults Button
+  const btnResetAdmin = document.getElementById('btnResetAdmin');
+  if (btnResetAdmin) {
+    btnResetAdmin.addEventListener('click', () => {
+      if (confirm('Are you sure you want to reset all content back to factory defaults?')) {
+        saveSiteConfig(DEFAULT_AURA_CONFIG);
+        hydrateDOM(DEFAULT_AURA_CONFIG);
+        populateAdminFields();
+        showAdminToast('✓ Reset to factory defaults!');
+      }
+    });
+  }
+
+  // Admin Tab Switching
+  document.querySelectorAll('.admin-nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.admin-nav-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      const targetId = tab.getAttribute('data-tab');
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) {
+        targetPane.classList.add('active');
+        if (targetId === 'paneGallery') {
+          const cfg = getSiteConfig();
+          renderAdminGalleryList(cfg.gallery);
+        } else if (targetId === 'paneHalls') {
+          const cfg = getSiteConfig();
+          renderAdminHallsList(cfg.halls);
+        }
+      }
+    });
+  });
+
+  // Admin Logout Button
+  const btnAdminLogout = document.getElementById('btnAdminLogout');
+  if (btnAdminLogout) {
+    btnAdminLogout.addEventListener('click', () => {
+      localStorage.removeItem('aura_admin_logged_in');
+      showLogin();
+      showAdminToast('Logged out successfully.');
+    });
+  }
+
+  // Admin Close Buttons (Back to Site)
+  document.querySelectorAll('#btnAdminClose').forEach(btn => {
+    btn.addEventListener('click', closeAdminPortal);
+  });
+
+  }
+  bindAdminInteractions();
+  checkAdminRoute();
+
+  // Toast alert function
+  function showAdminToast(msg) {
+    let toast = document.getElementById('auraAdminToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'auraAdminToast';
+      toast.className = 'aura-admin-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
   }
 });

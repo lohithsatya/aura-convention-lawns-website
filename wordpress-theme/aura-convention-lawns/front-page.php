@@ -388,7 +388,7 @@ get_header();
               </div>
               <div class="info-details">
                 <h5>Call Direct</h5>
-                <a href="tel:<?php echo esc_attr(get_theme_mod('aura_phone', '+91 98765 43210')); ?>"><?php echo esc_html(get_theme_mod('aura_phone', '+91 98765 43210')); ?></a>
+                <a href="tel:<?php echo esc_attr(get_theme_mod('aura_phone', '+91 77779 98789')); ?>"><?php echo esc_html(get_theme_mod('aura_phone', '+91 77779 98789')); ?></a>
               </div>
             </div>
 
