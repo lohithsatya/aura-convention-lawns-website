@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="40" fill="none">
+  <!-- Mirror Outer Arch Frame -->
+  <path d="M14 40V22C14 16.477 18.477 12 24 12C29.523 12 34 16.477 34 22V40" stroke="#E5C378" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Mirror Inner Glass -->
+  <path d="M18 38V23C18 19.686 20.686 17 24 17C27.314 17 30 19.686 30 23V38" stroke="#C5A059" stroke-width="1.5" stroke-dasharray="2 2" fill="rgba(229,195,120,0.15)"/>
+  <!-- Mirror Lights (Vanity bulbs) -->
+  <circle cx="14" cy="22" r="2" fill="#FFE599"/>
+  <circle cx="16" cy="15" r="2" fill="#FFE599"/>
+  <circle cx="24" cy="12" r="2.2" fill="#FFF"/>
+  <circle cx="32" cy="15" r="2" fill="#FFE599"/>
+  <circle cx="34" cy="22" r="2" fill="#FFE599"/>
+  <!-- Vanity Table Surface -->
+  <path d="M8 40H40" stroke="#E5C378" stroke-width="3" stroke-linecap="round"/>
+  <!-- Sparkle Star -->
+  <path d="M38 8L39 12L43 13L39 14L38 18L37 14L33 13L37 12Z" fill="#FFF2B2"/>
+  <path d="M10 28L11 30L13 31L11 32L10 34L9 32L7 31L9 30Z" fill="#FFF2B2"/>
+</svg>

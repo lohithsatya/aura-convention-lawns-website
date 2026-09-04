@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="40" height="40" fill="none">
+  <!-- Clipboard Board -->
+  <rect x="10" y="10" width="28" height="34" rx="4" fill="rgba(229,195,120,0.18)" stroke="#E5C378" stroke-width="2.5"/>
+  <!-- Top Clip with Ring -->
+  <path d="M18 10V7C18 5.895 18.895 5 20 5H28C29.105 5 30 5.895 30 7V10H18Z" fill="#C5A059" stroke="#E5C378" stroke-width="2"/>
+  <circle cx="24" cy="7.5" r="1.5" fill="#FFF"/>
+  <!-- Checkmark Row 1 -->
+  <path d="M16 19L19 22L25 16" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="28" y1="19" x2="33" y2="19" stroke="#E5C378" stroke-width="2" stroke-linecap="round"/>
+  <!-- Checkmark Row 2 -->
+  <path d="M16 28L19 31L25 25" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="28" y1="28" x2="33" y2="28" stroke="#E5C378" stroke-width="2" stroke-linecap="round"/>
+  <!-- Checkmark Row 3 -->
+  <path d="M16 37L19 40L25 34" stroke="#FFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="28" y1="37" x2="33" y2="37" stroke="#E5C378" stroke-width="2" stroke-linecap="round"/>
+</svg>
