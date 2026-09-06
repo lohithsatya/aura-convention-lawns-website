@@ -1058,6 +1058,21 @@ textarea.form-input-ref {
   box-shadow: var(--shadow-gold);
 }
 
+.form-success-msg {
+  display: none;
+  margin-top: 14px;
+  padding: 12px 18px;
+  background: rgba(14, 46, 29, 0.95);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  color: #e6f9ed;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
 /* 7. AMENITIES (Continuous dark emerald bar) */
 .amenities-section {
   background: radial-gradient(circle at 50% 30%, #0A2216 0%, #041007 100%);

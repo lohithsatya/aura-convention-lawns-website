@@ -491,40 +491,83 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Inquiry Form Submission & WhatsApp Routing
+  // 3. Inquiry Form Submission & Direct WhatsApp Draft Routing
   const inquiryForm = document.getElementById('inquiryForm');
-  const formSuccess = document.getElementById('formSuccess');
+  const formSuccess = document.getElementById('formSuccess') || document.getElementById('formSuccessMsg');
 
   if (inquiryForm) {
     inquiryForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const cfg = getSiteConfig();
-      const name = inquiryForm.querySelector('[name="name"]')?.value || 'Guest';
-      const phone = inquiryForm.querySelector('[name="phone"]')?.value || 'Not provided';
-      const email = inquiryForm.querySelector('[name="email"]')?.value || 'Not provided';
-      const eventType = inquiryForm.querySelector('[name="event_type"]')?.value || 'Event';
-      const eventDate = inquiryForm.querySelector('[name="event_date"]')?.value || 'Upcoming';
-      const guests = inquiryForm.querySelector('[name="guests"]')?.value || 'Flexible';
-      const message = inquiryForm.querySelector('[name="message"]')?.value || 'Please share hall availability and package details.';
 
-      if (formSuccess) formSuccess.style.display = 'block';
+      const name = (inquiryForm.querySelector('[name="name"], #guestName')?.value || '').trim() || 'Valued Guest';
+      const phone = (inquiryForm.querySelector('[name="phone"], #guestPhone')?.value || '').trim() || 'Not provided';
+      const email = (inquiryForm.querySelector('[name="email"], #guestEmail')?.value || '').trim();
+      const eventType = (inquiryForm.querySelector('[name="event_type"], #eventType')?.value || '').trim() || 'Celebration / Event';
+      const eventDate = (inquiryForm.querySelector('[name="event_date"], #eventDate')?.value || '').trim();
+      const guests = (inquiryForm.querySelector('[name="guests"], #guestCount')?.value || '').trim() || 'Flexible';
+      const message = (inquiryForm.querySelector('[name="message"], #guestMessage')?.value || '').trim();
 
-      const text = `*New Booking Inquiry - Aura Convention & Lawns*\n\n` +
-        `*Name:* ${name}\n` +
-        `*Phone:* ${phone}\n` +
-        `*Email:* ${email}\n` +
-        `*Event Type:* ${eventType}\n` +
-        `*Event Date:* ${eventDate}\n` +
-        `*Estimated Guests:* ${guests}\n` +
-        `*Message:* ${message}`;
+      // Format event date nicely (e.g. 24 Oct 2026)
+      let formattedDate = eventDate || 'Date to be finalized';
+      if (eventDate) {
+        try {
+          const parts = eventDate.split('-');
+          if (parts.length === 3) {
+            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+            if (!isNaN(d.getTime())) {
+              formattedDate = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+          }
+        } catch (err) {}
+      }
 
-      setTimeout(() => {
-        let activeWa = String(cfg.contact.whatsapp || cfg.contact.phone || '').replace(/\D/g, '');
-        if (activeWa.length === 10) activeWa = '91' + activeWa;
-        if (!activeWa) activeWa = '917777998789';
-        const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(text)}`;
-        window.open(waUrl, '_blank');
-      }, 700);
+      // Build WhatsApp message draft with all filled details
+      const text =
+        `✨ *NEW VENUE INQUIRY - AURA CONVENTION & LAWNS* ✨\n\n` +
+        `👤 *Guest Name:* ${name}\n` +
+        `📱 *Phone Number:* ${phone}\n` +
+        `✉️ *Email Address:* ${email || 'Not provided'}\n` +
+        `🎉 *Event Type:* ${eventType}\n` +
+        `📅 *Preferred Date:* ${formattedDate}\n` +
+        `👥 *Estimated Guests:* ${guests}\n` +
+        `📝 *Special Requirements / Notes:*\n${message || 'Please share hall availability, brochure, and customized pricing packages.'}\n\n` +
+        `📍 *Venue:* Aura Convention & Lawns, Gachibowli, Hyderabad\n` +
+        `_Sent via Aura Website Reservation Form_`;
+
+      let activeWa = String(cfg.contact.whatsapp || cfg.contact.phone || '').replace(/\D/g, '');
+      if (activeWa.length === 10) activeWa = '91' + activeWa;
+      if (!activeWa) activeWa = '917777998789';
+
+      const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(text)}`;
+
+      // Show immediate feedback on page
+      if (formSuccess) {
+        formSuccess.innerHTML = `
+          <div style="text-align: center; padding: 4px 0;">
+            <div style="font-weight: 700; color: #d4af37; font-size: 0.95rem; margin-bottom: 6px;">
+              ✓ Details recorded! Redirecting to WhatsApp...
+            </div>
+            <div style="font-size: 0.85rem; color: #b7cebf;">
+              If WhatsApp does not open automatically, <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="color: #25D366; text-decoration: underline; font-weight: 700;">tap here to open WhatsApp</a>.
+            </div>
+          </div>
+        `;
+        formSuccess.style.display = 'block';
+      }
+
+      // Check for mobile user agents
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+      // Open WhatsApp synchronously in the user gesture thread to prevent popup blockers
+      if (isMobile) {
+        window.location.href = waUrl;
+      } else {
+        const opened = window.open(waUrl, '_blank');
+        if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+          window.location.href = waUrl;
+        }
+      }
     });
   }
 

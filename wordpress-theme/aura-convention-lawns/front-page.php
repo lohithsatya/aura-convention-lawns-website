@@ -480,12 +480,12 @@ get_header();
 
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" style="flex: 1;">
-              SEND INQUIRY
+              INQUIRE NOW
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
           </div>
 
-          <div id="formSuccessMsg" class="form-success-msg">
+          <div id="formSuccess" class="form-success-msg">
             ✓ Thank you! Your inquiry has been received. Our venue management team in Gachibowli will reach out shortly.
           </div>
         </form>
