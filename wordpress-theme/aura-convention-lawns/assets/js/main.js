@@ -476,6 +476,22 @@ document.addEventListener('DOMContentLoaded', () => {
   setupLightbox();
   setupFullGalleryModal();
 
+  // Strip any lingering section hash from the URL on page load / refresh (while preserving #admin)
+  if (window.location.hash && !window.location.hash.toLowerCase().includes('admin')) {
+    const initialHash = window.location.hash;
+    history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    if (initialHash && initialHash !== '#home') {
+      setTimeout(() => {
+        const target = document.querySelector(initialHash);
+        if (target) {
+          const headerHeight = document.querySelector('.site-header')?.offsetHeight || 75;
+          const targetTop = target.getBoundingClientRect().top + window.pageYOffset - headerHeight + 5;
+          window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        }
+      }, 80);
+    }
+  }
+
   // 1. Header scroll effect
   const header = document.querySelector('.site-header');
   window.addEventListener('scroll', () => {
@@ -486,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. Mobile navigation toggle
+  // 2. Navigation & Hashless Smooth Scroll (Never pollutes URL with #section)
   const hamburger = document.querySelector('.hamburger');
   const navMenu = document.querySelector('.nav-menu');
   const navLinks = document.querySelectorAll('.nav-link');
@@ -496,14 +512,64 @@ document.addEventListener('DOMContentLoaded', () => {
       navMenu.classList.toggle('active');
       hamburger.classList.toggle('open');
     });
-
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
-        hamburger.classList.remove('open');
-      });
-    });
   }
+
+  // Intercept all internal anchor links (smooth scroll & keep URL clean)
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const hash = link.getAttribute('href');
+      if (!hash || hash === '#' || hash.toLowerCase().includes('admin')) {
+        return; // Allow #admin router to work as intended
+      }
+      e.preventDefault();
+
+      const target = document.querySelector(hash);
+      if (target) {
+        const headerHeight = document.querySelector('.site-header')?.offsetHeight || 75;
+        const targetTop = hash === '#home' ? 0 : (target.getBoundingClientRect().top + window.pageYOffset - headerHeight + 5);
+        window.scrollTo({
+          top: targetTop,
+          behavior: 'smooth'
+        });
+      }
+
+      // If clicked from navbar, update active class
+      if (link.classList.contains('nav-link')) {
+        navLinks.forEach(nl => nl.classList.remove('active'));
+        link.classList.add('active');
+      }
+
+      // Close mobile menu if open
+      if (navMenu && navMenu.classList.contains('active')) {
+        navMenu.classList.remove('active');
+        hamburger?.classList.remove('open');
+      }
+
+      // Ensure address bar stays clean (no #home or #section in URL)
+      if (window.location.hash && !window.location.hash.toLowerCase().includes('admin')) {
+        history.replaceState(null, document.title, window.location.pathname + window.location.search);
+      }
+    });
+  });
+
+  // 3. Scrollspy: dynamically update active nav link as user scrolls WITHOUT changing URL hash
+  const spySections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    const scrollPos = window.pageYOffset + 120;
+    spySections.forEach(sec => {
+      const top = sec.offsetTop;
+      const height = sec.offsetHeight;
+      const id = sec.getAttribute('id');
+      if (scrollPos >= top && scrollPos < top + height) {
+        navLinks.forEach(nl => {
+          if (nl.getAttribute('href') === `#${id}`) {
+            navLinks.forEach(item => item.classList.remove('active'));
+            nl.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { passive: true });
 
   // 3. Inquiry Form Submission & Direct WhatsApp Draft Routing
   const inquiryForm = document.getElementById('inquiryForm');
