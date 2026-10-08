@@ -15,6 +15,16 @@ get_header();
     <div class="hero-drone-slide hero-drone-slide-2"></div>
   </div>
   <div class="hero-overlay"></div>
+
+  <!-- Notification-style Exclusive Partner Pill at Left Top Below Header -->
+  <a href="https://kateringking.com" target="_blank" rel="noopener noreferrer" class="partner-notification-badge">
+    <span class="partner-notification-icon">★</span>
+    <span class="partner-notification-text">
+      <span class="partner-notification-label">EXCLUSIVE FOOD & CATERING PARTNER</span>
+      <span class="partner-notification-brand">KateringKing.com <span class="partner-notification-arrow">↗</span></span>
+    </span>
+  </a>
+
   <div class="container">
     <div class="hero-content">
       <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_logo_transparent.png" alt="Aura Emblem" class="hero-emblem">
@@ -130,18 +140,7 @@ get_header();
                 <span class="feature-pill-gold">KATERINGKING.COM</span>
               </div>
             </div>
-            <p>Artisanal dining with separate 100% pure veg kitchens and live culinary stations.</p>
-          </div>
-        </div>
-
-        <!-- Founder's Note -->
-        <div class="founder-note-card">
-          <div class="founder-note-quote">
-            “At Aura, our intention was never simply to build another event venue. We set out to craft an enduring canvas—a living stage where architecture respects nature, and every occasion is elevated into high art. Whether hosting high-level global leadership or the most sacred personal milestones, we welcome you to experience an enclave where gracious hospitality, quiet luxury, and timeless memories converge effortlessly.”
-          </div>
-          <div class="founder-note-author">
-            <span class="founder-name">Mohammed Azhar Mohiuddin</span>
-            <span class="founder-role">Founder, Mash & Co. & Aura Convention and Lawns</span>
+            <p>Artisanal dining with separate 100% pure veg kitchens and live food counters.</p>
           </div>
         </div>
       </div>
@@ -160,14 +159,14 @@ get_header();
     </div>
 
     <div class="halls-grid">
-      <!-- Hall 1: Convention Hall (MICE & Summits) -->
+      <!-- Hall 1: Convention Hall -->
       <div class="hall-card">
         <div class="hall-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_grand_stage_led_wall.jpg" alt="Aura Convention Hall (MICE & Summits)">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_grand_stage_led_wall.jpg" alt="Convention Hall">
           <span class="hall-badge-tag">EXECUTIVE PRECISION</span>
         </div>
         <div class="hall-body">
-          <h3 class="hall-title">Convention Hall (MICE & Summits)</h3>
+          <h3 class="hall-title">Convention Hall</h3>
           <div class="hall-specs">
             <div class="spec-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -186,14 +185,14 @@ get_header();
         </div>
       </div>
 
-      <!-- Hall 2: Sprawling Royal Lawns -->
+      <!-- Hall 2: Lawns -->
       <div class="hall-card">
         <div class="hall-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_sprawling_lawns_evening.jpg" alt="Aura Sprawling Royal Lawns">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_sprawling_lawns_evening.jpg" alt="Lawns">
           <span class="hall-badge-tag">UNDER THE NIGHT SKY</span>
         </div>
         <div class="hall-body">
-          <h3 class="hall-title">Sprawling Royal Lawns</h3>
+          <h3 class="hall-title">Lawns</h3>
           <div class="hall-specs">
             <div class="spec-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -212,14 +211,14 @@ get_header();
         </div>
       </div>
 
-      <!-- Hall 3: Indoor AC Banquet Hall -->
+      <!-- Hall 3: Banquet Hall -->
       <div class="hall-card">
         <div class="hall-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hall_grand_stage.jpg" alt="Aura Indoor AC Banquet Hall">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hall_grand_stage.jpg" alt="Banquet Hall">
           <span class="hall-badge-tag">OPULENT CLIMATE COMFORT</span>
         </div>
         <div class="hall-body">
-          <h3 class="hall-title">Indoor AC Banquet Hall</h3>
+          <h3 class="hall-title">Banquet Hall</h3>
           <div class="hall-specs">
             <div class="spec-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -343,17 +342,18 @@ get_header();
         </div>
       </div>
 
+      <!-- Bottom row: 2 wide images (100% Real Aerial Drone Shots) -->
       <div class="gallery-item span-2-col">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/lawn_night_stage.jpg" alt="Outdoor Floral Mandap & Evening Lawns">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_drone_aerial_panorama.jpg" alt="Aerial Drone Panorama: Venue Estate & Lake Sanctuary">
         <div class="gallery-overlay">
-          <span class="gallery-caption">Outdoor Floral Mandap & Evening Lawns</span>
+          <span class="gallery-caption">Aerial Drone Panorama: Venue Estate & Lake Sanctuary</span>
         </div>
       </div>
 
       <div class="gallery-item span-2-col">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hall_grand_stage.jpg" alt="Pillarless Indoor Convention Hall">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_drone_aerial_lawns.jpg" alt="Aerial Bird's Eye View: Sprawling Banquet Lawns">
         <div class="gallery-overlay">
-          <span class="gallery-caption">Pillarless Indoor Convention Hall</span>
+          <span class="gallery-caption">Aerial Bird's Eye View: Sprawling Banquet Lawns</span>
         </div>
       </div>
     </div>
@@ -366,27 +366,27 @@ get_header();
   </div>
 </section>
 
-<!-- 7. CATERING & PACKAGES -->
+<!-- 7. FOOD & CATERING & PACKAGES -->
 <section class="catering-section" id="catering">
   <div class="container">
     <div class="catering-card">
       <div class="catering-content">
         <div class="partner-header-pill" style="margin-bottom: 14px; display: inline-flex;">
           <span class="partner-pill-icon">👑</span>
-          <span class="partner-pill-text">EXCLUSIVE CULINARY PARTNER: <strong>KateringKing.com</strong></span>
+          <span class="partner-pill-text">EXCLUSIVE FOOD & CATERING PARTNER: <strong>KateringKing.com</strong></span>
         </div>
-        <span class="section-tag" style="display: block;">GASTRONOMIC EXCELLENCE</span>
-        <h2 class="section-title">An Unforgettable Culinary Journey</h2>
+        <span class="section-tag" style="display: block;">ROYAL FOOD & CATERING</span>
+        <h2 class="section-title">An Unforgettable Food & Dining Experience</h2>
         <div class="divider-ornament" style="margin-left: 0;"><span></span></div>
         
         <p class="catering-text">
-          No event is complete without an unforgettable culinary journey. At Aura Convention and Lawns, dining is elevated through our partnership with KateringKing.com. Known for artisanal menu engineering, exquisite live culinary stations, and flawless banqueting service, KateringKing curates epicurean experiences tailored to royal tastes. Together, we ensure your guests savor every moment of your occasion.
+          No event is complete without an unforgettable food experience. At Aura Convention and Lawns, dining is elevated through our partnership with KateringKing.com. Known for artisanal menu creation, exquisite live food stations, and flawless banquet hospitality, KateringKing curates dining experiences tailored to royal tastes. Together, we ensure your guests savor every bite of your occasion.
         </p>
 
         <div class="catering-tags">
-          <span class="catering-tag">Artisanal Menu Engineering</span>
-          <span class="catering-tag">Exquisite Live Culinary Stations</span>
-          <span class="catering-tag">Flawless Banqueting Service</span>
+          <span class="catering-tag">Artisanal Menu Creation</span>
+          <span class="catering-tag">Exquisite Live Food Counters</span>
+          <span class="catering-tag">Flawless Banquet Hospitality</span>
           <span class="catering-tag">100% Segregated Pure Veg Facilities</span>
           <span class="catering-tag">Customized Tasting Sessions</span>
         </div>

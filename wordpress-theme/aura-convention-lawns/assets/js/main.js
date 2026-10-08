@@ -15,7 +15,7 @@
 
 // Default fallback configuration for Aura Convention & Lawns
 const DEFAULT_AURA_CONFIG = {
-  version: 2,
+  version: 4,
   about: {
     title: "An Urban Sanctuary Conceived to Redefine the Art of Gathering",
     intro: "Beyond the glass and concrete of Hyderabad’s financial corridor lies an unexpected sanctuary. A place where the relentless pace of the city quietly dissolves into open skies, natural harmony, and architectural grandeur. Welcome to <strong>Aura Convention and Lawns</strong> — an urban oasis conceived to redefine the art of gathering.<br><br>Carved into a natural landscape framed by majestic, timeless hillocks, Aura Convention and Lawns merges raw natural topography with refined modern design. Winding botanical promenades, sculpted green terraces, and curated art installations bring texture and soul to every open space. Every angle has been engineered with photogenic intention: from dramatic golden-hour sightlines against the rocky horizon to intimate, glowing garden alcoves. Here, every photograph captures an heirloom memory, and every view invites stillness.",
@@ -57,7 +57,7 @@ const DEFAULT_AURA_CONFIG = {
   },
   halls: [
     {
-      title: "Convention Hall (MICE & Summits)",
+      title: "Convention Hall",
       badge: "EXECUTIVE PRECISION",
       guests: "1,500 Guests",
       area: "12,000 sq.ft",
@@ -65,7 +65,7 @@ const DEFAULT_AURA_CONFIG = {
       desc: "Inside our convention hall, executive ambition meets uncompromising precision. Aura Convention and Lawns is built from the ground up for premier MICE engagements—from high-profile corporate conventions, international tech summits, and product unveils to strategic board retreats and expansive trade exhibitions. With intelligent acoustic engineering, advanced presentation infrastructure, and versatile modular floor plans, we deliver the structured focus, privacy, and flawless execution that global enterprise commands."
     },
     {
-      title: "Sprawling Royal Lawns",
+      title: "Lawns",
       badge: "UNDER THE NIGHT SKY",
       guests: "2,000+ Guests",
       area: "20,000 sq.ft",
@@ -73,7 +73,7 @@ const DEFAULT_AURA_CONFIG = {
       desc: "Under the open night sky, Aura Convention and Lawns becomes a stage for life’s grandest milestones. Our sprawling lawns provide an unconstrained canvas for lavish weddings, vibrant sangeets, royal receptions, and intimate family galas. The sweeping lawns adapt effortlessly to your vision—whether you imagine an ethereal, traditional celebration framed by ancient stone, or a chic contemporary gala beneath the stars. Here, celebrations are not merely hosted; they are immortalized."
     },
     {
-      title: "Indoor AC Banquet Hall",
+      title: "Banquet Hall",
       badge: "OPULENT CLIMATE COMFORT",
       guests: "600 Guests",
       area: "6,000 sq.ft",
@@ -84,16 +84,10 @@ const DEFAULT_AURA_CONFIG = {
   gallery: [
     { src: "assets/images/aura_grand_stage_led_wall.jpg", title: "Grand Production Stage & LED Video Wall", span: "1" },
     { src: "assets/images/aura_sprawling_lawns_evening.jpg", title: "Sprawling Royal Lawns & Twilight Canopy", span: "1" },
-    { src: "assets/images/aura_royal_buffet_spread.jpg", title: "KateringKing Royal Banquet Feast", span: "1" },
-    { src: "assets/images/lawn_night_stage.jpg", title: "Outdoor Floral Mandap & Hillock View", span: "1" },
-    { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "2" },
-    { src: "assets/images/hall_grand_stage.jpg", title: "Pillarless Indoor Convention Hall", span: "2" },
+    { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "1" },
+    { src: "assets/images/aura_royal_buffet_spread.jpg", title: "Royal Banquet Feast by KateringKing", span: "1" },
     { src: "assets/images/aura_drone_aerial_panorama.jpg", title: "Aerial Drone Panorama: Venue Estate & Lake Sanctuary", span: "2" },
-    { src: "assets/images/aura_drone_aerial_lawns.jpg", title: "Aerial Bird's Eye View: Sprawling Banquet Lawns", span: "2" },
-    { src: "assets/images/expo_canopy.jpg", title: "Festival Canopy Pavilion", span: "1" },
-    { src: "assets/images/art_craft_exhibition.jpg", title: "Art & Craft Exhibition Wall", span: "1" },
-    { src: "assets/images/about_venue_entrance.jpg", title: "Daylight Entrance Courtyard", span: "1" },
-    { src: "assets/images/catering_grand_feast.jpg", title: "Royal Wedding Buffet Spread", span: "1" }
+    { src: "assets/images/aura_drone_aerial_lawns.jpg", title: "Aerial Bird's Eye View: Sprawling Banquet Lawns", span: "2" }
   ],
   admin: {
     user: "admin",
@@ -128,8 +122,8 @@ function getSiteConfig() {
     const saved = localStorage.getItem('aura_venue_config');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (!parsed.version || parsed.version < 3) {
-        parsed.version = 3;
+      if (!parsed.version || parsed.version < 4) {
+        parsed.version = 4;
         parsed.about = DEFAULT_AURA_CONFIG.about;
         parsed.halls = DEFAULT_AURA_CONFIG.halls;
         parsed.gallery = DEFAULT_AURA_CONFIG.gallery;
