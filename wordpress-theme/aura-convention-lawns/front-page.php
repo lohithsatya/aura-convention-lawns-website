@@ -145,6 +145,37 @@ get_header();
         </div>
       </div>
     </div>
+
+    <!-- Luxury Stats Ribbon - Wide & Perfectly Divided (Spans Full Container Width) -->
+    <div class="about-stats-ribbon">
+      <div class="stat-item">
+        <div class="stat-icon-box">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" data-aura-stat="area">35,000+</div>
+          <div class="stat-label">SQ.FT ESTATE AREA</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon-box">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" data-aura-stat="capacity">1,000+</div>
+          <div class="stat-label">GUEST CAPACITY</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-icon-box">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-number" data-aura-stat="parking">200+</div>
+          <div class="stat-label">VALET CAR PARKING</div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
