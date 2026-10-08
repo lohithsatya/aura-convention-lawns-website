@@ -15,30 +15,31 @@
 
 // Default fallback configuration for Aura Convention & Lawns
 const DEFAULT_AURA_CONFIG = {
+  version: 2,
   about: {
-    title: "Crafting Unforgettable Celebrations",
-    intro: "Nestled amidst serene surroundings in Telecom Nagar Extension, Gachibowli, Aura Convention & Lawns is thoughtfully designed to make your once-in-a-lifetime moments truly extraordinary. With royal architectural grandeur, opulent modern interiors, and heartfelt service, we turn your wedding dreams into beautiful, unforgettable realities.",
-    image: "assets/images/about_venue_entrance.jpg",
+    title: "An Urban Sanctuary Conceived to Redefine the Art of Gathering",
+    intro: "Beyond the glass and concrete of Hyderabad’s financial corridor lies an unexpected sanctuary. A place where the relentless pace of the city quietly dissolves into open skies, natural harmony, and architectural grandeur. Welcome to <strong>Aura Convention and Lawns</strong> — an urban oasis conceived to redefine the art of gathering.<br><br>Carved into a natural landscape framed by majestic, timeless hillocks, Aura Convention and Lawns merges raw natural topography with refined modern design. Winding botanical promenades, sculpted green terraces, and curated art installations bring texture and soul to every open space. Every angle has been engineered with photogenic intention: from dramatic golden-hour sightlines against the rocky horizon to intimate, glowing garden alcoves. Here, every photograph captures an heirloom memory, and every view invites stillness.",
+    image: "assets/images/aura_grand_entrance_night.jpg",
     features: [
       {
-        title: "Serene Location",
-        badge: "★ LUSH GREEN RETREAT",
-        desc: "Tranquil green surroundings in Telecom Nagar Extension, conveniently located just 5 mins from ORR Gachibowli."
+        title: "Photogenic Landscape",
+        badge: "★ TIMELESS HILLOCKS",
+        desc: "Carved into natural topography with sculpted green terraces, botanical promenades, and golden-hour horizon views."
       },
       {
-        title: "Royal Ambiance",
-        badge: "★ CRYSTAL CHANDELIERS",
-        desc: "Pillars and grand halls with soaring ceilings, opulent floral stages, and traditional-yet-modern royal aesthetics."
+        title: "Executive MICE Hall",
+        badge: "★ INTELLIGENT ACOUSTICS",
+        desc: "Built from the ground up for high-profile conventions, tech summits, executive board retreats, and trade expos."
       },
       {
-        title: "5-Star Hospitality",
-        badge: "★ ATTENTIVE CARE",
-        desc: "Dedicated event directors, seasoned banquet managers, and warm hospitality staff ensuring flawless execution."
+        title: "Sprawling Lawns",
+        badge: "★ OPEN NIGHT SKY",
+        desc: "Unconstrained canvas for lavish weddings, royal receptions, and contemporary galas framed by ancient stone."
       },
       {
-        title: "Grand Celebrations",
-        badge: "★ FLAWLESS EXECUTION",
-        desc: "Comprehensive event coordination from grand mandap design and royal catering to valet management."
+        title: "Indoor AC Banquet",
+        badge: "★ CLIMATE CONTROLLED",
+        desc: "Pristine, fully air-conditioned ballroom with plush interiors and customizable ambient lighting."
       }
     ]
   },
@@ -52,41 +53,45 @@ const DEFAULT_AURA_CONFIG = {
   stats: {
     area: "35,000+",
     capacity: "1,000+",
-    parking: "50+"
+    parking: "200+"
   },
   halls: [
     {
-      title: "Grand Ballroom",
-      badge: "1,500 GUESTS",
+      title: "Convention Hall (MICE & Summits)",
+      badge: "EXECUTIVE PRECISION",
       guests: "1,500 Guests",
       area: "12,000 sq.ft",
-      image: "assets/images/hall_grand_stage.jpg",
-      desc: "Majestic high-ceiling indoor banquet hall featuring crystal chandeliers, grand stage, acoustic walls, and integrated royal lighting for lavish wedding receptions."
+      image: "assets/images/aura_grand_stage_led_wall.jpg",
+      desc: "Inside our convention hall, executive ambition meets uncompromising precision. Aura Convention and Lawns is built from the ground up for premier MICE engagements—from high-profile corporate conventions, international tech summits, and product unveils to strategic board retreats and expansive trade exhibitions. With intelligent acoustic engineering, advanced presentation infrastructure, and versatile modular floor plans, we deliver the structured focus, privacy, and flawless execution that global enterprise commands."
     },
     {
-      title: "Lotus Hall",
-      badge: "500 GUESTS",
-      guests: "500 Guests",
-      area: "4,500 sq.ft",
-      image: "assets/images/expo_canopy.jpg",
-      desc: "An intimate, elegant banquet space designed for engagement ceremonies, sangeet gatherings, pre-wedding festivities, and corporate banquets."
-    },
-    {
-      title: "Aura Royal Lawns",
-      badge: "2,000 GUESTS",
-      guests: "2,000 Guests",
+      title: "Sprawling Royal Lawns",
+      badge: "UNDER THE NIGHT SKY",
+      guests: "2,000+ Guests",
       area: "20,000 sq.ft",
-      image: "assets/images/lawn_night_stage.jpg",
-      desc: "Expansive open-air manicured lawns surrounded by lush greenery and ambient fairy lighting. Ideal for grand wedding receptions, outdoor mandaps, and cultural expos."
+      image: "assets/images/aura_sprawling_lawns_evening.jpg",
+      desc: "Under the open night sky, Aura Convention and Lawns becomes a stage for life’s grandest milestones. Our sprawling lawns provide an unconstrained canvas for lavish weddings, vibrant sangeets, royal receptions, and intimate family galas. The sweeping lawns adapt effortlessly to your vision—whether you imagine an ethereal, traditional celebration framed by ancient stone, or a chic contemporary gala beneath the stars. Here, celebrations are not merely hosted; they are immortalized."
+    },
+    {
+      title: "Indoor AC Banquet Hall",
+      badge: "OPULENT CLIMATE COMFORT",
+      guests: "600 Guests",
+      area: "6,000 sq.ft",
+      image: "assets/images/hall_grand_stage.jpg",
+      desc: "For occasions that demand flawless climate-controlled comfort without sacrificing an ounce of grandeur, Aura Convention and Lawns proudly presents our pristine Indoor AC Banquet Hall. This opulent, fully air-conditioned space offers an elegant sanctuary for sophisticated celebrations, vibrant pre-wedding sangeets, and exclusive private galas. With plush interiors, customizable ambient lighting, and impeccable acoustics, the banquet hall ensures your guests remain immersed in absolute comfort and luxury, completely insulated from the seasons outside."
     }
   ],
   gallery: [
-    { src: "assets/images/hall_grand_stage.jpg", title: "Aura Grand Ballroom Stage", span: "1" },
-    { src: "assets/images/lawn_night_stage.jpg", title: "Outdoor Floral Mandap", span: "1" },
+    { src: "assets/images/aura_grand_stage_led_wall.jpg", title: "Grand Production Stage & LED Video Wall", span: "1" },
+    { src: "assets/images/aura_sprawling_lawns_evening.jpg", title: "Sprawling Royal Lawns & Twilight Canopy", span: "1" },
+    { src: "assets/images/aura_royal_buffet_spread.jpg", title: "KateringKing Royal Banquet Feast", span: "1" },
+    { src: "assets/images/lawn_night_stage.jpg", title: "Outdoor Floral Mandap & Hillock View", span: "1" },
+    { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "2" },
+    { src: "assets/images/hall_grand_stage.jpg", title: "Pillarless Indoor Convention Hall", span: "2" },
     { src: "assets/images/expo_canopy.jpg", title: "Festival Canopy Pavilion", span: "1" },
-    { src: "assets/images/art_craft_exhibition.jpg", title: "Art & Craft Expo Wall", span: "1" },
-    { src: "assets/images/about_venue_entrance.jpg", title: "Grand Entrance Courtyard", span: "2" },
-    { src: "assets/images/catering_grand_feast.jpg", title: "Royal Wedding Buffet Spread", span: "2" }
+    { src: "assets/images/art_craft_exhibition.jpg", title: "Art & Craft Exhibition Wall", span: "1" },
+    { src: "assets/images/about_venue_entrance.jpg", title: "Daylight Entrance Courtyard", span: "1" },
+    { src: "assets/images/catering_grand_feast.jpg", title: "Royal Wedding Buffet Spread", span: "1" }
   ],
   admin: {
     user: "admin",
@@ -121,11 +126,24 @@ function getSiteConfig() {
     const saved = localStorage.getItem('aura_venue_config');
     if (saved) {
       const parsed = JSON.parse(saved);
+      if (!parsed.version || parsed.version < 2) {
+        parsed.version = 2;
+        parsed.about = DEFAULT_AURA_CONFIG.about;
+        parsed.halls = DEFAULT_AURA_CONFIG.halls;
+        parsed.gallery = DEFAULT_AURA_CONFIG.gallery;
+        if (parsed.stats) parsed.stats.parking = '200+';
+        try { localStorage.setItem('aura_venue_config', JSON.stringify(parsed)); } catch (e) {}
+      }
       if (parsed.contact) {
         if (parsed.contact.phone && parsed.contact.phone.includes('98765')) {
           parsed.contact.phone = '+91 77779 98789';
           parsed.contact.phoneRaw = '+917777998789';
           parsed.contact.whatsapp = '917777998789';
+        }
+      }
+      if (parsed.stats) {
+        if (!parsed.stats.parking || parsed.stats.parking === '50+') {
+          parsed.stats.parking = '200+';
         }
       }
       return { 
@@ -245,7 +263,7 @@ function hydrateDOM(cfg) {
   });
 
   // 2. Update ALL tel: call buttons and links
-  document.querySelectorAll('a[href^="tel:"], [data-aura-href="tel"]').forEach(el => {
+  document.querySelectorAll('a[href^="tel:"], [data-aura-href="tel"], .aura-floating-call-pill').forEach(el => {
     el.href = `tel:+${activeDialDigits}`;
   });
 
@@ -265,7 +283,7 @@ function hydrateDOM(cfg) {
   });
 
   // 6. Update EVERY WhatsApp link, button, and floating widget on the page!
-  document.querySelectorAll('a[href*="wa.me"], [data-aura-href="whatsapp"], .btn-whatsapp, .aura-floating-wa').forEach(el => {
+  document.querySelectorAll('a[href*="wa.me"], [data-aura-href="whatsapp"], .btn-whatsapp, .aura-floating-wa, .aura-floating-wa-circle').forEach(el => {
     let rawHref = el.getAttribute('href') || '';
     let customText = '';
     if (rawHref.includes('text=')) {

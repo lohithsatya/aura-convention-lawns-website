@@ -62,6 +62,17 @@
   </div>
 </footer>
 
+  <!-- Floating Action Cluster: Golden Call Pill + Green WhatsApp Circle -->
+  <div class="aura-floating-action-cluster">
+    <a href="tel:+917777998789" class="aura-floating-call-pill" aria-label="Call Aura Venue Manager" data-aura-href="tel">
+      <svg class="pill-call-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <span class="pill-call-text"><span data-aura="phone">+91 77779 98789</span></span>
+    </a>
+    <a href="https://wa.me/917777998789?text=Hi%2C%20I%20would%20like%20to%20inquire%20about%20booking%20Aura%20Convention%20%26%20Lawns." target="_blank" class="aura-floating-wa-circle" aria-label="Chat on WhatsApp with Aura Venue Manager" data-aura-href="whatsapp" data-wa-text="Hi, I would like to inquire about booking Aura Convention & Lawns.">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.11 7.42C8.95 7.42 8.78 7.47 8.65 7.64C8.4 7.94 7.74 8.57 7.74 9.85C7.74 11.13 8.68 12.36 8.81 12.53C8.95 12.7 10.65 15.33 13.25 16.45C13.87 16.72 14.35 16.88 14.73 17C15.36 17.2 15.92 17.17 16.38 17.1C16.89 17.03 17.95 16.46 18.17 15.83C18.39 15.21 18.39 14.67 18.33 14.56C18.26 14.45 18.1 14.39 17.85 14.27C17.6 14.14 16.38 13.54 16.15 13.46C15.93 13.37 15.76 13.33 15.6 13.58C15.43 13.83 14.96 14.39 14.81 14.56C14.67 14.72 14.53 14.75 14.28 14.62C14.03 14.5 12.98 14.15 11.73 13.04C10.76 12.17 10.11 11.1 9.94 10.81C9.78 10.56 9.92 10.43 10.05 10.3C10.16 10.19 10.3 10.01 10.42 9.87C10.55 9.73 10.59 9.62 10.67 9.46C10.76 9.29 10.71 9.15 10.65 9.03C10.59 8.91 10.09 7.68 9.88 7.18C9.68 6.69 9.48 6.75 9.33 6.75C9.18 6.74 9.11 7.42 9.11 7.42Z"/></svg>
+    </a>
+  </div>
+
 <!-- PROPER FULLSCREEN LIGHTBOX (Hidden by default, zero broken icon) -->
   <div class="lightbox-modal" id="lightboxModal" style="display: none;">
     <div class="lightbox-backdrop"></div>
@@ -275,7 +286,7 @@
           </div>
           <div class="admin-form-group">
             <label for="cfgParking">Valet Car Parking Spots</label>
-            <input type="text" id="cfgParking" placeholder="50+">
+            <input type="text" id="cfgParking" placeholder="200+">
           </div>
         </div>
 

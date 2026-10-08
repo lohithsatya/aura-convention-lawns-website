@@ -41,6 +41,10 @@
       <?php } ?>
 
       <div class="nav-actions">
+        <a href="https://kateringking.com/" target="_blank" rel="noopener noreferrer" class="partner-header-pill" title="Exclusive Culinary Partner: KateringKing.com">
+          <span class="partner-pill-icon">👑</span>
+          <span class="partner-pill-text">EXCLUSIVE FOOD PARTNER: <strong>KateringKing.com</strong></span>
+        </a>
         <a href="#contact" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.82rem;">
           INQUIRE NOW
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>

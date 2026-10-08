@@ -42,7 +42,7 @@ get_header();
         </div>
         <div class="hero-badge-item">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
-          <span>300+ Dedicated Car Parking</span>
+          <span>200+ Dedicated Car Parking</span>
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@ get_header();
     <div class="about-grid">
       <div class="about-image-wrapper">
         <div class="about-image-main">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hero_banner_highres.jpg" alt="Aura Convention & Lawns Entrance" style="height: 420px; width: 100%; object-fit: cover;">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_grand_entrance_night.jpg" alt="Aura Convention & Lawns Architectural Grandeur" class="about-img-cover" style="height: 480px; width: 100%; object-fit: cover;">
         </div>
         <div class="about-badge-floating">
           <div class="years">Gachibowli</div>
@@ -65,52 +65,78 @@ get_header();
 
       <div class="about-content">
         <span class="section-tag">ABOUT OUR VENUE</span>
-        <h2 class="section-title">Crafting Unforgettable Celebrations</h2>
+        <h2 class="section-title">An Urban Oasis Framed by Nature & Modern Design</h2>
         <div class="divider-ornament" style="margin-left: 0;"><span></span></div>
         
         <p class="about-text">
-          Nestled amidst serene surroundings in Telecom Nagar Extension, Gachibowli, <strong>Aura Convention & Lawns</strong> is thoughtfully designed to make your special moments truly extraordinary. With traditional charm, opulent modern interiors, and heartfelt service, we turn your wedding dreams into beautiful, unforgettable realities.
+          Beyond the glass and concrete of Hyderabad’s financial corridor lies an unexpected sanctuary. A place where the relentless pace of the city quietly dissolves into open skies, natural harmony, and architectural grandeur. Welcome to <strong>Aura Convention and Lawns</strong> - an urban oasis conceived to redefine the art of gathering.
+        </p>
+        <p class="about-text" style="margin-top: -12px;">
+          Carved into a natural landscape framed by majestic, timeless hillocks, Aura Convention and Lawns merges raw natural topography with refined modern design. Winding botanical promenades, sculpted green terraces, and curated art installations bring texture and soul to every open space. Every angle has been engineered with photogenic intention: from dramatic golden-hour sightlines against the rocky horizon to intimate, glowing garden alcoves. Here, every photograph captures an heirloom memory, and every view invites stillness.
         </p>
 
         <div class="about-features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/serene-location.svg" alt="Serene Location" width="26" height="26">
+          <div class="feature-card-rich">
+            <div class="feature-top">
+              <div class="feature-icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div class="feature-title-wrap">
+                <h4>Natural Hillock Canvas</h4>
+                <span class="feature-pill-gold">SERENE TOPOGRAPHY</span>
+              </div>
             </div>
-            <div class="feature-info">
-              <h4>Serene Location</h4>
-              <p>Surrounded by tranquil nature, conveniently located in Gachibowli.</p>
-            </div>
+            <p>Carved into majestic hillocks, creating dramatic golden-hour sightlines and photographic memories.</p>
           </div>
 
-          <div class="feature-card">
-            <div class="feature-icon">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/elegant-ambiance.svg" alt="Elegant Ambiance" width="26" height="26">
+          <div class="feature-card-rich">
+            <div class="feature-top">
+              <div class="feature-icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16M4 6h16M6 6v16M10 6v16M14 6v16M18 6v16M12 2 4 6h16l-8-4z"/></svg>
+              </div>
+              <div class="feature-title-wrap">
+                <h4>Executive MICE & Summits</h4>
+                <span class="feature-pill-gold">GLOBAL STANDARDS</span>
+              </div>
             </div>
-            <div class="feature-info">
-              <h4>Elegant Ambiance</h4>
-              <p>Seamless blend of traditional grandeur and modern aesthetics.</p>
-            </div>
+            <p>Acoustic precision, advanced presentation technology, and seamless VIP hospitality for enterprise summits.</p>
           </div>
 
-          <div class="feature-card">
-            <div class="feature-icon">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/trusted-service.svg" alt="Trusted Service" width="26" height="26">
+          <div class="feature-card-rich">
+            <div class="feature-top">
+              <div class="feature-icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="m12 11-2 2-1-1"/></svg>
+              </div>
+              <div class="feature-title-wrap">
+                <h4>Starlit Royal Weddings</h4>
+                <span class="feature-pill-gold">TIMELESS GRANDEUR</span>
+              </div>
             </div>
-            <div class="feature-info">
-              <h4>Trusted Service</h4>
-              <p>Warm, attentive hospitality dedicated to flawless execution.</p>
-            </div>
+            <p>Sprawling lawns under open night skies, designed for opulent celebrations and heirloom moments.</p>
           </div>
 
-          <div class="feature-card">
-            <div class="feature-icon">
-              <img src="<?php echo get_template_directory_uri(); ?>/assets/icons/memorable-events.svg" alt="Memorable Events" width="26" height="26">
+          <div class="feature-card-rich">
+            <div class="feature-top">
+              <div class="feature-icon-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/></svg>
+              </div>
+              <div class="feature-title-wrap">
+                <h4>Epicurean Partner</h4>
+                <span class="feature-pill-gold">KATERINGKING.COM</span>
+              </div>
             </div>
-            <div class="feature-info">
-              <h4>Memorable Events</h4>
-              <p>From grand royal weddings to corporate galas and cultural expos.</p>
-            </div>
+            <p>Artisanal dining with separate 100% pure veg kitchens and live culinary stations.</p>
+          </div>
+        </div>
+
+        <!-- Founder's Note -->
+        <div class="founder-note-card">
+          <div class="founder-note-quote">
+            “At Aura, our intention was never simply to build another event venue. We set out to craft an enduring canvas—a living stage where architecture respects nature, and every occasion is elevated into high art. Whether hosting high-level global leadership or the most sacred personal milestones, we welcome you to experience an enclave where gracious hospitality, quiet luxury, and timeless memories converge effortlessly.”
+          </div>
+          <div class="founder-note-author">
+            <span class="founder-name">Mohammed Azhar Mohiuddin</span>
+            <span class="founder-role">Founder, Mash & Co. & Aura Convention and Lawns</span>
           </div>
         </div>
       </div>
@@ -129,14 +155,14 @@ get_header();
     </div>
 
     <div class="halls-grid">
-      <!-- Hall 1: Grand Ballroom -->
+      <!-- Hall 1: Convention Hall (MICE & Summits) -->
       <div class="hall-card">
         <div class="hall-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hall_grand_stage.jpg" alt="Aura Grand Ballroom">
-          <span class="hall-badge-tag">INDOOR PILLARLESS</span>
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_grand_stage_led_wall.jpg" alt="Aura Convention Hall (MICE & Summits)">
+          <span class="hall-badge-tag">EXECUTIVE PRECISION</span>
         </div>
         <div class="hall-body">
-          <h3 class="hall-title">Grand Ballroom</h3>
+          <h3 class="hall-title">Convention Hall (MICE & Summits)</h3>
           <div class="hall-specs">
             <div class="spec-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -147,7 +173,7 @@ get_header();
               <span>12,000 sq.ft</span>
             </div>
           </div>
-          <p class="hall-desc">Our flagship pillarless convention hall with soaring ceilings, crystal chandeliers, a palatial elevated stage, and centralized climate control. Built for grand weddings and galas.</p>
+          <p class="hall-desc">Inside our convention hall, executive ambition meets uncompromising precision. Aura Convention and Lawns is built from the ground up for premier MICE engagements—from high-profile corporate conventions, international tech summits, and product unveils to strategic board retreats and expansive trade exhibitions. With intelligent acoustic engineering, advanced presentation infrastructure, and versatile modular floor plans, we deliver the structured focus, privacy, and flawless execution that global enterprise commands.</p>
           <a href="#contact" class="hall-link">
             VIEW DETAILS & PRICING
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -155,51 +181,51 @@ get_header();
         </div>
       </div>
 
-      <!-- Hall 2: Lotus Banquet Hall -->
+      <!-- Hall 2: Sprawling Royal Lawns -->
       <div class="hall-card">
         <div class="hall-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/expo_canopy.jpg" alt="Aura Lotus Hall">
-          <span class="hall-badge-tag">INTIMATE BANQUET</span>
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_sprawling_lawns_evening.jpg" alt="Aura Sprawling Royal Lawns">
+          <span class="hall-badge-tag">UNDER THE NIGHT SKY</span>
         </div>
         <div class="hall-body">
-          <h3 class="hall-title">Lotus Hall</h3>
+          <h3 class="hall-title">Sprawling Royal Lawns</h3>
           <div class="hall-specs">
             <div class="spec-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              <span>500 Guests</span>
-            </div>
-            <div class="spec-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-              <span>4,500 sq.ft</span>
-            </div>
-          </div>
-          <p class="hall-desc">Gracefully styled hall designed for engagements, sangeet parties, intimate family ceremonies, corporate seminars, and pre-wedding functions.</p>
-          <a href="#contact" class="hall-link">
-            VIEW DETAILS & PRICING
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Hall 3: Aura Royal Lawns -->
-      <div class="hall-card">
-        <div class="hall-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/lawn_night_stage.jpg" alt="Aura Royal Lawns">
-          <span class="hall-badge-tag">OPEN-AIR LAWNS</span>
-        </div>
-        <div class="hall-body">
-          <h3 class="hall-title">Aura Royal Lawns</h3>
-          <div class="hall-specs">
-            <div class="spec-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              <span>2,000 Guests</span>
+              <span>2,000+ Guests</span>
             </div>
             <div class="spec-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
               <span>20,000 sq.ft</span>
             </div>
           </div>
-          <p class="hall-desc">Expansive open-air manicured lawns surrounded by lush greenery and ambient fairy lighting. Ideal for starlit wedding receptions, outdoor mandaps, and cultural expos.</p>
+          <p class="hall-desc">Under the open night sky, Aura Convention and Lawns becomes a stage for life’s grandest milestones. Our sprawling lawns provide an unconstrained canvas for lavish weddings, vibrant sangeets, royal receptions, and intimate family galas. The sweeping lawns adapt effortlessly to your vision—whether you imagine an ethereal, traditional celebration framed by ancient stone, or a chic contemporary gala beneath the stars. Here, celebrations are not merely hosted; they are immortalized.</p>
+          <a href="#contact" class="hall-link">
+            VIEW DETAILS & PRICING
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hall 3: Indoor AC Banquet Hall -->
+      <div class="hall-card">
+        <div class="hall-image">
+          <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hall_grand_stage.jpg" alt="Aura Indoor AC Banquet Hall">
+          <span class="hall-badge-tag">OPULENT CLIMATE COMFORT</span>
+        </div>
+        <div class="hall-body">
+          <h3 class="hall-title">Indoor AC Banquet Hall</h3>
+          <div class="hall-specs">
+            <div class="spec-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <span>600 Guests</span>
+            </div>
+            <div class="spec-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+              <span>6,000 sq.ft</span>
+            </div>
+          </div>
+          <p class="hall-desc">For occasions that demand flawless climate-controlled comfort without sacrificing an ounce of grandeur, Aura Convention and Lawns proudly presents our pristine Indoor AC Banquet Hall. This opulent, fully air-conditioned space offers an elegant sanctuary for sophisticated celebrations, vibrant pre-wedding sangeets, and exclusive private galas. With plush interiors, customizable ambient lighting, and impeccable acoustics, the banquet hall ensures your guests remain immersed in absolute comfort and luxury, completely insulated from the seasons outside.</p>
           <a href="#contact" class="hall-link">
             VIEW DETAILS & PRICING
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -285,37 +311,44 @@ get_header();
 
     <div class="gallery-grid">
       <div class="gallery-item span-2-col">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hall_grand_stage.jpg" alt="Grand Ballroom Stage Setup">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_grand_stage_led_wall.jpg" alt="Grand Production Stage & LED Video Wall">
         <div class="gallery-overlay">
-          <span class="gallery-caption">Grand Ballroom Royal Stage</span>
+          <span class="gallery-caption">Grand Production Stage & LED Video Wall</span>
         </div>
       </div>
 
       <div class="gallery-item">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/lawn_night_stage.jpg" alt="Open-Air Lawn Night Reception">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_sprawling_lawns_evening.jpg" alt="Sprawling Royal Lawns Evening Reception">
         <div class="gallery-overlay">
-          <span class="gallery-caption">Aura Lawns Evening Reception</span>
-        </div>
-      </div>
-
-      <div class="gallery-item span-2-row">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/art_craft_exhibition.jpg" alt="Handicraft & Art Exhibition">
-        <div class="gallery-overlay">
-          <span class="gallery-caption">Cultural & Art Expo Gallery</span>
+          <span class="gallery-caption">Sprawling Royal Lawns Evening Reception</span>
         </div>
       </div>
 
       <div class="gallery-item">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/expo_canopy.jpg" alt="Flea Market & Exhibition Pavilion">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_grand_entrance_night.jpg" alt="Grand Architectural Facade at Night">
         <div class="gallery-overlay">
-          <span class="gallery-caption">Outdoor Flea Market Pavilion</span>
+          <span class="gallery-caption">Grand Architectural Facade at Night</span>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_royal_buffet_spread.jpg" alt="Royal Buffet Spread by KateringKing">
+        <div class="gallery-overlay">
+          <span class="gallery-caption">Royal Buffet Spread by KateringKing</span>
         </div>
       </div>
 
       <div class="gallery-item span-2-col">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/catering_buffet_highres.jpg" alt="Grand Royal Indian Buffet">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/lawn_night_stage.jpg" alt="Outdoor Floral Mandap & Evening Lawns">
         <div class="gallery-overlay">
-          <span class="gallery-caption">Royal Banquet Culinary Spread</span>
+          <span class="gallery-caption">Outdoor Floral Mandap & Evening Lawns</span>
+        </div>
+      </div>
+
+      <div class="gallery-item span-2-col">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/hall_grand_stage.jpg" alt="Pillarless Indoor Convention Hall">
+        <div class="gallery-overlay">
+          <span class="gallery-caption">Pillarless Indoor Convention Hall</span>
         </div>
       </div>
     </div>
@@ -333,32 +366,39 @@ get_header();
   <div class="container">
     <div class="catering-card">
       <div class="catering-content">
-        <span class="section-tag">GASTRONOMIC EXCELLENCE</span>
-        <h2 class="section-title">Delicious Moments Made to Perfection</h2>
+        <div class="partner-header-pill" style="margin-bottom: 14px; display: inline-flex;">
+          <span class="partner-pill-icon">👑</span>
+          <span class="partner-pill-text">EXCLUSIVE CULINARY PARTNER: <strong>KateringKing.com</strong></span>
+        </div>
+        <span class="section-tag" style="display: block;">GASTRONOMIC EXCELLENCE</span>
+        <h2 class="section-title">An Unforgettable Culinary Journey</h2>
         <div class="divider-ornament" style="margin-left: 0;"><span></span></div>
         
         <p class="catering-text">
-          From traditional South Indian banana leaf feasts and authentic Hyderabadi Dum Biryani to royal multi-cuisine spreads, our in-house culinary masters add signature flavors to your every celebration.
+          No event is complete without an unforgettable culinary journey. At Aura Convention and Lawns, dining is elevated through our partnership with KateringKing.com. Known for artisanal menu engineering, exquisite live culinary stations, and flawless banqueting service, KateringKing curates epicurean experiences tailored to royal tastes. Together, we ensure your guests savor every moment of your occasion.
         </p>
 
         <div class="catering-tags">
-          <span class="catering-tag">Royal Hyderabadi Biryani</span>
-          <span class="catering-tag">Traditional Banana Leaf Feasts</span>
-          <span class="catering-tag">Pure Veg & Non-Veg Kitchens</span>
-          <span class="catering-tag">Live Chaat & Dessert Counters</span>
+          <span class="catering-tag">Artisanal Menu Engineering</span>
+          <span class="catering-tag">Exquisite Live Culinary Stations</span>
+          <span class="catering-tag">Flawless Banqueting Service</span>
+          <span class="catering-tag">100% Segregated Pure Veg Facilities</span>
           <span class="catering-tag">Customized Tasting Sessions</span>
         </div>
 
-        <div>
-          <a href="#contact" class="btn btn-gold">
-            EXPLORE PACKAGES
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px;">
+          <a href="https://kateringking.com/" target="_blank" rel="noopener noreferrer" class="btn btn-kateringking">
+            <span>VISIT KATERINGKING.COM</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <a href="https://wa.me/917777998789?text=Hi%2C%20I%20would%20like%20to%20schedule%20a%20food%20tasting%20session%20with%20KateringKing%20at%20Aura%20Convention." target="_blank" class="btn btn-outline-gold" data-aura-href="whatsapp" data-wa-text="Hi, I would like to schedule a food tasting session with KateringKing at Aura Convention.">
+            SCHEDULE TASTING
           </a>
         </div>
       </div>
 
       <div class="catering-image">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/catering_buffet_highres.jpg" alt="Traditional Indian Catering Buffet">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_royal_buffet_spread.jpg" alt="Aura Convention and Lawns Royal Buffet Spread by KateringKing">
       </div>
     </div>
   </div>
