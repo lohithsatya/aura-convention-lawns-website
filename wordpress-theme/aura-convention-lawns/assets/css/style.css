@@ -328,8 +328,9 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('../assets/images/hero_banner_highres.jpg');
-  background-size: 100% 100%;
+  background-color: #06150C;
+  background-image: url('../assets/images/aura_drone_aerial_panorama.jpg');
+  background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   color: #FFFFFF;
@@ -338,18 +339,102 @@ section {
   border-bottom: 1px solid var(--border-gold);
 }
 
-@media (max-width: 992px) {
-  .hero-section {
-    background-size: cover;
-    background-position: center top;
+/* Cinematic Drone Background with Slow Zoom-in (Ken Burns Effect) */
+.hero-drone-bg-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-drone-slide {
+  position: absolute;
+  top: -6%;
+  left: -6%;
+  width: 112%;
+  height: 112%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.hero-drone-slide-1 {
+  background-image: url('../assets/images/aura_drone_aerial_panorama.jpg');
+  animation: droneKenBurns1 18s infinite ease-in-out;
+}
+
+.hero-drone-slide-2 {
+  background-image: url('../assets/images/aura_drone_aerial_lawns.jpg');
+  animation: droneKenBurns2 18s infinite ease-in-out;
+}
+
+@keyframes droneKenBurns1 {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  42% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+  92% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes droneKenBurns2 {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  42% {
+    opacity: 0;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  92% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-drone-slide-1 {
+    animation: none;
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  .hero-drone-slide-2 {
+    display: none;
   }
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 45%, rgba(6, 21, 12, 0.15) 0%, rgba(6, 21, 12, 0.65) 100%),
-              linear-gradient(180deg, rgba(6, 21, 12, 0.35) 0%, transparent 25%, transparent 75%, rgba(6, 21, 12, 0.85) 100%);
+  z-index: 1;
+  background: radial-gradient(circle at 50% 45%, rgba(6, 21, 12, 0.22) 0%, rgba(6, 21, 12, 0.70) 100%),
+              linear-gradient(180deg, rgba(6, 21, 12, 0.40) 0%, rgba(6, 21, 12, 0.15) 30%, rgba(6, 21, 12, 0.35) 70%, rgba(6, 21, 12, 0.88) 100%);
+  pointer-events: none;
 }
 
 .hero-content {

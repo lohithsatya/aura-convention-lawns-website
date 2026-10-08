@@ -88,6 +88,8 @@ const DEFAULT_AURA_CONFIG = {
     { src: "assets/images/lawn_night_stage.jpg", title: "Outdoor Floral Mandap & Hillock View", span: "1" },
     { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "2" },
     { src: "assets/images/hall_grand_stage.jpg", title: "Pillarless Indoor Convention Hall", span: "2" },
+    { src: "assets/images/aura_drone_aerial_panorama.jpg", title: "Aerial Drone Panorama: Venue Estate & Lake Sanctuary", span: "2" },
+    { src: "assets/images/aura_drone_aerial_lawns.jpg", title: "Aerial Bird's Eye View: Sprawling Banquet Lawns", span: "2" },
     { src: "assets/images/expo_canopy.jpg", title: "Festival Canopy Pavilion", span: "1" },
     { src: "assets/images/art_craft_exhibition.jpg", title: "Art & Craft Exhibition Wall", span: "1" },
     { src: "assets/images/about_venue_entrance.jpg", title: "Daylight Entrance Courtyard", span: "1" },
@@ -126,8 +128,8 @@ function getSiteConfig() {
     const saved = localStorage.getItem('aura_venue_config');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (!parsed.version || parsed.version < 2) {
-        parsed.version = 2;
+      if (!parsed.version || parsed.version < 3) {
+        parsed.version = 3;
         parsed.about = DEFAULT_AURA_CONFIG.about;
         parsed.halls = DEFAULT_AURA_CONFIG.halls;
         parsed.gallery = DEFAULT_AURA_CONFIG.gallery;

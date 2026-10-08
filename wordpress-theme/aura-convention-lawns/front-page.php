@@ -9,13 +9,18 @@ get_header();
 
 <!-- 2. HERO SECTION -->
 <section class="hero-section" id="home">
+  <!-- Cinematic Drone Aerial Background with Slow Ken Burns Zoom-In Effect -->
+  <div class="hero-drone-bg-container" aria-hidden="true">
+    <div class="hero-drone-slide hero-drone-slide-1"></div>
+    <div class="hero-drone-slide hero-drone-slide-2"></div>
+  </div>
   <div class="hero-overlay"></div>
   <div class="container">
     <div class="hero-content">
       <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_logo_transparent.png" alt="Aura Emblem" class="hero-emblem">
       <span class="section-tag" style="color: var(--gold-light);">WELCOME TO AURA</span>
       <h1 class="hero-title">Where Celebrations Become Timeless Memories</h1>
-      <p class="hero-subtitle">A perfect blend of royal tradition, architectural elegance, and world-class hospitality in Telecom Nagar Extension, Gachibowli, Hyderabad.</p>
+      <p class="hero-subtitle">An urban oasis conceived to redefine the art of gathering, framed by majestic hillocks in Hyderabad’s financial corridor.</p>
       
       <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
         <a href="#contact" class="btn btn-gold">
