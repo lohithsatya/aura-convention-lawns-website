@@ -246,6 +246,27 @@ window.uploadGalleryImage = function(idx, fileInput) {
   }
 };
 
+// Global handler for reordering gallery photos (Move Up / Down)
+window.moveGalleryItem = function(idx, direction) {
+  const cfg = getSiteConfig();
+  if (!cfg.gallery || !Array.isArray(cfg.gallery)) return;
+  const targetIdx = idx + direction;
+  if (targetIdx < 0 || targetIdx >= cfg.gallery.length) return;
+
+  const temp = cfg.gallery[idx];
+  cfg.gallery[idx] = cfg.gallery[targetIdx];
+  cfg.gallery[targetIdx] = temp;
+
+  saveSiteConfig(cfg);
+  hydrateDOM(cfg);
+  if (typeof renderAdminGalleryList === 'function') {
+    renderAdminGalleryList(cfg.gallery);
+  }
+  if (typeof showAdminToast === 'function') {
+    showAdminToast('✓ Gallery photo order updated!');
+  }
+};
+
 // Global handler for updating hall fields
 window.updateHallField = function(idx, field, val) {
   const cfg = getSiteConfig();
@@ -1124,6 +1145,41 @@ document.addEventListener('DOMContentLoaded', () => {
     populateAdminFields();
   }
 
+  function switchToGalleryTab() {
+    document.querySelectorAll('.admin-nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.remove('active'));
+
+    const galTab = document.querySelector('.admin-nav-tab[data-tab="paneGallery"]');
+    const galPane = document.getElementById('paneGallery');
+    if (galTab) galTab.classList.add('active');
+    if (galPane) {
+      galPane.classList.add('active');
+      const cfg = getSiteConfig();
+      renderAdminGalleryList(cfg.gallery);
+      const dashBody = document.querySelector('.admin-dash-body');
+      if (dashBody) dashBody.scrollTop = 0;
+    }
+  }
+  window.switchToGalleryTab = switchToGalleryTab;
+
+  function openGalleryAdmin() {
+    const fullGalleryModal = document.getElementById('auraFullGalleryModal');
+    if (fullGalleryModal) {
+      fullGalleryModal.classList.remove('active');
+      fullGalleryModal.style.display = 'none';
+    }
+
+    openAdminPortal();
+
+    const isAuth = localStorage.getItem('aura_admin_logged_in') === 'true';
+    if (isAuth) {
+      setTimeout(switchToGalleryTab, 50);
+    } else {
+      window._redirectTabAfterLogin = 'paneGallery';
+    }
+  }
+  window.openGalleryAdmin = openGalleryAdmin;
+
   // Global hotkey: Ctrl + Shift + A opens Admin CMS
   window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
@@ -1139,6 +1195,16 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       openAdminPortal();
     });
+  }
+
+  // Quick Add Gallery buttons on website
+  const btnQuickAddGallery = document.getElementById('btnQuickAddGallery');
+  if (btnQuickAddGallery) {
+    btnQuickAddGallery.addEventListener('click', openGalleryAdmin);
+  }
+  const btnModalAddGallery = document.getElementById('btnModalAddGallery');
+  if (btnModalAddGallery) {
+    btnModalAddGallery.addEventListener('click', openGalleryAdmin);
   }
 
   let adminBound = false;
@@ -1163,6 +1229,10 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('aura_admin_logged_in', 'true');
           if (adminLoginError) adminLoginError.style.display = 'none';
           showDashboard();
+          if (window._redirectTabAfterLogin === 'paneGallery') {
+            setTimeout(switchToGalleryTab, 50);
+            window._redirectTabAfterLogin = null;
+          }
           showAdminToast('✓ Welcome to Aura Admin Console');
         } else {
           if (adminLoginError) {
@@ -1361,7 +1431,52 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Add New Gallery Photo Button
+    // Drag & Drop Zone for Gallery Photos
+    const dropzone = document.getElementById('adminGalleryDropzone');
+    const newPhotoFileInput = document.getElementById('newPhotoFile');
+    const previewCount = document.getElementById('dropzonePreviewCount');
+
+    if (dropzone && newPhotoFileInput) {
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.add('dragover');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropzone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropzone.classList.remove('dragover');
+        }, false);
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length) {
+          newPhotoFileInput.files = files;
+          if (previewCount) {
+            previewCount.textContent = `✓ Selected ${files.length} photo${files.length > 1 ? 's' : ''} ready to add!`;
+            previewCount.style.display = 'block';
+          }
+        }
+      });
+
+      newPhotoFileInput.addEventListener('change', () => {
+        if (newPhotoFileInput.files && newPhotoFileInput.files.length) {
+          const count = newPhotoFileInput.files.length;
+          if (previewCount) {
+            previewCount.textContent = `✓ Selected ${count} photo${count > 1 ? 's' : ''} ready to add!`;
+            previewCount.style.display = 'block';
+          }
+        }
+      });
+    }
+
+    // Add New Gallery Photo Button (Multi-file batch upload + Placement support)
     const addPhotoBtn = document.getElementById('btnAddGalleryPhoto');
     if (addPhotoBtn) {
       addPhotoBtn.addEventListener('click', () => {
@@ -1369,26 +1484,62 @@ document.addEventListener('DOMContentLoaded', () => {
         const fileInput = document.getElementById('newPhotoFile');
         const titleInput = document.getElementById('newPhotoTitle');
         const spanInput = document.getElementById('newPhotoSpan');
+        const posInput = document.getElementById('newPhotoPosition');
 
-        const title = titleInput?.value.trim() || 'Aura Celebration';
+        const baseTitle = titleInput?.value.trim() || 'Aura Celebration';
         const span = spanInput?.value || '1';
+        const position = posInput?.value || 'start'; // 'start' = live on homepage immediately!
 
-        if (fileInput && fileInput.files && fileInput.files[0]) {
-          compressImage(fileInput.files[0], 1200, (compressedDataUrl) => {
-            const cfg = getSiteConfig();
-            if (!cfg.gallery) cfg.gallery = [];
-            cfg.gallery.push({ src: compressedDataUrl, title: title, span: span });
-            saveSiteConfig(cfg);
-            hydrateDOM(cfg);
-            renderAdminGalleryList(cfg.gallery);
-            fileInput.value = '';
-            if (titleInput) titleInput.value = '';
-            showAdminToast('✓ Photo uploaded & added to gallery collection!');
+        if (fileInput && fileInput.files && fileInput.files.length > 0) {
+          const files = Array.from(fileInput.files);
+          const total = files.length;
+          let processed = 0;
+          const compressedItems = [];
+
+          showAdminToast(`Processing & compressing ${total} photo${total > 1 ? 's' : ''}...`);
+
+          files.forEach((file, idx) => {
+            compressImage(file, 1200, (compressedDataUrl) => {
+              const itemTitle = total > 1 ? `${baseTitle} (${idx + 1})` : baseTitle;
+              compressedItems.push({
+                src: compressedDataUrl,
+                title: itemTitle,
+                span: span
+              });
+              processed++;
+
+              if (processed === total) {
+                const cfg = getSiteConfig();
+                if (!cfg.gallery) cfg.gallery = [];
+
+                if (position === 'start') {
+                  cfg.gallery = [...compressedItems, ...cfg.gallery];
+                } else {
+                  cfg.gallery = [...cfg.gallery, ...compressedItems];
+                }
+
+                saveSiteConfig(cfg);
+                hydrateDOM(cfg);
+                renderAdminGalleryList(cfg.gallery);
+
+                fileInput.value = '';
+                if (titleInput) titleInput.value = '';
+                if (previewCount) previewCount.style.display = 'none';
+                showAdminToast(`✓ Added ${total} photo${total > 1 ? 's' : ''} to gallery!`);
+              }
+            });
           });
         } else if (urlInput && urlInput.value.trim()) {
           const cfg = getSiteConfig();
           if (!cfg.gallery) cfg.gallery = [];
-          cfg.gallery.push({ src: urlInput.value.trim(), title: title, span: span });
+          const newItem = { src: urlInput.value.trim(), title: baseTitle, span: span };
+
+          if (position === 'start') {
+            cfg.gallery.unshift(newItem);
+          } else {
+            cfg.gallery.push(newItem);
+          }
+
           saveSiteConfig(cfg);
           hydrateDOM(cfg);
           renderAdminGalleryList(cfg.gallery);
@@ -1396,7 +1547,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (titleInput) titleInput.value = '';
           showAdminToast('✓ Photo URL added to gallery collection!');
         } else {
-          alert('Please enter an image URL or choose an image file.');
+          alert('Please select one or more photo files, or enter an image web URL.');
         }
       });
     }
@@ -1884,7 +2035,11 @@ document.addEventListener('DOMContentLoaded', () => {
         : `<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(197, 160, 89, 0.15); color: #C5A059; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.72rem; border: 1px solid rgba(197, 160, 89, 0.3);">○ View Gallery Modal</span>`;
 
       html += `
-        <div class="admin-gallery-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: rgba(4, 15, 9, 0.85); border: 1px solid rgba(197, 160, 89, 0.25); border-radius: 8px; margin-bottom: 10px; gap: 14px; transition: border-color 0.2s ease;">
+        <div class="admin-gallery-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: rgba(4, 15, 9, 0.85); border: 1px solid rgba(197, 160, 89, 0.25); border-radius: 8px; margin-bottom: 10px; gap: 12px; transition: border-color 0.2s ease;">
+          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; justify-content: center; flex-shrink: 0;">
+            <button type="button" class="btn-admin-reorder" onclick="moveGalleryItem(${idx}, -1)" ${idx === 0 ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''} title="Move Up (toward Homepage Top 10)">▲</button>
+            <button type="button" class="btn-admin-reorder" onclick="moveGalleryItem(${idx}, 1)" ${idx === galleryItems.length - 1 ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''} title="Move Down">▼</button>
+          </div>
           <img src="${item.src}" class="admin-gallery-item-thumb" alt="thumb" style="width: 64px; height: 48px; object-fit: cover; border-radius: 6px; border: 1.5px solid rgba(197, 160, 89, 0.4); flex-shrink: 0;">
           <div class="admin-gallery-item-details" style="flex: 1; min-width: 0;">
             <div style="margin-bottom: 6px;">

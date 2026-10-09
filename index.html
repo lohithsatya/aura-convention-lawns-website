@@ -375,9 +375,13 @@
         </div>
       </div>
 
-      <div class="gallery-footer">
+      <div class="gallery-footer" style="display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap;">
         <button type="button" class="btn btn-outline-gold" id="btnOpenFullGallery">
           VIEW GALLERY &rarr;
+        </button>
+        <button type="button" class="btn btn-gold btn-gallery-admin-add" id="btnQuickAddGallery" title="Add photos to gallery (Admin)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>ADD PHOTOS (ADMIN)</span>
         </button>
       </div>
     </div>
@@ -690,7 +694,13 @@
         <span class="section-tag">COMPLETE PORTFOLIO</span>
         <h3 class="full-gallery-modal-title">Aura Celebration Gallery</h3>
         <p class="full-gallery-modal-subtitle">Browse through our complete collection of royal weddings, grand mandaps, vibrant expos, and unforgettable memories.</p>
-        <div id="fullGalleryCounter" class="full-gallery-counter-pill">Showing 6 Photos</div>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap;">
+          <div id="fullGalleryCounter" class="full-gallery-counter-pill">Showing 13 Photos</div>
+          <button type="button" class="btn btn-gold" id="btnModalAddGallery" style="padding: 7px 18px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>+ Add Photos (Admin)</span>
+          </button>
+        </div>
       </div>
 
       <!-- Expansive Grid Showing ALL Images -->
@@ -1046,27 +1056,44 @@
 
         <!-- 5. Pane: Photo Gallery -->
         <div id="paneGallery" class="admin-tab-pane">
-          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 4px;">Active Gallery Images Manager</h5>
-          <p style="font-size: 0.78rem; color: #A3B8AD; margin-bottom: 14px;">
-            📌 <strong>Homepage display:</strong> The first 10 photos appear directly on the homepage gallery grid. All photos appear in the fullscreen modal on <strong>"VIEW GALLERY &rarr;"</strong>.
-          </p>
-          <div id="adminGalleryList" class="admin-gallery-list"></div>
-
-          <div class="admin-add-photo-box">
-            <h5>Add New Photo to Gallery</h5>
-            <div class="admin-grid-2col">
-              <div class="admin-form-group">
-                <label for="newPhotoUrl">Image URL (Web Link or Local Path)</label>
-                <input type="text" id="newPhotoUrl" placeholder="assets/images/hall_grand_stage.jpg or https://...">
-              </div>
-              <div class="admin-form-group">
-                <label for="newPhotoFile">Or Upload from Device</label>
-                <input type="file" id="newPhotoFile" accept="image/*">
-              </div>
+          <div class="admin-add-photo-box" id="galleryAddCard" style="margin-bottom: 22px; background: rgba(197, 160, 89, 0.08); border: 1.5px solid rgba(197, 160, 89, 0.45); border-radius: 10px; padding: 18px 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <h5 style="color: var(--gold-light); margin: 0; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <span>Add Photos to Gallery</span>
+              </h5>
+              <span style="font-size: 0.74rem; color: #4ADE80; background: rgba(74, 222, 128, 0.15); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(74, 222, 128, 0.3);">
+                ⚡ Direct Device Upload + Compression
+              </span>
             </div>
+
+            <!-- Drag & Drop Zone -->
+            <div class="admin-dropzone" id="adminGalleryDropzone">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: var(--gold-light); margin-bottom: 8px;">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              <div style="font-weight: 600; color: #FFFFFF; font-size: 0.92rem; margin-bottom: 4px;">Drag & Drop Photos Here</div>
+              <div style="font-size: 0.78rem; color: #8FA698; margin-bottom: 12px;">or click to browse from device (select multiple photos supported)</div>
+              <label class="admin-btn-save" style="padding: 8px 20px; font-size: 0.8rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <span>Choose Photos from Device</span>
+                <input type="file" id="newPhotoFile" accept="image/*" multiple style="display: none;">
+              </label>
+              <div id="dropzonePreviewCount" style="margin-top: 10px; font-size: 0.8rem; color: #4ADE80; font-weight: 600; display: none;"></div>
+            </div>
+
+            <div style="text-align: center; margin: 10px 0; font-size: 0.74rem; color: #8FA698; text-transform: uppercase; letter-spacing: 1px;">— OR ENTER IMAGE WEB URL —</div>
+
+            <div class="admin-form-group" style="margin-bottom: 12px;">
+              <label for="newPhotoUrl">Image URL / Path</label>
+              <input type="text" id="newPhotoUrl" placeholder="assets/images/photo.jpg or https://images.unsplash.com/...">
+            </div>
+
             <div class="admin-grid-2col">
               <div class="admin-form-group">
-                <label for="newPhotoTitle">Photo Title / Caption</label>
+                <label for="newPhotoTitle">Photo Caption / Title</label>
                 <input type="text" id="newPhotoTitle" placeholder="e.g., Grand Sangeet Celebration">
               </div>
               <div class="admin-form-group">
@@ -1077,8 +1104,23 @@
                 </select>
               </div>
             </div>
-            <button type="button" id="btnAddGalleryPhoto" class="admin-btn-save" style="padding: 9px 20px; font-size: 0.78rem;">+ Add Photo to Gallery</button>
+
+            <div class="admin-form-group" style="margin-bottom: 14px;">
+              <label for="newPhotoPosition">Display Placement</label>
+              <select id="newPhotoPosition">
+                <option value="start">Feature at Beginning (Live on Homepage Top 10)</option>
+                <option value="end">Add to End of Gallery Collection</option>
+              </select>
+            </div>
+
+            <button type="button" id="btnAddGalleryPhoto" class="admin-btn-save" style="width: 100%; padding: 10px 20px; font-size: 0.82rem;">+ ADD PHOTO(S) TO GALLERY</button>
           </div>
+
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 4px;">Active Gallery Images Manager</h5>
+          <p style="font-size: 0.78rem; color: #A3B8AD; margin-bottom: 14px;">
+            📌 <strong>Homepage display:</strong> The first 10 photos appear directly on the homepage gallery grid. All photos appear in the fullscreen modal on <strong>"VIEW GALLERY &rarr;"</strong>. Use <strong>▲ Move Up / ▼ Move Down</strong> to reorder.
+          </p>
+          <div id="adminGalleryList" class="admin-gallery-list"></div>
         </div>
 
         <!-- 6. Pane: Contact & Footer -->
