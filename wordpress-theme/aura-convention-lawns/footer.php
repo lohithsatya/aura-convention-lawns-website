@@ -77,7 +77,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All Rights Reserved. Designed for Excellence.</p>
+      <p><span data-aura="footerCopyright">&copy; <?php echo date('Y'); ?> <?php bloginfo('name'); ?>. All Rights Reserved. Designed for Excellence.</span> <span style="margin: 0 8px; opacity: 0.35;">|</span> <a href="#admin" id="linkFooterAdmin" class="footer-admin-link" title="Open Venue Management Portal">🔒 Admin CMS</a></p>
     </div>
   </div>
 </footer>
@@ -189,33 +189,132 @@
       </div>
 
       <div class="admin-dash-nav">
-        <button type="button" class="admin-nav-tab active" data-tab="paneAbout">🏛️ About Venue</button>
-        <button type="button" class="admin-nav-tab" data-tab="paneContact">📞 Contact Details</button>
-        <button type="button" class="admin-nav-tab" data-tab="paneStats">📊 Venue Stats</button>
+        <button type="button" class="admin-nav-tab active" data-tab="paneHero">🎯 Hero Banner</button>
+        <button type="button" class="admin-nav-tab" data-tab="paneAbout">🏛️ About Venue</button>
+        <button type="button" class="admin-nav-tab" data-tab="paneHalls">🏰 Halls & Spaces</button>
+        <button type="button" class="admin-nav-tab" data-tab="paneCatering">🍽️ Food & Catering</button>
         <button type="button" class="admin-nav-tab" data-tab="paneGallery">🖼️ Photo Gallery</button>
-        <button type="button" class="admin-nav-tab" data-tab="paneHalls">🏛️ Halls & Spaces</button>
-        <button type="button" class="admin-nav-tab" data-tab="paneSecurity">🔑 Admin Security</button>
+        <button type="button" class="admin-nav-tab" data-tab="paneContact">📞 Contact & Footer</button>
+        <button type="button" class="admin-nav-tab" data-tab="paneStats">📊 Venue Stats</button>
+        <button type="button" class="admin-nav-tab" data-tab="paneBackup">💾 Backup & Sync</button>
+        <button type="button" class="admin-nav-tab" data-tab="paneSecurity">🔑 Security</button>
       </div>
 
       <div class="admin-dash-body">
-        <!-- Pane: About Venue -->
-        <div id="paneAbout" class="admin-tab-pane active">
-          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">About Our Venue Content</h5>
+        <!-- 1. Pane: Hero Banner -->
+        <div id="paneHero" class="admin-tab-pane active">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Hero Landing Section Content</h5>
           
           <div class="admin-grid-2col">
             <div class="admin-form-group">
-              <label for="cfgAboutTitle">Section Main Title</label>
-              <input type="text" id="cfgAboutTitle" placeholder="Crafting Unforgettable Celebrations">
+              <label for="cfgHeroTag">Hero Section Tag</label>
+              <input type="text" id="cfgHeroTag" placeholder="WELCOME TO AURA">
             </div>
             <div class="admin-form-group">
-              <label for="cfgAboutImage">Entrance Visual URL</label>
-              <input type="text" id="cfgAboutImage" placeholder="assets/images/about_venue_entrance.jpg">
+              <label for="cfgHeroTitle">Main Headline Title</label>
+              <input type="text" id="cfgHeroTitle" placeholder="Where Celebrations Become Timeless Memories">
             </div>
           </div>
 
           <div class="admin-form-group">
+            <label for="cfgHeroSubtitle">Hero Subtitle / Tagline</label>
+            <textarea id="cfgHeroSubtitle" rows="2" placeholder="An urban oasis conceived to redefine the art of gathering..."></textarea>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgHeroBtnPrimaryText">Primary Button Text</label>
+              <input type="text" id="cfgHeroBtnPrimaryText" placeholder="SEND AN INQUIRY">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgHeroBtnPrimaryLink">Primary Button Link</label>
+              <input type="text" id="cfgHeroBtnPrimaryLink" placeholder="#contact">
+            </div>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgHeroBtnSecondaryText">Secondary Button Text</label>
+              <input type="text" id="cfgHeroBtnSecondaryText" placeholder="EXPLORE SPACES">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgHeroBtnSecondaryLink">Secondary Button Link</label>
+              <input type="text" id="cfgHeroBtnSecondaryLink" placeholder="#halls">
+            </div>
+          </div>
+
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin: 20px 0 12px;">Hero Background Photo</h5>
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgHeroBgImage">Background Image URL or Path</label>
+              <input type="text" id="cfgHeroBgImage" placeholder="assets/images/aura_drone_aerial_panorama.jpg">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgHeroBgFile">Or Upload from Device</label>
+              <input type="file" id="cfgHeroBgFile" accept="image/*">
+            </div>
+          </div>
+          <div class="admin-img-preview-wrap" id="heroBgPreviewWrap">
+            <img id="cfgHeroBgPreview" class="admin-img-preview-thumb" src="assets/images/aura_drone_aerial_panorama.jpg" alt="Hero Preview">
+            <span class="admin-img-preview-label">Active Hero Background Visual</span>
+          </div>
+
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin: 20px 0 12px;">Hero Highlights & Metric Pills</h5>
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgHeroBadgeCapacity">Guest Capacity Badge</label>
+              <input type="text" id="cfgHeroBadgeCapacity" placeholder="1000+ Guests Capacity">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgHeroBadgeArea">Area Badge</label>
+              <input type="text" id="cfgHeroBadgeArea" placeholder="35,000+ Sq.Ft Area">
+            </div>
+          </div>
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgHeroBadgeLocation">Location Badge</label>
+              <input type="text" id="cfgHeroBadgeLocation" placeholder="Prime Gachibowli Location ↗">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgHeroBadgeParking">Valet Parking Badge</label>
+              <input type="text" id="cfgHeroBadgeParking" placeholder="200+ Spacious Inside Valet Parking">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Pane: About Venue -->
+        <div id="paneAbout" class="admin-tab-pane">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">About Our Venue Content</h5>
+          
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgAboutTag">Section Tag</label>
+              <input type="text" id="cfgAboutTag" placeholder="ABOUT OUR VENUE">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgAboutTitle">Section Main Title</label>
+              <input type="text" id="cfgAboutTitle" placeholder="An Unexpected Sanctuary in Hyderabad’s Financial Corridor">
+            </div>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgAboutImage">Entrance Visual URL or Path</label>
+              <input type="text" id="cfgAboutImage" placeholder="assets/images/aura_grand_entrance_night.jpg">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgAboutImageFile">Or Upload from Device</label>
+              <input type="file" id="cfgAboutImageFile" accept="image/*">
+            </div>
+          </div>
+          <div class="admin-img-preview-wrap">
+            <img id="cfgAboutImagePreview" class="admin-img-preview-thumb" src="assets/images/aura_grand_entrance_night.jpg" alt="About Visual">
+            <span class="admin-img-preview-label">Active About Entrance Visual</span>
+          </div>
+
+          <div class="admin-form-group" style="margin-top: 14px;">
             <label for="cfgAboutIntro">Introductory Description Paragraph</label>
-            <textarea id="cfgAboutIntro" rows="3" placeholder="Nestled amidst serene surroundings in Telecom Nagar Extension..."></textarea>
+            <textarea id="cfgAboutIntro" rows="4" placeholder="Beyond the glass and concrete of Hyderabad’s financial corridor..."></textarea>
           </div>
 
           <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin: 20px 0 12px;">Venue Feature Grid Cards (Add / Edit / Remove)</h5>
@@ -241,119 +340,29 @@
           </div>
         </div>
 
-        <!-- Pane: Security -->
-        <div id="paneSecurity" class="admin-tab-pane">
-          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Admin Access & Password Settings</h5>
-          
-          <div class="admin-add-photo-box" style="margin-bottom: 20px;">
-            <h5>Change Admin Password</h5>
-            <form id="adminChangePassForm">
-              <div class="admin-grid-2col">
-                <div class="admin-form-group">
-                  <label for="newAdminPass">New Password</label>
-                  <input type="password" id="newAdminPass" placeholder="Enter new password" required>
-                </div>
-                <div class="admin-form-group">
-                  <label for="confirmAdminPass">Confirm Password</label>
-                  <input type="password" id="confirmAdminPass" placeholder="Confirm new password" required>
-                </div>
-              </div>
-              <button type="submit" class="admin-btn-save" style="padding: 9px 20px; font-size: 0.78rem;">UPDATE PASSWORD</button>
-            </form>
-          </div>
-
-          <div class="admin-add-photo-box">
-            <h5>Reset to Master Password</h5>
-            <p style="font-size: 0.82rem; color: #A3B8AD; margin-bottom: 14px;">If you ever want to reset the admin password back to factory defaults (<code>aura@2026</code>):</p>
-            <button type="button" id="btnResetPassDefault" class="admin-btn-secondary">Reset Password to "aura@2026"</button>
-          </div>
-        </div>
-        <!-- Pane 1: Contact -->
-        <div id="paneContact" class="admin-tab-pane">
-          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Direct Customer Contacts</h5>
-          <div class="admin-grid-2col">
-            <div class="admin-form-group">
-              <label for="cfgPhone">Phone Number (Display)</label>
-              <input type="text" id="cfgPhone" placeholder="+91 77779 98789">
-            </div>
-            <div class="admin-form-group">
-              <label for="cfgWhatsapp">WhatsApp Number (Digits Only)</label>
-              <input type="text" id="cfgWhatsapp" placeholder="917777998789">
-            </div>
-          </div>
-          <div class="admin-form-group">
-            <label for="cfgEmail">Inquiries Email Address</label>
-            <input type="email" id="cfgEmail" placeholder="info@auraconvention.com">
-          </div>
-          <div class="admin-form-group">
-            <label for="cfgAddress">Venue Full Physical Address</label>
-            <textarea id="cfgAddress" rows="3" placeholder="Telecom Nagar Extension, Gachibowli, Hyderabad, Telangana 500032"></textarea>
-          </div>
-        </div>
-
-        <!-- Pane 2: Stats -->
-        <div id="paneStats" class="admin-tab-pane">
-          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Key Venue Highlights</h5>
-          <div class="admin-grid-2col">
-            <div class="admin-form-group">
-              <label for="cfgArea">Estate Total Area</label>
-              <input type="text" id="cfgArea" placeholder="35,000+">
-            </div>
-            <div class="admin-form-group">
-              <label for="cfgCapacity">Total Guest Capacity</label>
-              <input type="text" id="cfgCapacity" placeholder="1,000+">
-            </div>
-          </div>
-          <div class="admin-form-group">
-            <label for="cfgParking">Valet Car Parking Spots</label>
-            <input type="text" id="cfgParking" placeholder="200+">
-          </div>
-        </div>
-
-        <!-- Pane 3: Gallery -->
-        <div id="paneGallery" class="admin-tab-pane">
-          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 4px;">Active Gallery Images</h5>
-          <p style="font-size: 0.78rem; color: #A3B8AD; margin-bottom: 14px;">
-            📌 <strong>Homepage limit:</strong> The first 6 photos appear on the homepage gallery grid. All additional photos are shown when visitors click <strong>"VIEW GALLERY &rarr;"</strong>.
-          </p>
-          <div id="adminGalleryList" class="admin-gallery-list"></div>
-
-          <div class="admin-add-photo-box">
-            <h5>Add New Photo to Gallery</h5>
-            <div class="admin-grid-2col">
-              <div class="admin-form-group">
-                <label for="newPhotoUrl">Image URL (Web Link)</label>
-                <input type="text" id="newPhotoUrl" placeholder="assets/images/hall_grand_stage.jpg or https://...">
-              </div>
-              <div class="admin-form-group">
-                <label for="newPhotoFile">Or Upload from Device</label>
-                <input type="file" id="newPhotoFile" accept="image/*">
-              </div>
-            </div>
-            <div class="admin-grid-2col">
-              <div class="admin-form-group">
-                <label for="newPhotoTitle">Photo Title / Caption</label>
-                <input type="text" id="newPhotoTitle" placeholder="e.g., Grand Sangeet Celebration">
-              </div>
-              <div class="admin-form-group">
-                <label for="newPhotoSpan">Layout Span</label>
-                <select id="newPhotoSpan">
-                  <option value="1">Standard Width (Top Row)</option>
-                  <option value="2">Featured Wide Width (Bottom Row)</option>
-                </select>
-              </div>
-            </div>
-            <button type="button" id="btnAddGalleryPhoto" class="admin-btn-save" style="padding: 9px 20px; font-size: 0.78rem;">+ Add Photo to Gallery</button>
-          </div>
-        </div>
-
-        <!-- Pane 4: Halls & Spaces Dynamic CRUD -->
+        <!-- 3. Pane: Halls & Spaces Dynamic CRUD -->
         <div id="paneHalls" class="admin-tab-pane">
           <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 8px;">Halls & Event Spaces Manager</h5>
           <p style="font-size: 0.82rem; color: #A3B8AD; margin-bottom: 16px;">
-            Manage existing halls, edit capacities and descriptions, or add brand new halls/lawns to the grid.
+            Edit existing halls, change capacities, update photos, or add brand new halls/lawns to the grid.
           </p>
 
+          <div class="admin-grid-2col" style="margin-bottom: 14px;">
+            <div class="admin-form-group">
+              <label for="cfgHallsTag">Section Tag</label>
+              <input type="text" id="cfgHallsTag" placeholder="OUR VENUES">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgHallsTitle">Section Title</label>
+              <input type="text" id="cfgHallsTitle" placeholder="Halls & Spaces">
+            </div>
+          </div>
+          <div class="admin-form-group" style="margin-bottom: 20px;">
+            <label for="cfgHallsSubtitle">Section Subtitle</label>
+            <input type="text" id="cfgHallsSubtitle" placeholder="Exquisite indoor ballrooms and vast open-air lawns...">
+          </div>
+
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin: 16px 0 10px;">Active Halls & Spaces Cards</h5>
           <div id="adminHallsList" style="margin-bottom: 24px;"></div>
 
           <div class="admin-add-photo-box">
@@ -378,15 +387,241 @@
                 <input type="text" id="newHallArea" placeholder="e.g., 8,000 sq.ft">
               </div>
             </div>
-            <div class="admin-form-group">
-              <label for="newHallImage">Image URL or Path</label>
-              <input type="text" id="newHallImage" placeholder="assets/images/expo_canopy.jpg or https://...">
+            <div class="admin-grid-2col">
+              <div class="admin-form-group">
+                <label for="newHallImage">Image URL or Path</label>
+                <input type="text" id="newHallImage" placeholder="assets/images/expo_canopy.jpg">
+              </div>
+              <div class="admin-form-group">
+                <label for="newHallImageFile">Or Upload from Device</label>
+                <input type="file" id="newHallImageFile" accept="image/*">
+              </div>
             </div>
             <div class="admin-form-group">
               <label for="newHallDesc">Hall Description</label>
               <textarea id="newHallDesc" rows="2" placeholder="Describe the hall features, ambiance, and suitable celebration types..."></textarea>
             </div>
             <button type="button" id="btnAddHallCard" class="admin-btn-save" style="padding: 9px 20px; font-size: 0.78rem;">+ Add Hall / Space Card to Grid</button>
+          </div>
+        </div>
+
+        <!-- 4. Pane: Food & Catering -->
+        <div id="paneCatering" class="admin-tab-pane">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Royal Food & Catering Section</h5>
+          
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgCateringTag">Section Tag</label>
+              <input type="text" id="cfgCateringTag" placeholder="ROYAL FOOD & CATERING">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgCateringTitle">Section Title</label>
+              <input type="text" id="cfgCateringTitle" placeholder="Delicious Moments Made to Perfection">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="cfgCateringSubtitle">Section Subtitle</label>
+            <input type="text" id="cfgCateringSubtitle" placeholder="Exquisite royal feasts powered by our exclusive food & catering partner...">
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgCateringPartnerPill">Partner Badge Pill</label>
+              <input type="text" id="cfgCateringPartnerPill" placeholder="EXCLUSIVE FOOD & CATERING PARTNER: KateringKing.com">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgCateringPartnerUrl">Partner Website URL</label>
+              <input type="text" id="cfgCateringPartnerUrl" placeholder="https://kateringking.com/">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="cfgCateringDesc">Catering Story / Description</label>
+            <textarea id="cfgCateringDesc" rows="3" placeholder="No event is complete without an unforgettable food experience..."></textarea>
+          </div>
+
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin: 18px 0 10px;">Catering Showcase Photo</h5>
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgCateringImage">Showcase Image URL or Path</label>
+              <input type="text" id="cfgCateringImage" placeholder="assets/images/aura_live_buffet_service.jpg">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgCateringImageFile">Or Upload from Device</label>
+              <input type="file" id="cfgCateringImageFile" accept="image/*">
+            </div>
+          </div>
+          <div class="admin-img-preview-wrap">
+            <img id="cfgCateringImagePreview" class="admin-img-preview-thumb" src="assets/images/aura_live_buffet_service.jpg" alt="Catering Preview">
+            <span class="admin-img-preview-label">Active Catering Section Visual</span>
+          </div>
+
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin: 20px 0 10px;">Catering Highlights & Checklist Points</h5>
+          <div id="adminCateringChecklist" style="margin-bottom: 20px;"></div>
+
+          <div class="admin-add-photo-box">
+            <h5>+ Add New Catering Checklist Item</h5>
+            <div class="admin-form-group">
+              <label for="newCateringBulletTitle">Bullet Title</label>
+              <input type="text" id="newCateringBulletTitle" placeholder="e.g., Live Chaat Counter">
+            </div>
+            <div class="admin-form-group">
+              <label for="newCateringBulletDesc">Bullet Description</label>
+              <input type="text" id="newCateringBulletDesc" placeholder="e.g., Authentic Delhi & Lucknow street delicacies curated live.">
+            </div>
+            <button type="button" id="btnAddCateringBullet" class="admin-btn-save" style="padding: 9px 20px; font-size: 0.78rem;">+ Add Catering Bullet</button>
+          </div>
+        </div>
+
+        <!-- 5. Pane: Photo Gallery -->
+        <div id="paneGallery" class="admin-tab-pane">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 4px;">Active Gallery Images Manager</h5>
+          <p style="font-size: 0.78rem; color: #A3B8AD; margin-bottom: 14px;">
+            📌 <strong>Homepage display:</strong> The first 10 photos appear directly on the homepage gallery grid. All photos appear in the fullscreen modal on <strong>"VIEW GALLERY &rarr;"</strong>.
+          </p>
+          <div id="adminGalleryList" class="admin-gallery-list"></div>
+
+          <div class="admin-add-photo-box">
+            <h5>Add New Photo to Gallery</h5>
+            <div class="admin-grid-2col">
+              <div class="admin-form-group">
+                <label for="newPhotoUrl">Image URL (Web Link or Local Path)</label>
+                <input type="text" id="newPhotoUrl" placeholder="assets/images/hall_grand_stage.jpg or https://...">
+              </div>
+              <div class="admin-form-group">
+                <label for="newPhotoFile">Or Upload from Device</label>
+                <input type="file" id="newPhotoFile" accept="image/*">
+              </div>
+            </div>
+            <div class="admin-grid-2col">
+              <div class="admin-form-group">
+                <label for="newPhotoTitle">Photo Title / Caption</label>
+                <input type="text" id="newPhotoTitle" placeholder="e.g., Grand Sangeet Celebration">
+              </div>
+              <div class="admin-form-group">
+                <label for="newPhotoSpan">Layout Span</label>
+                <select id="newPhotoSpan">
+                  <option value="1">Standard Width (Top Rows)</option>
+                  <option value="2">Featured Wide Width (Bottom Row)</option>
+                </select>
+              </div>
+            </div>
+            <button type="button" id="btnAddGalleryPhoto" class="admin-btn-save" style="padding: 9px 20px; font-size: 0.78rem;">+ Add Photo to Gallery</button>
+          </div>
+        </div>
+
+        <!-- 6. Pane: Contact & Footer -->
+        <div id="paneContact" class="admin-tab-pane">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Direct Customer Contacts & Footer Branding</h5>
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgPhone">Phone Number (Display)</label>
+              <input type="text" id="cfgPhone" placeholder="+91 77779 98789">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgWhatsapp">WhatsApp Number (Digits Only)</label>
+              <input type="text" id="cfgWhatsapp" placeholder="917777998789">
+            </div>
+          </div>
+          <div class="admin-form-group">
+            <label for="cfgEmail">Inquiries Email Address (Used for EmailJS dispatch & display)</label>
+            <input type="email" id="cfgEmail" placeholder="info@auraconvention.com">
+          </div>
+          <div class="admin-form-group">
+            <label for="cfgAddress">Venue Full Physical Address</label>
+            <textarea id="cfgAddress" rows="2" placeholder="Telecom Nagar Extension, Gachibowli, Hyderabad, Telangana 500032"></textarea>
+          </div>
+          <div class="admin-form-group">
+            <label for="cfgMapsUrl">Google Maps Redirection Link</label>
+            <input type="text" id="cfgMapsUrl" placeholder="https://www.google.com/maps/place/AURA+Convention+%26+Lawns/...">
+          </div>
+          <div class="admin-form-group">
+            <label for="cfgGoogleProfileUrl">Google Business Profile Share Link</label>
+            <input type="text" id="cfgGoogleProfileUrl" placeholder="https://share.google/AniDRQuswFoXfx32N">
+          </div>
+          <div class="admin-form-group">
+            <label for="cfgFooterCopyright">Footer Copyright Notice</label>
+            <input type="text" id="cfgFooterCopyright" placeholder="© 2026 Aura Convention and Lawns. All Rights Reserved.">
+          </div>
+        </div>
+
+        <!-- 7. Pane: Venue Stats -->
+        <div id="paneStats" class="admin-tab-pane">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Key Venue Metric Highlights</h5>
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgArea">Estate Total Area</label>
+              <input type="text" id="cfgArea" placeholder="35,000+">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgCapacity">Total Guest Capacity</label>
+              <input type="text" id="cfgCapacity" placeholder="1,000+">
+            </div>
+          </div>
+          <div class="admin-form-group">
+            <label for="cfgParking">Valet Car Parking Spots</label>
+            <input type="text" id="cfgParking" placeholder="200+">
+          </div>
+        </div>
+
+        <!-- 8. Pane: Backup & Sync -->
+        <div id="paneBackup" class="admin-tab-pane">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 10px;">Configuration Backup & Migration</h5>
+          <p style="font-size: 0.82rem; color: #A3B8AD; margin-bottom: 18px;">
+            Export all website text, images, and settings to a JSON file for safe backup, or import an existing configuration to migrate across devices.
+          </p>
+
+          <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 24px;">
+            <button type="button" id="btnExportConfig" class="admin-btn-export">
+              <span>📥 Download Backup (JSON)</span>
+            </button>
+            <button type="button" id="btnCopyConfig" class="admin-btn-secondary" style="font-size: 0.82rem;">
+              <span>📋 Copy Config JSON to Clipboard</span>
+            </button>
+          </div>
+
+          <div class="admin-add-photo-box" style="margin-bottom: 24px;">
+            <h5>Restore Configuration from Backup File</h5>
+            <p style="font-size: 0.8rem; color: #A3B8AD; margin-bottom: 12px;">Choose a previously exported <code>aura_venue_config.json</code> file to restore all website content:</p>
+            <input type="file" id="importConfigFile" accept=".json" style="margin-bottom: 12px;">
+            <button type="button" id="btnTriggerImport" class="admin-btn-import">
+              <span>📤 Restore Selected Backup</span>
+            </button>
+          </div>
+
+          <div class="admin-add-photo-box">
+            <h5 style="color: #FFA0A0;">Reset to Factory Curated Defaults</h5>
+            <p style="font-size: 0.8rem; color: #A3B8AD; margin-bottom: 12px;">Reverts all text, cards, catering descriptions, and photos back to the original verified photoshoot state.</p>
+            <button type="button" id="btnResetAllDefaults" class="btn-admin-del" style="padding: 9px 18px; font-size: 0.82rem;">⚠️ Reset Entire Website to Defaults</button>
+          </div>
+        </div>
+
+        <!-- 9. Pane: Admin Security -->
+        <div id="paneSecurity" class="admin-tab-pane">
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin-bottom: 16px;">Admin Access & Password Settings</h5>
+          
+          <div class="admin-add-photo-box" style="margin-bottom: 20px;">
+            <h5>Change Admin Password</h5>
+            <form id="adminChangePassForm">
+              <div class="admin-grid-2col">
+                <div class="admin-form-group">
+                  <label for="newAdminPass">New Password</label>
+                  <input type="password" id="newAdminPass" placeholder="Enter new password" required>
+                </div>
+                <div class="admin-form-group">
+                  <label for="confirmAdminPass">Confirm Password</label>
+                  <input type="password" id="confirmAdminPass" placeholder="Confirm new password" required>
+                </div>
+              </div>
+              <button type="submit" class="admin-btn-save" style="padding: 9px 20px; font-size: 0.78rem;">UPDATE PASSWORD</button>
+            </form>
+          </div>
+
+          <div class="admin-add-photo-box">
+            <h5>Reset to Master Password</h5>
+            <p style="font-size: 0.82rem; color: #A3B8AD; margin-bottom: 14px;">If you ever want to reset the admin password back to factory defaults (<code>aura@2026</code>):</p>
+            <button type="button" id="btnResetPassDefault" class="admin-btn-secondary">Reset Password to "aura@2026"</button>
           </div>
         </div>
       </div>
