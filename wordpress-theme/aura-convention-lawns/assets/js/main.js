@@ -15,7 +15,7 @@
 
 // Default fallback configuration for Aura Convention & Lawns
 const DEFAULT_AURA_CONFIG = {
-  version: 5,
+  version: 50,
   about: {
     title: "An Urban Sanctuary Conceived to Redefine the Art of Gathering",
     intro: "Beyond the glass and concrete of Hyderabad’s financial corridor lies an unexpected sanctuary. A place where the relentless pace of the city quietly dissolves into open skies, natural harmony, and architectural grandeur. Welcome to <strong>Aura Convention and Lawns</strong> — an urban oasis conceived to redefine the art of gathering.<br><br>Carved into a natural landscape framed by majestic, timeless hillocks, Aura Convention and Lawns merges raw natural topography with refined modern design. Winding botanical promenades, sculpted green terraces, and curated art installations bring texture and soul to every open space. Every angle has been engineered with photogenic intention: from dramatic golden-hour sightlines against the rocky horizon to intimate, glowing garden alcoves. Here, every photograph captures an heirloom memory, and every view invites stillness.",
@@ -125,12 +125,20 @@ function getSiteConfig() {
   try {
     const saved = localStorage.getItem('aura_venue_config');
     if (saved) {
-      const parsed = JSON.parse(saved);
-      if (!parsed.version || parsed.version < 5) {
-        parsed.version = 5;
+      let parsed = JSON.parse(saved);
+      
+      // Mandatory gallery validation: ensure latest genuine photoshoot is active
+      const isLegacyGallery = !parsed.gallery || 
+        !Array.isArray(parsed.gallery) || 
+        !parsed.gallery.length || 
+        !parsed.gallery[0].src || 
+        !parsed.gallery[0].src.includes('aura_stage_led_backdrop');
+
+      if (!parsed.version || parsed.version < 50 || isLegacyGallery) {
+        parsed.version = 50;
         parsed.about = DEFAULT_AURA_CONFIG.about;
         parsed.halls = DEFAULT_AURA_CONFIG.halls;
-        parsed.gallery = DEFAULT_AURA_CONFIG.gallery;
+        parsed.gallery = JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG.gallery));
         if (parsed.stats) parsed.stats.parking = '200+';
         try { localStorage.setItem('aura_venue_config', JSON.stringify(parsed)); } catch (e) {}
       }
@@ -153,7 +161,7 @@ function getSiteConfig() {
         contact: { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) },
         stats: { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) },
         halls: (parsed.halls && Array.isArray(parsed.halls) && parsed.halls.length) ? parsed.halls : DEFAULT_AURA_CONFIG.halls,
-        gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length > 0) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
+        gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length > 0 && parsed.gallery[0].src.includes('aura_stage_led_backdrop')) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
         admin: { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) }
       };
     }

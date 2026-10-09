@@ -520,54 +520,41 @@ section {
   box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
 }
 
-/* Google Maps Dedicated Action Button in Hero */
-.hero-maps-action {
+/* Google Maps Luxury Action Button in Hero (Matches "Send an Inquiry" button styling) */
+.hero-maps-action-wrapper {
   display: flex;
   justify-content: center;
-  margin-top: 14px;
+  margin-top: 20px;
 }
 
-.hero-maps-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: linear-gradient(135deg, rgba(197, 160, 89, 0.25) 0%, rgba(6, 21, 12, 0.88) 100%);
-  border: 1.5px solid var(--gold);
-  padding: 9px 24px;
-  border-radius: 30px;
-  color: #FFF2C6;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-decoration: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 0 12px rgba(197, 160, 89, 0.15);
-  transition: all 0.25s ease;
-  backdrop-filter: blur(6px);
+.btn-hero-maps {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  background: var(--gold) !important;
+  color: #06150C !important;
+  padding: 12px 28px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  font-size: 0.84rem !important;
+  letter-spacing: 1px !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  box-shadow: 0 4px 18px rgba(212, 175, 55, 0.45) !important;
+  transition: var(--transition) !important;
+  border: none !important;
 }
 
-.hero-maps-pill:hover {
-  background: linear-gradient(135deg, rgba(197, 160, 89, 0.45) 0%, rgba(11, 34, 21, 0.95) 100%);
-  border-color: #FFE599;
-  color: #FFFFFF;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(197, 160, 89, 0.4);
+.btn-hero-maps:hover {
+  background: var(--gold-light) !important;
+  color: #000000 !important;
+  box-shadow: 0 6px 24px rgba(212, 175, 55, 0.65) !important;
+  transform: translateY(-2px) !important;
 }
 
-.hero-maps-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #EA4335;
-}
-
-.hero-maps-arrow {
-  color: var(--gold-light);
-  font-size: 0.95rem;
-  transition: transform 0.2s ease;
-}
-
-.hero-maps-pill:hover .hero-maps-arrow {
-  transform: translate(2px, -2px);
+.btn-hero-maps svg {
+  flex-shrink: 0;
 }
 
 /* 2. ABOUT SECTION - Direct Match to Reference 1 */

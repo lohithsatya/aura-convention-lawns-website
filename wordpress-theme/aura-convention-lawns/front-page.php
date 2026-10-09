@@ -61,16 +61,15 @@ get_header();
         </div>
       </div>
 
-      <!-- Google Maps Location Link & Navigation Button Below Icons -->
-      <div class="hero-maps-action">
-        <a href="https://maps.app.goo.gl/WHmxMP4GU2yBQLXJ7" target="_blank" rel="noopener noreferrer" class="hero-maps-pill" title="Navigate to Aura Convention & Lawns on Google Maps">
-          <span class="hero-maps-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-            </svg>
-          </span>
+      <!-- Google Maps Luxury Button Feature (Styled like "Send an Inquiry" button) -->
+      <div class="hero-maps-action-wrapper" style="margin-top: 18px; display: flex; justify-content: center;">
+        <a href="https://maps.app.goo.gl/WHmxMP4GU2yBQLXJ7" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-hero-maps" title="Open Aura Convention & Lawns Location on Google Maps">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
           <span>GET LOCATION DIRECTIONS ON GOOGLE MAPS</span>
-          <span class="hero-maps-arrow">↗</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
@@ -191,64 +190,7 @@ get_header();
       </div>
     </div>
 
-    <!-- Dedicated Parking & Space Feature Showcase -->
-    <div class="about-parking-showcase">
-      <div class="parking-showcase-image">
-        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_drone_aerial_parking.jpg" alt="Aura Expansive 200+ Car Parking & Driveway Grounds">
-        <div class="parking-image-badges">
-          <span class="parking-badge-count">★ 200+ VEHICLES CAPACITY</span>
-          <span class="parking-aerial-caption">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
-            AERIAL VIEW • GACHIBOWLI ESTATE GROUNDS
-          </span>
-        </div>
-      </div>
-      <div class="parking-showcase-content">
-        <span class="parking-tag-label">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
-          PARKING COUNT & EXPANSIVE SPACE
-        </span>
-        <h3 class="parking-showcase-title">Expansive 200+ Car Parking with Dedicated Valet Concierge</h3>
-        <p class="parking-showcase-desc">
-          Convenient vehicular access is paramount for grand gatherings. Aura Convention and Lawns offers an unconstrained estate driveway accommodating <strong>200+ vehicles</strong>, with multi-lane entrance gates, separate VIP arrival lanes, and dedicated coach parking ensuring completely congestion-free arrivals.
-        </p>
-        <div class="parking-specs-grid">
-          <div class="parking-spec-item">
-            <div class="parking-spec-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
-            </div>
-            <div class="parking-spec-text">
-              <strong>200+ Dedicated Car Bays</strong>
-              <p>Abundant paved space accommodating massive wedding fleets, corporate convoys, and guest vehicles effortlessly.</p>
-            </div>
-          </div>
-          <div class="parking-spec-item">
-            <div class="parking-spec-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
-            </div>
-            <div class="parking-spec-text">
-              <strong>White-Glove Valet Assistance</strong>
-              <p>Trained uniformed valet stewards providing instant vehicle drop-off and pickup right at the main porch.</p>
-            </div>
-          </div>
-          <div class="parking-spec-item">
-            <div class="parking-spec-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <div class="parking-spec-text">
-              <strong>24/7 Security & Wide Dual Access</strong>
-              <p>Fully illuminated premises with CCTV surveillance and wide ingress/egress directly connected to the main road.</p>
-            </div>
-          </div>
-        </div>
-        <div class="parking-highlights-row">
-          <span class="parking-highlight-pill">✓ 200+ CARS</span>
-          <span class="parking-highlight-pill">✓ VALET SERVICE</span>
-          <span class="parking-highlight-pill">✓ BUS & COACH FRIENDLY</span>
-          <span class="parking-highlight-pill">✓ ZERO TRAFFIC CHOKE</span>
-        </div>
-      </div>
-    </div>
+
   </div>
 </section>
 
