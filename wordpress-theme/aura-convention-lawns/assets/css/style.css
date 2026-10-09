@@ -447,10 +447,17 @@ section {
 }
 
 .hero-emblem {
-  width: 58px;
-  height: 58px;
-  margin: 0 auto 8px auto;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+  width: 115px;
+  height: auto;
+  max-height: 110px;
+  margin: 0 auto 12px auto;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 16px rgba(212, 175, 55, 0.45));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.hero-emblem:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.85)) drop-shadow(0 0 22px rgba(212, 175, 55, 0.65));
 }
 
 .hero-title {
@@ -497,6 +504,70 @@ section {
   border-radius: 20px;
   border: 1px solid rgba(197, 160, 89, 0.4);
   backdrop-filter: blur(4px);
+}
+
+.hero-badge-link {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hero-badge-link:hover {
+  background: rgba(197, 160, 89, 0.25);
+  border-color: var(--gold-light);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
+}
+
+/* Google Maps Dedicated Action Button in Hero */
+.hero-maps-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.hero-maps-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.25) 0%, rgba(6, 21, 12, 0.88) 100%);
+  border: 1.5px solid var(--gold);
+  padding: 9px 24px;
+  border-radius: 30px;
+  color: #FFF2C6;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 0 12px rgba(197, 160, 89, 0.15);
+  transition: all 0.25s ease;
+  backdrop-filter: blur(6px);
+}
+
+.hero-maps-pill:hover {
+  background: linear-gradient(135deg, rgba(197, 160, 89, 0.45) 0%, rgba(11, 34, 21, 0.95) 100%);
+  border-color: #FFE599;
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(197, 160, 89, 0.4);
+}
+
+.hero-maps-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #EA4335;
+}
+
+.hero-maps-arrow {
+  color: var(--gold-light);
+  font-size: 0.95rem;
+  transition: transform 0.2s ease;
+}
+
+.hero-maps-pill:hover .hero-maps-arrow {
+  transform: translate(2px, -2px);
 }
 
 /* 2. ABOUT SECTION - Direct Match to Reference 1 */
@@ -713,6 +784,228 @@ section {
   color: #D2E0D7;
   margin-top: 4px;
   white-space: nowrap;
+}
+
+/* Featured glow on 3rd stat item */
+.stat-item.stat-featured-parking {
+  background: rgba(197, 160, 89, 0.08);
+  border-radius: 12px;
+}
+
+.stat-item.stat-featured-parking .stat-icon-box {
+  background: rgba(197, 160, 89, 0.22);
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(197, 160, 89, 0.35);
+}
+
+.stat-featured-tag {
+  display: inline-block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #071D11;
+  background: var(--gold-glow);
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  width: fit-content;
+}
+
+/* Dedicated Parking & Space Showcase Card */
+.about-parking-showcase {
+  width: 100%;
+  margin-top: 36px;
+  background: linear-gradient(135deg, rgba(8, 26, 17, 0.9) 0%, rgba(4, 16, 10, 0.96) 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(197, 160, 89, 0.45);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.about-parking-showcase:hover {
+  border-color: rgba(197, 160, 89, 0.7);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55), 0 0 25px rgba(197, 160, 89, 0.15);
+}
+
+.parking-showcase-image {
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+}
+
+.parking-showcase-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-parking-showcase:hover .parking-showcase-image img {
+  transform: scale(1.04);
+}
+
+.parking-image-badges {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+  pointer-events: none;
+}
+
+.parking-badge-count {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(6, 22, 13, 0.9);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  padding: 7px 16px;
+  border-radius: 30px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+}
+
+.parking-aerial-caption {
+  color: #FFFFFF;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.parking-showcase-content {
+  padding: 36px 36px 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.parking-tag-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold-light);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.parking-showcase-title {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+
+.parking-showcase-desc {
+  font-size: 0.88rem;
+  color: #C2D4C8;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.parking-specs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.parking-spec-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(6, 21, 13, 0.55);
+  border: 1px solid rgba(197, 160, 89, 0.22);
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.parking-spec-item:hover {
+  border-color: rgba(197, 160, 89, 0.5);
+  background: rgba(8, 28, 17, 0.75);
+}
+
+.parking-spec-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(197, 160, 89, 0.15);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-light);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.parking-spec-text strong {
+  display: block;
+  font-size: 0.88rem;
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+
+.parking-spec-text p {
+  font-size: 0.78rem;
+  color: #A6BAAF;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.parking-highlights-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.parking-highlight-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gold-glow);
+  background: rgba(197, 160, 89, 0.12);
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  padding: 5px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .about-parking-showcase {
+    grid-template-columns: 1fr;
+  }
+  .parking-showcase-image {
+    min-height: 260px;
+  }
+  .parking-showcase-content {
+    padding: 24px 20px;
+  }
 }
 
 /* 3. HALLS & SPACES - Direct Match to Reference 2 */
@@ -1293,6 +1586,47 @@ textarea.form-input-ref {
   align-items: center;
   justify-content: center;
   color: var(--gold-light);
+  transition: all 0.25s ease;
+}
+
+.social-link:hover {
+  background: var(--gold);
+  color: #06150C;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
+}
+
+.footer-google-profile {
+  margin-top: 14px;
+}
+
+.google-profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: #E2ECE5;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+
+.google-profile-btn:hover {
+  background: rgba(197, 160, 89, 0.18);
+  border-color: var(--gold);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.google-profile-btn svg {
+  flex-shrink: 0;
 }
 
 .footer-col h4 {
@@ -1387,6 +1721,10 @@ textarea.form-input-ref {
   }
   .hamburger {
     display: flex;
+  }
+  .hero-emblem {
+    width: 90px;
+    max-height: 85px;
   }
   .about-features-grid {
     grid-template-columns: 1fr;

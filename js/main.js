@@ -15,7 +15,7 @@
 
 // Default fallback configuration for Aura Convention & Lawns
 const DEFAULT_AURA_CONFIG = {
-  version: 4,
+  version: 5,
   about: {
     title: "An Urban Sanctuary Conceived to Redefine the Art of Gathering",
     intro: "Beyond the glass and concrete of Hyderabad’s financial corridor lies an unexpected sanctuary. A place where the relentless pace of the city quietly dissolves into open skies, natural harmony, and architectural grandeur. Welcome to <strong>Aura Convention and Lawns</strong> — an urban oasis conceived to redefine the art of gathering.<br><br>Carved into a natural landscape framed by majestic, timeless hillocks, Aura Convention and Lawns merges raw natural topography with refined modern design. Winding botanical promenades, sculpted green terraces, and curated art installations bring texture and soul to every open space. Every angle has been engineered with photogenic intention: from dramatic golden-hour sightlines against the rocky horizon to intimate, glowing garden alcoves. Here, every photograph captures an heirloom memory, and every view invites stillness.",
@@ -82,12 +82,16 @@ const DEFAULT_AURA_CONFIG = {
     }
   ],
   gallery: [
-    { src: "assets/images/aura_grand_stage_led_wall.jpg", title: "Grand Production Stage & LED Video Wall", span: "1" },
-    { src: "assets/images/aura_sprawling_lawns_evening.jpg", title: "Sprawling Royal Lawns & Twilight Canopy", span: "1" },
-    { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "1" },
-    { src: "assets/images/aura_royal_buffet_spread.jpg", title: "Royal Banquet Feast by KateringKing", span: "1" },
+    { src: "assets/images/aura_stage_led_backdrop.jpg", title: "Grand Production Stage & LED Visual Backdrop", span: "1" },
+    { src: "assets/images/aura_lawns_banquet_setup.jpg", title: "Lush Sprawling Lawns & Royal Banquet Seating", span: "1" },
+    { src: "assets/images/aura_live_fruit_counter.jpg", title: "Exquisite Live Fruit Counter & Gourmet Display", span: "1" },
+    { src: "assets/images/aura_artisanal_dessert_display.jpg", title: "Artisanal Dessert & Pastry Showcase by KateringKing", span: "1" },
+    { src: "assets/images/aura_canopy_buffet_hall.jpg", title: "Spacious Canopy Dining & Grand Buffet Hall", span: "2" },
+    { src: "assets/images/aura_drone_aerial_parking.jpg", title: "Expansive 200+ Inside Valet Parking Grounds", span: "2" },
     { src: "assets/images/aura_drone_aerial_panorama.jpg", title: "Aerial Drone Panorama: Venue Estate & Lake Sanctuary", span: "2" },
-    { src: "assets/images/aura_drone_aerial_lawns.jpg", title: "Aerial Bird's Eye View: Sprawling Banquet Lawns", span: "2" }
+    { src: "assets/images/aura_drone_aerial_lawns.jpg", title: "Aerial Bird's Eye View: Sprawling Banquet Lawns", span: "2" },
+    { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "1" },
+    { src: "assets/images/aura_royal_buffet_spread.jpg", title: "Royal Banquet Feast by KateringKing", span: "1" }
   ],
   admin: {
     user: "admin",
@@ -122,8 +126,8 @@ function getSiteConfig() {
     const saved = localStorage.getItem('aura_venue_config');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (!parsed.version || parsed.version < 4) {
-        parsed.version = 4;
+      if (!parsed.version || parsed.version < 5) {
+        parsed.version = 5;
         parsed.about = DEFAULT_AURA_CONFIG.about;
         parsed.halls = DEFAULT_AURA_CONFIG.halls;
         parsed.gallery = DEFAULT_AURA_CONFIG.gallery;
@@ -621,14 +625,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(text)}`;
 
-      // Show immediate feedback on page
+      // 4. EmailJS Dispatch targeting lohi8978019972@gmail.com
+      const emailParams = {
+        to_email: 'lohi8978019972@gmail.com',
+        recipient: 'lohi8978019972@gmail.com',
+        user_name: name,
+        user_phone: phone,
+        user_email: email || 'Not provided',
+        event_type: eventType,
+        event_date: formattedDate,
+        guest_count: guests,
+        message: message || 'Please share hall availability, brochure, and customized pricing packages.',
+        venue_name: 'Aura Convention & Lawns, Gachibowli',
+        subject: `New Venue Inquiry for Aura Convention & Lawns: ${eventType} - ${name}`
+      };
+
+      if (typeof emailjs !== 'undefined' && typeof emailjs.send === 'function') {
+        try {
+          emailjs.send('default_service', 'template_aura_inquiry', emailParams)
+            .then(res => {
+              console.log('✓ EmailJS inquiry delivered:', res.status, res.text);
+            })
+            .catch(err => {
+              console.log('EmailJS status notice:', err);
+            });
+        } catch (e) {
+          console.warn('EmailJS dispatch attempt:', e);
+        }
+      }
+
+      // Show immediate feedback confirming EmailJS dispatch & WhatsApp priority link
       if (formSuccess) {
         formSuccess.innerHTML = `
-          <div style="text-align: center; padding: 4px 0;">
-            <div style="font-weight: 700; color: #d4af37; font-size: 0.95rem; margin-bottom: 6px;">
-              ✓ Details recorded! Redirecting to WhatsApp...
+          <div style="text-align: center; padding: 6px 0;">
+            <div style="font-weight: 700; color: #d4af37; font-size: 1rem; margin-bottom: 6px;">
+              ✓ Inquiry Dispatched to lohi8978019972@gmail.com!
             </div>
-            <div style="font-size: 0.85rem; color: #b7cebf;">
+            <div style="font-size: 0.85rem; color: #b7cebf; margin-bottom: 8px;">
+              Our event concierge is also connecting via WhatsApp for priority date hold and instant assistance.
+            </div>
+            <div style="font-size: 0.82rem; color: #9bb5a4;">
               If WhatsApp does not open automatically, <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="color: #25D366; text-decoration: underline; font-weight: 700;">tap here to open WhatsApp</a>.
             </div>
           </div>

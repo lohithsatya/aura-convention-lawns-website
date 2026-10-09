@@ -7,6 +7,8 @@
   <meta name="description" content="Aura Convention & Lawns in Telecom Nagar Extension, Gachibowli, Hyderabad. Premium pillarless convention hall, lush outdoor lawns, in-house catering, and world-class amenities for weddings and corporate events.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" type="image/jpeg" href="assets/images/aura_shield_emblem.jpg">
+  <!-- EmailJS SDK for direct inquiry dispatch -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -91,14 +93,27 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
             <span>35,000+ Sq.Ft Area</span>
           </div>
-          <div class="hero-badge-item">
+          <a href="https://maps.app.goo.gl/WHmxMP4GU2yBQLXJ7" target="_blank" rel="noopener noreferrer" class="hero-badge-item hero-badge-link" title="Open Google Maps Location">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>Prime Gachibowli Location</span>
-          </div>
+            <span>Prime Gachibowli Location ↗</span>
+          </a>
           <div class="hero-badge-item">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
-            <span>200+ Dedicated Car Parking</span>
+            <span>200+ Spacious Inside Valet Parking</span>
           </div>
+        </div>
+
+        <!-- Google Maps Location Link & Navigation Button Below Icons -->
+        <div class="hero-maps-action">
+          <a href="https://maps.app.goo.gl/WHmxMP4GU2yBQLXJ7" target="_blank" rel="noopener noreferrer" class="hero-maps-pill" title="Navigate to Aura Convention & Lawns on Google Maps">
+            <span class="hero-maps-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </span>
+            <span>GET LOCATION DIRECTIONS ON GOOGLE MAPS</span>
+            <span class="hero-maps-arrow">↗</span>
+          </a>
         </div>
       </div>
     </div>
@@ -201,13 +216,73 @@
             <div class="stat-label">GUEST CAPACITY</div>
           </div>
         </div>
-        <div class="stat-item">
+        <div class="stat-item stat-featured-parking">
           <div class="stat-icon-box">
             <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
           </div>
           <div class="stat-info">
+            <span class="stat-featured-tag">★ INSIDE & SPACIOUS</span>
             <div class="stat-number" data-aura-stat="parking">200+</div>
-            <div class="stat-label">VALET CAR PARKING</div>
+            <div class="stat-label">SPACIOUS INSIDE VALET PARKING</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dedicated Parking & Space Feature Showcase -->
+      <div class="about-parking-showcase">
+        <div class="parking-showcase-image">
+          <img src="assets/images/aura_drone_aerial_parking.jpg" alt="Aura Expansive 200+ Spacious Inside Valet Parking Grounds">
+          <div class="parking-image-badges">
+            <span class="parking-badge-count">★ 200+ INSIDE VEHICLES CAPACITY</span>
+            <span class="parking-aerial-caption">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+              AERIAL VIEW • GACHIBOWLI ESTATE GROUNDS
+            </span>
+          </div>
+        </div>
+        <div class="parking-showcase-content">
+          <span class="parking-tag-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+            200+ PARKING COUNT & AMPLE SPACE
+          </span>
+          <h3 class="parking-showcase-title">Spacious Inside Valet Parking for 200+ Vehicles with Wide Driveways</h3>
+          <p class="parking-showcase-desc">
+            Convenient on-site parking is paramount for grand gatherings. Aura Convention and Lawns features extensive, dedicated inside parking accommodating over <strong>200+ vehicles directly within our secure venue perimeter</strong>—complete with dual-lane ingress gates, separate VIP arrival lanes, and dedicated coach parking ensuring completely congestion-free arrivals.
+          </p>
+          <div class="parking-specs-grid">
+            <div class="parking-spec-item">
+              <div class="parking-spec-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/></svg>
+              </div>
+              <div class="parking-spec-text">
+                <strong>200+ Dedicated Inside Bays</strong>
+                <p>Abundant paved parking within our secure estate boundary, ensuring zero congestion during massive weddings & leadership summits.</p>
+              </div>
+            </div>
+            <div class="parking-spec-item">
+              <div class="parking-spec-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+              </div>
+              <div class="parking-spec-text">
+                <strong>White-Glove Valet Assistance</strong>
+                <p>Trained uniformed valet stewards providing instant vehicle drop-off and pickup right at the main porch.</p>
+              </div>
+            </div>
+            <div class="parking-spec-item">
+              <div class="parking-spec-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="parking-spec-text">
+                <strong>24/7 Security & Wide Dual Access</strong>
+                <p>Fully illuminated premises with CCTV surveillance and wide ingress/egress directly connected to the main road.</p>
+              </div>
+            </div>
+          </div>
+          <div class="parking-highlights-row">
+            <span class="parking-highlight-pill">✓ 200+ INSIDE CARS</span>
+            <span class="parking-highlight-pill">✓ SPACIOUS GROUNDS</span>
+            <span class="parking-highlight-pill">✓ ON-SITE VALET</span>
+            <span class="parking-highlight-pill">✓ ZERO TRAFFIC CHOKE</span>
           </div>
         </div>
       </div>
@@ -317,26 +392,26 @@
       <div class="gallery-grid-ref" id="auraGalleryGrid">
         <!-- Top row: 4 images -->
         <div class="gallery-row-top">
-          <div class="gallery-thumb">
-            <img src="assets/images/aura_grand_stage_led_wall.jpg" alt="Grand Production Stage & LED Video Wall">
+          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_stage_led_backdrop.jpg')" style="cursor: pointer;">
+            <img src="assets/images/aura_stage_led_backdrop.jpg" alt="Grand Production Stage & LED Visual Backdrop">
           </div>
-          <div class="gallery-thumb">
-            <img src="assets/images/aura_sprawling_lawns_evening.jpg" alt="Sprawling Royal Lawns Evening Reception">
+          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_lawns_banquet_setup.jpg')" style="cursor: pointer;">
+            <img src="assets/images/aura_lawns_banquet_setup.jpg" alt="Lush Sprawling Lawns & Royal Banquet Seating">
           </div>
-          <div class="gallery-thumb">
-            <img src="assets/images/aura_grand_entrance_night.jpg" alt="Grand Architectural Facade at Night">
+          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_live_fruit_counter.jpg')" style="cursor: pointer;">
+            <img src="assets/images/aura_live_fruit_counter.jpg" alt="Exquisite Live Fruit Counter & Gourmet Display">
           </div>
-          <div class="gallery-thumb">
-            <img src="assets/images/aura_royal_buffet_spread.jpg" alt="Royal Buffet Spread by KateringKing">
+          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_artisanal_dessert_display.jpg')" style="cursor: pointer;">
+            <img src="assets/images/aura_artisanal_dessert_display.jpg" alt="Artisanal Dessert & Pastry Showcase by KateringKing">
           </div>
         </div>
-        <!-- Bottom row: 2 wide images (100% Real Aerial Drone Shots) -->
+        <!-- Bottom row: 2 wide images (100% Real Aerial & Interior Venue Shots) -->
         <div class="gallery-row-bottom">
-          <div class="gallery-thumb">
-            <img src="assets/images/aura_drone_aerial_panorama.jpg" alt="Aerial Drone Panorama: Venue Estate & Lake Sanctuary">
+          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_canopy_buffet_hall.jpg')" style="cursor: pointer;">
+            <img src="assets/images/aura_canopy_buffet_hall.jpg" alt="Spacious Canopy Dining & Grand Buffet Hall">
           </div>
-          <div class="gallery-thumb">
-            <img src="assets/images/aura_drone_aerial_lawns.jpg" alt="Aerial Bird's Eye View: Sprawling Banquet Lawns">
+          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_drone_aerial_parking.jpg')" style="cursor: pointer;">
+            <img src="assets/images/aura_drone_aerial_parking.jpg" alt="Expansive 200+ Inside Valet Parking Grounds">
           </div>
         </div>
       </div>
@@ -471,6 +546,11 @@
         <!-- Right Inquiry Form -->
         <div class="inquiry-right-form">
           <form id="inquiryForm">
+            <!-- EmailJS Destination Target -->
+            <input type="hidden" name="to_email" value="lohi8978019972@gmail.com">
+            <input type="hidden" name="recipient" value="lohi8978019972@gmail.com">
+            <input type="hidden" name="venue_name" value="Aura Convention & Lawns">
+            
             <div class="form-grid-ref">
               <div class="form-group-ref">
                 <label>Your Name *</label>
@@ -550,6 +630,19 @@
             </a>
             <a href="https://wa.me/917777998789" target="_blank" class="social-link" aria-label="WhatsApp" data-aura-href="whatsapp">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/></svg>
+            </a>
+          </div>
+
+          <!-- Google Business Profile Link -->
+          <div class="footer-google-profile">
+            <a href="https://share.google/AniDRQuswFoXfx32N" target="_blank" rel="noopener noreferrer" class="google-profile-btn" title="View Aura Convention & Lawns on Google">
+              <svg width="16" height="16" viewBox="0 0 24 24">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+              </svg>
+              <span>Aura on Google Profile ↗</span>
             </a>
           </div>
         </div>
