@@ -51,7 +51,7 @@ get_header();
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg>
           <span>35,000+ Sq.Ft Area</span>
         </div>
-        <a href="https://maps.app.goo.gl/WHmxMP4GU2yBQLXJ7" target="_blank" rel="noopener noreferrer" class="hero-badge-item hero-badge-link" title="Open Google Maps Location">
+        <a href="https://www.google.com/maps/place/AURA+Convention+%26+Lawns/@17.4307919,78.3605956,17z/data=!3m1!4b1!4m6!3m5!1s0x3bcb93be75973279:0x7ebae846414c1aaf!8m2!3d17.4307919!4d78.3631705!16s%2Fg%2F11kcl9qh80?entry=ttu&g_ep=EgoyMDI2MTAwNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="hero-badge-item hero-badge-link" title="Open Aura Convention & Lawns on Google Maps">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
           <span>Prime Gachibowli Location ↗</span>
         </a>
@@ -63,7 +63,7 @@ get_header();
 
       <!-- Google Maps Luxury Button Feature (Styled like "Send an Inquiry" button) -->
       <div class="hero-maps-action-wrapper" style="margin-top: 18px; display: flex; justify-content: center;">
-        <a href="https://maps.app.goo.gl/WHmxMP4GU2yBQLXJ7" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-hero-maps" title="Open Aura Convention & Lawns Location on Google Maps">
+        <a href="https://www.google.com/maps/place/AURA+Convention+%26+Lawns/@17.4307919,78.3605956,17z/data=!3m1!4b1!4m6!3m5!1s0x3bcb93be75973279:0x7ebae846414c1aaf!8m2!3d17.4307919!4d78.3631705!16s%2Fg%2F11kcl9qh80?entry=ttu&g_ep=EgoyMDI2MTAwNi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="btn btn-gold btn-hero-maps" title="Open Aura Convention & Lawns Location on Google Maps">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
             <circle cx="12" cy="10" r="3"/>
