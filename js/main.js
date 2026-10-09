@@ -61,7 +61,7 @@ const DEFAULT_AURA_CONFIG = {
       badge: "EXECUTIVE PRECISION",
       guests: "1,500 Guests",
       area: "12,000 sq.ft",
-      image: "assets/images/aura_grand_stage_led_wall.jpg",
+      image: "assets/images/aura_convention_hall_canopy.jpg",
       desc: "Inside our convention hall, executive ambition meets uncompromising precision. Aura Convention and Lawns is built from the ground up for premier MICE engagements—from high-profile corporate conventions, international tech summits, and product unveils to strategic board retreats and expansive trade exhibitions. With intelligent acoustic engineering, advanced presentation infrastructure, and versatile modular floor plans, we deliver the structured focus, privacy, and flawless execution that global enterprise commands."
     },
     {
@@ -69,8 +69,8 @@ const DEFAULT_AURA_CONFIG = {
       badge: "UNDER THE NIGHT SKY",
       guests: "2,000+ Guests",
       area: "20,000 sq.ft",
-      image: "assets/images/aura_sprawling_lawns_evening.jpg",
-      desc: "Under the open night sky, Aura Convention and Lawns becomes a stage for life’s grandest milestones. Our sprawling lawns provide an unconstrained canvas for lavish weddings, vibrant sangeets, royal receptions, and intimate family galas. The sweeping lawns adapt effortlessly to your vision—whether you imagine an ethereal, traditional celebration framed by ancient stone, or a chic contemporary gala beneath the stars. Here, celebrations are not merely hosted; they are immortalized."
+      image: "assets/images/aura_sprawling_lawns_setup.jpg",
+      desc: "Under the open night sky, Aura Convention and Lawns offers a versatile canvas designed not only for royal weddings, vibrant sangeets, and grand receptions, but also for large-scale corporate exhibitions, curated art galleries, cultural festivals, and high-impact tech events. Spanning 20,000 sq.ft framed by scenic natural rock formations, the sprawling lawns adapt effortlessly to custom exhibition pavilions, stage setups, tech product zones, and lavish open-air banquets under the stars."
     },
     {
       title: "Banquet Hall",
@@ -134,8 +134,17 @@ function getSiteConfig() {
         !parsed.gallery[0].src || 
         !parsed.gallery[0].src.includes('aura_stage_led_backdrop');
 
-      if (!parsed.version || parsed.version < 50 || isLegacyGallery) {
-        parsed.version = 50;
+      const isLegacyHalls = !parsed.halls ||
+        !Array.isArray(parsed.halls) ||
+        !parsed.halls[0] ||
+        !parsed.halls[0].image ||
+        !parsed.halls[0].image.includes('aura_convention_hall_canopy') ||
+        !parsed.halls[1] ||
+        !parsed.halls[1].desc ||
+        !parsed.halls[1].desc.includes('exhibitions');
+
+      if (!parsed.version || parsed.version < 60 || isLegacyGallery || isLegacyHalls) {
+        parsed.version = 60;
         parsed.about = DEFAULT_AURA_CONFIG.about;
         parsed.halls = DEFAULT_AURA_CONFIG.halls;
         parsed.gallery = JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG.gallery));
@@ -160,7 +169,7 @@ function getSiteConfig() {
         about: { ...DEFAULT_AURA_CONFIG.about, ...(parsed.about || {}) },
         contact: { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) },
         stats: { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) },
-        halls: (parsed.halls && Array.isArray(parsed.halls) && parsed.halls.length) ? parsed.halls : DEFAULT_AURA_CONFIG.halls,
+        halls: (parsed.halls && Array.isArray(parsed.halls) && parsed.halls.length && parsed.halls[0].image && parsed.halls[0].image.includes('aura_convention_hall_canopy')) ? parsed.halls : DEFAULT_AURA_CONFIG.halls,
         gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length > 0 && parsed.gallery[0].src.includes('aura_stage_led_backdrop')) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
         admin: { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) }
       };
