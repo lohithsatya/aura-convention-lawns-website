@@ -819,12 +819,19 @@ function renderFullGalleryModalGrid(galleryList) {
     counterPill.textContent = `Showing all ${items.length} Photos`;
   }
 
+  const isAuth = localStorage.getItem('aura_admin_logged_in') === 'true';
+
   let html = '';
   items.forEach((item, index) => {
     const isSpan2 = item.span === '2';
     const spanClass = isSpan2 ? 'full-gallery-item-span2' : '';
+    const adminDelBtn = isAuth
+      ? `<button type="button" class="modal-admin-del-btn" onclick="event.stopPropagation(); if(confirm('Remove this photo from the gallery?')) deleteGalleryItem(${index});" title="Delete Photo (Admin)">&times;</button>`
+      : '';
+
     html += `
-      <div class="full-gallery-item ${spanClass}" onclick="openLightbox('${item.src}')">
+      <div class="full-gallery-item ${spanClass}" onclick="openLightbox('${item.src}')" style="position: relative;">
+        ${adminDelBtn}
         <img src="${item.src}" alt="${item.title || 'Aura Photo ' + (index + 1)}" loading="lazy">
         <div class="full-gallery-item-overlay">
           <span class="full-gallery-item-title">${item.title || 'Aura Celebration'}</span>
