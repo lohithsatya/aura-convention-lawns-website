@@ -360,13 +360,39 @@ get_header();
     </div>
 
     <div class="gallery-grid">
+      <!-- 1. Illuminated Grand Entry Gate (New) -->
       <div class="gallery-item span-2-col">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_grand_entrance_arch_night.jpg" alt="Illuminated Grand Entry Gate & Welcome Promenade">
+        <div class="gallery-overlay">
+          <span class="gallery-caption">Illuminated Grand Entry Gate & Welcome Promenade</span>
+        </div>
+      </div>
+
+      <!-- 2. Grand Production Stage & LED Backdrop -->
+      <div class="gallery-item">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_stage_led_backdrop.jpg" alt="Grand Production Stage & LED Visual Backdrop">
         <div class="gallery-overlay">
           <span class="gallery-caption">Grand Production Stage & LED Visual Backdrop</span>
         </div>
       </div>
 
+      <!-- 3. Twilight Lawn Banquet & LED Stage (New) -->
+      <div class="gallery-item">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_evening_lawn_gala_setup.jpg" alt="Twilight Lawn Banquet & LED Stage Setting">
+        <div class="gallery-overlay">
+          <span class="gallery-caption">Twilight Lawn Banquet & LED Stage Setting</span>
+        </div>
+      </div>
+
+      <!-- 4. Artisanal Gourmet Salad Counter (New) -->
+      <div class="gallery-item">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_artisanal_salad_counter.jpg" alt="Artisanal Gourmet Salad & Live Cold Display by KateringKing">
+        <div class="gallery-overlay">
+          <span class="gallery-caption">Artisanal Gourmet Salad & Live Cold Display by KateringKing</span>
+        </div>
+      </div>
+
+      <!-- 5. Lush Sprawling Lawns & Royal Banquet Seating -->
       <div class="gallery-item">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_lawns_banquet_setup.jpg" alt="Lush Sprawling Lawns & Royal Banquet Seating">
         <div class="gallery-overlay">
@@ -374,6 +400,7 @@ get_header();
         </div>
       </div>
 
+      <!-- 6. Exquisite Live Fruit Counter -->
       <div class="gallery-item">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_live_fruit_counter.jpg" alt="Exquisite Live Fruit Counter & Gourmet Display">
         <div class="gallery-overlay">
@@ -381,6 +408,7 @@ get_header();
         </div>
       </div>
 
+      <!-- 7. Artisanal Dessert Display -->
       <div class="gallery-item">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_artisanal_dessert_display.jpg" alt="Artisanal Dessert & Pastry Showcase by KateringKing">
         <div class="gallery-overlay">
@@ -388,7 +416,15 @@ get_header();
         </div>
       </div>
 
-      <!-- Bottom row: 2 wide images (100% Real Aerial & Interior Venue Shots) -->
+      <!-- 8. Royal Banquet Feast -->
+      <div class="gallery-item">
+        <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_royal_buffet_spread.jpg" alt="Royal Banquet Feast by KateringKing">
+        <div class="gallery-overlay">
+          <span class="gallery-caption">Royal Banquet Feast by KateringKing</span>
+        </div>
+      </div>
+
+      <!-- 9. Spacious Canopy Dining & Grand Buffet Hall -->
       <div class="gallery-item span-2-col">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_canopy_buffet_hall.jpg" alt="Spacious Canopy Dining & Grand Buffet Hall">
         <div class="gallery-overlay">
@@ -396,6 +432,7 @@ get_header();
         </div>
       </div>
 
+      <!-- 10. Expansive 200+ Inside Valet Parking Grounds -->
       <div class="gallery-item span-2-col">
         <img src="<?php echo get_template_directory_uri(); ?>/assets/images/aura_drone_aerial_parking.jpg" alt="Expansive 200+ Inside Valet Parking Grounds">
         <div class="gallery-overlay">

@@ -82,16 +82,19 @@ const DEFAULT_AURA_CONFIG = {
     }
   ],
   gallery: [
+    { src: "assets/images/aura_grand_entrance_arch_night.jpg", title: "Illuminated Grand Entry Gate & Welcome Promenade", span: "1" },
     { src: "assets/images/aura_stage_led_backdrop.jpg", title: "Grand Production Stage & LED Visual Backdrop", span: "1" },
+    { src: "assets/images/aura_evening_lawn_gala_setup.jpg", title: "Twilight Lawn Banquet & LED Stage Setting", span: "1" },
+    { src: "assets/images/aura_artisanal_salad_counter.jpg", title: "Artisanal Gourmet Salad & Live Cold Display by KateringKing", span: "1" },
     { src: "assets/images/aura_lawns_banquet_setup.jpg", title: "Lush Sprawling Lawns & Royal Banquet Seating", span: "1" },
     { src: "assets/images/aura_live_fruit_counter.jpg", title: "Exquisite Live Fruit Counter & Gourmet Display", span: "1" },
     { src: "assets/images/aura_artisanal_dessert_display.jpg", title: "Artisanal Dessert & Pastry Showcase by KateringKing", span: "1" },
+    { src: "assets/images/aura_royal_buffet_spread.jpg", title: "Royal Banquet Feast by KateringKing", span: "1" },
     { src: "assets/images/aura_canopy_buffet_hall.jpg", title: "Spacious Canopy Dining & Grand Buffet Hall", span: "2" },
     { src: "assets/images/aura_drone_aerial_parking.jpg", title: "Expansive 200+ Inside Valet Parking Grounds", span: "2" },
     { src: "assets/images/aura_drone_aerial_panorama.jpg", title: "Aerial Drone Panorama: Venue Estate & Lake Sanctuary", span: "2" },
     { src: "assets/images/aura_drone_aerial_lawns.jpg", title: "Aerial Bird's Eye View: Sprawling Banquet Lawns", span: "2" },
-    { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "1" },
-    { src: "assets/images/aura_royal_buffet_spread.jpg", title: "Royal Banquet Feast by KateringKing", span: "1" }
+    { src: "assets/images/aura_grand_entrance_night.jpg", title: "Aura Grand Illuminated Entrance & Promenade", span: "1" }
   ],
   admin: {
     user: "admin",
@@ -127,12 +130,11 @@ function getSiteConfig() {
     if (saved) {
       let parsed = JSON.parse(saved);
       
-      // Mandatory gallery validation: ensure latest genuine photoshoot is active
+      // Mandatory gallery validation: ensure latest genuine photoshoot and new uploaded photos are active
       const isLegacyGallery = !parsed.gallery || 
         !Array.isArray(parsed.gallery) || 
         !parsed.gallery.length || 
-        !parsed.gallery[0].src || 
-        !parsed.gallery[0].src.includes('aura_stage_led_backdrop');
+        !parsed.gallery.some(img => img.src && img.src.includes('aura_grand_entrance_arch_night'));
 
       const isLegacyHalls = !parsed.halls ||
         !Array.isArray(parsed.halls) ||
@@ -143,8 +145,8 @@ function getSiteConfig() {
         !parsed.halls[1].desc ||
         !parsed.halls[1].desc.includes('exhibitions');
 
-      if (!parsed.version || parsed.version < 60 || isLegacyGallery || isLegacyHalls) {
-        parsed.version = 60;
+      if (!parsed.version || parsed.version < 70 || isLegacyGallery || isLegacyHalls) {
+        parsed.version = 70;
         parsed.about = DEFAULT_AURA_CONFIG.about;
         parsed.halls = DEFAULT_AURA_CONFIG.halls;
         parsed.gallery = JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG.gallery));
@@ -170,7 +172,7 @@ function getSiteConfig() {
         contact: { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) },
         stats: { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) },
         halls: (parsed.halls && Array.isArray(parsed.halls) && parsed.halls.length && parsed.halls[0].image && parsed.halls[0].image.includes('aura_convention_hall_canopy')) ? parsed.halls : DEFAULT_AURA_CONFIG.halls,
-        gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length > 0 && parsed.gallery[0].src.includes('aura_stage_led_backdrop')) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
+        gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length > 0 && parsed.gallery.some(img => img.src && img.src.includes('aura_grand_entrance_arch_night'))) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
         admin: { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) }
       };
     }
@@ -361,17 +363,18 @@ function hydrateDOM(cfg) {
     hallsGrid.innerHTML = hHtml;
   }
 
-  // 5. MAIN WEBSITE GALLERY: Strictly first 6 images!
+  // 5. MAIN WEBSITE GALLERY: Curated 10 images (2 rows of 4 + 1 row of 2 wide shots)
   const galleryContainer = document.getElementById('auraGalleryGrid') || document.querySelector('.gallery-grid-ref');
   if (galleryContainer && cfg.gallery && cfg.gallery.length) {
-    const homeImages = cfg.gallery.slice(0, 6);
-    const top4 = homeImages.slice(0, 4);
-    const bottom2 = homeImages.slice(4, 6);
+    const homeImages = cfg.gallery.slice(0, 10);
+    const row1 = homeImages.slice(0, 4);
+    const row2 = homeImages.slice(4, 8);
+    const row3 = homeImages.slice(8, 10);
 
     let html = '';
-    if (top4.length) {
+    if (row1.length) {
       html += '<div class="gallery-row-top">';
-      top4.forEach(item => {
+      row1.forEach(item => {
         html += `
           <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
             <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -380,9 +383,20 @@ function hydrateDOM(cfg) {
       html += '</div>';
     }
 
-    if (bottom2.length) {
+    if (row2.length) {
+      html += '<div class="gallery-row-top">';
+      row2.forEach(item => {
+        html += `
+          <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
+            <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
+          </div>`;
+      });
+      html += '</div>';
+    }
+
+    if (row3.length) {
       html += '<div class="gallery-row-bottom">';
-      bottom2.forEach(item => {
+      row3.forEach(item => {
         html += `
           <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
             <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -1090,7 +1104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let html = '';
     galleryItems.forEach((item, idx) => {
-      const isHome = idx < 6;
+      const isHome = idx < 10;
       const title = item.title || ('Gallery Image #' + (idx + 1));
       const badge = isHome 
         ? `<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(74, 222, 128, 0.15); color: #4ADE80; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.72rem; border: 1px solid rgba(74, 222, 128, 0.3);">● Live on Homepage (#${idx + 1})</span>`
