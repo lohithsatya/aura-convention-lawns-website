@@ -920,8 +920,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (hamburger && navMenu) {
     hamburger.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      hamburger.classList.toggle('open');
+      const isOpen = navMenu.classList.toggle('active');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
     });
   }
 
@@ -952,6 +953,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (navMenu && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
         hamburger?.classList.remove('open');
+        hamburger?.setAttribute('aria-expanded', 'false');
       }
 
       if (window.location.hash && !window.location.hash.toLowerCase().includes('admin')) {
