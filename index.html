@@ -1156,6 +1156,52 @@
             <label for="cfgFooterCopyright">Footer Copyright Notice</label>
             <input type="text" id="cfgFooterCopyright" placeholder="© 2026 Aura Convention and Lawns. All Rights Reserved.">
           </div>
+
+          <!-- EmailJS Inquiry Service Settings -->
+          <h5 style="color: var(--gold-light); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 1.2px; margin: 24px 0 10px; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            <span>EmailJS Inquiry Service Settings</span>
+          </h5>
+          <p style="font-size: 0.78rem; color: #A3B8AD; margin-bottom: 14px;">
+            Connects the venue inquiry form to your EmailJS account so date booking inquiries are sent directly to your email address without requiring any custom backend.
+          </p>
+
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgEmailjsToEmail">Inquiry Recipient Email</label>
+              <input type="email" id="cfgEmailjsToEmail" placeholder="lohi8978019972@gmail.com">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgEmailjsPublicKey">EmailJS Public Key</label>
+              <input type="text" id="cfgEmailjsPublicKey" placeholder="e.g. user_xxx or public key">
+            </div>
+          </div>
+
+          <div class="admin-grid-2col">
+            <div class="admin-form-group">
+              <label for="cfgEmailjsServiceId">EmailJS Service ID</label>
+              <input type="text" id="cfgEmailjsServiceId" placeholder="service_aura or service_xxxxxxx">
+            </div>
+            <div class="admin-form-group">
+              <label for="cfgEmailjsTemplateId">EmailJS Template ID</label>
+              <input type="text" id="cfgEmailjsTemplateId" placeholder="template_aura_inquiry or template_xxxxxxx">
+            </div>
+          </div>
+
+          <div style="background: rgba(197, 160, 89, 0.08); border: 1px dashed rgba(197, 160, 89, 0.35); border-radius: 8px; padding: 14px; margin-top: 6px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <div style="font-size: 0.8rem; color: #FFF2C6; font-weight: 600;">
+                ✉️ Active Target: <span id="adminActiveEmailjsRecipient" style="color: #4ADE80;">lohi8978019972@gmail.com</span>
+              </div>
+              <button type="button" id="btnTestEmailjs" class="admin-btn-secondary" style="font-size: 0.75rem; padding: 6px 14px;">
+                ⚡ Test EmailJS Dispatch
+              </button>
+            </div>
+            <div id="emailjsTestFeedback" style="display: none; margin-top: 10px; font-size: 0.78rem; padding: 8px 12px; border-radius: 6px;"></div>
+            <div style="font-size: 0.74rem; color: #8FA698; margin-top: 10px; line-height: 1.5;">
+              💡 <strong>EmailJS Dashboard Setup:</strong> Create an account at <a href="https://www.emailjs.com" target="_blank" style="color: var(--gold-light); text-decoration: underline;">emailjs.com</a> &rarr; Connect Email Service (Gmail) &rarr; Create an Email Template using placeholders: <code>{{user_name}}</code>, <code>{{user_phone}}</code>, <code>{{user_email}}</code>, <code>{{event_type}}</code>, <code>{{event_date}}</code>, <code>{{guest_count}}</code>, <code>{{message}}</code>, <code>{{to_email}}</code> &rarr; Copy your Service ID, Template ID, and Public Key into the fields above &rarr; Click <strong>Save Changes</strong>.
+            </div>
+          </div>
         </div>
 
         <!-- 7. Pane: Venue Stats -->

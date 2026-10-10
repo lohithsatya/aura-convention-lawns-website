@@ -47,11 +47,20 @@ function aura_enqueue_scripts() {
         '1.0.0'
     );
 
+    // EmailJS SDK
+    wp_enqueue_script(
+        'emailjs-sdk',
+        'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js',
+        array(),
+        null,
+        true
+    );
+
     // Theme JS
     wp_enqueue_script(
         'aura-main-js',
         get_template_directory_uri() . '/assets/js/main.js',
-        array(),
+        array('emailjs-sdk'),
         '1.0.0',
         true
     );

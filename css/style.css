@@ -1464,6 +1464,26 @@ textarea.form-input-ref {
   box-shadow: var(--shadow-gold);
 }
 
+.btn-submit-ref:disabled {
+  opacity: 0.72;
+  cursor: wait;
+  pointer-events: none;
+  background: rgba(197, 160, 89, 0.15);
+  border-color: rgba(197, 160, 89, 0.4);
+  color: #E2CE9C;
+}
+
+.btn-spinner {
+  animation: auraSpin 0.9s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+@keyframes auraSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .form-success-msg {
   display: none;
   margin-top: 14px;

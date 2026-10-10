@@ -16,7 +16,7 @@
 
 // Default fallback configuration for Aura Convention & Lawns
 const DEFAULT_AURA_CONFIG = {
-  version: 80,
+  version: 81,
   hero: {
     tag: "WELCOME TO AURA",
     title: "Where Celebrations Become Timeless Memories",
@@ -149,6 +149,12 @@ const DEFAULT_AURA_CONFIG = {
     address: "Telecom Nagar Extension, Gachibowli, Hyderabad, Telangana 500032",
     mapsUrl: "https://www.google.com/maps/place/AURA+Convention+%26+Lawns/@17.4307919,78.3605956,17z/data=!3m1!4b1!4m6!3m5!1s0x3bcb93be75973279:0x7ebae846414c1aaf!8m2!3d17.4307919!4d78.3631705!16s%2Fg%2F11kcl9qh80?entry=ttu&g_ep=EgoyMDI2MTAwNi4wIKXMDSoASAFQAw%3D%3D",
     googleProfileUrl: "https://share.google/AniDRQuswFoXfx32N"
+  },
+  emailjs: {
+    serviceId: "service_aura",
+    templateId: "template_aura_inquiry",
+    publicKey: "",
+    toEmail: "lohi8978019972@gmail.com"
   },
   stats: {
     area: "35,000+",
@@ -384,8 +390,8 @@ function getSiteConfig() {
         !parsed.halls[1].desc ||
         !parsed.halls[1].desc.includes('exhibitions');
 
-      if (!parsed.version || parsed.version < 80 || isLegacyGallery || isLegacyHalls) {
-        parsed.version = 80;
+      if (!parsed.version || parsed.version < 81 || isLegacyGallery || isLegacyHalls) {
+        parsed.version = 81;
         parsed.hero = { ...DEFAULT_AURA_CONFIG.hero, ...(parsed.hero || {}) };
         parsed.about = { ...DEFAULT_AURA_CONFIG.about, ...(parsed.about || {}) };
         parsed.hallsHeader = { ...DEFAULT_AURA_CONFIG.hallsHeader, ...(parsed.hallsHeader || {}) };
@@ -400,6 +406,7 @@ function getSiteConfig() {
         parsed.galleryHeader = { ...DEFAULT_AURA_CONFIG.galleryHeader, ...(parsed.galleryHeader || {}) };
         parsed.gallery = isLegacyGallery ? JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG.gallery)) : (parsed.gallery || DEFAULT_AURA_CONFIG.gallery);
         parsed.contact = { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) };
+        parsed.emailjs = { ...DEFAULT_AURA_CONFIG.emailjs, ...(parsed.emailjs || {}) };
         parsed.stats = { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) };
         parsed.footer = { ...DEFAULT_AURA_CONFIG.footer, ...(parsed.footer || {}) };
         parsed.admin = { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) };
@@ -424,6 +431,7 @@ function getSiteConfig() {
         galleryHeader: { ...DEFAULT_AURA_CONFIG.galleryHeader, ...(parsed.galleryHeader || {}) },
         gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
         contact: { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) },
+        emailjs: { ...DEFAULT_AURA_CONFIG.emailjs, ...(parsed.emailjs || {}) },
         stats: { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) },
         footer: { ...DEFAULT_AURA_CONFIG.footer, ...(parsed.footer || {}) },
         admin: { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) }
@@ -976,9 +984,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const formSuccess = document.getElementById('formSuccess') || document.getElementById('formSuccessMsg');
 
   if (inquiryForm) {
-    inquiryForm.addEventListener('submit', (e) => {
+    inquiryForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const cfg = getSiteConfig();
+      const submitBtn = inquiryForm.querySelector('button[type="submit"], .btn-submit-ref');
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'INQUIRE NOW';
 
       const name = (inquiryForm.querySelector('[name="name"], #guestName')?.value || '').trim() || 'Valued Guest';
       const phone = (inquiryForm.querySelector('[name="phone"], #guestPhone')?.value || '').trim() || 'Not provided';
@@ -1019,56 +1029,125 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(text)}`;
 
-      // EmailJS Dispatch
-      const targetEmail = cfg.contact.email || 'lohi8978019972@gmail.com';
+      // EmailJS Target & Configuration
+      const emailjsCfg = cfg.emailjs || DEFAULT_AURA_CONFIG.emailjs;
+      const targetEmail = (emailjsCfg.toEmail || 'lohi8978019972@gmail.com').trim();
+      const pubKey = (emailjsCfg.publicKey || '').trim();
+      const serviceId = (emailjsCfg.serviceId || 'service_aura').trim();
+      const templateId = (emailjsCfg.templateId || 'template_aura_inquiry').trim();
+
       const emailParams = {
         to_email: targetEmail,
         recipient: targetEmail,
+        to_name: 'Aura Reservations Desk',
         user_name: name,
+        from_name: name,
+        name: name,
         user_phone: phone,
+        phone: phone,
         user_email: email || 'Not provided',
+        from_email: email || 'Not provided',
+        email: email || 'Not provided',
+        reply_to: email || '',
         event_type: eventType,
         event_date: formattedDate,
         guest_count: guests,
+        guests: guests,
         message: message || 'Please share hall availability, brochure, and customized pricing packages.',
-        venue_name: 'Aura Convention & Lawns, Gachibowli',
-        subject: `New Venue Inquiry for Aura Convention & Lawns: ${eventType} - ${name}`
+        venue_name: 'Aura Convention & Lawns, Gachibowli, Hyderabad',
+        subject: `New Venue Inquiry for Aura Convention & Lawns: ${eventType} - ${name}`,
+        inquiry_time: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
       };
 
-      if (typeof emailjs !== 'undefined' && typeof emailjs.send === 'function') {
+      // Set loading state on submit button
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <svg class="btn-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg>
+          <span>SENDING INQUIRY...</span>
+        `;
+      }
+
+      let emailSentSuccessfully = false;
+
+      // Attempt EmailJS dispatch if SDK is present
+      if (typeof emailjs !== 'undefined' && typeof emailjs.send === 'function' && pubKey) {
         try {
-          emailjs.send('default_service', 'template_aura_inquiry', emailParams)
-            .then(res => console.log('✓ EmailJS inquiry delivered:', res.status, res.text))
-            .catch(err => console.log('EmailJS status notice:', err));
+          emailjs.init({ publicKey: pubKey });
+          const res = await emailjs.send(serviceId, templateId, emailParams, pubKey);
+          console.log('✓ EmailJS inquiry delivered successfully:', res.status, res.text);
+          emailSentSuccessfully = true;
         } catch (err) {
-          console.warn('EmailJS dispatch attempt:', err);
+          console.warn('EmailJS dispatch attempt error:', err);
         }
       }
 
-      if (formSuccess) {
-        formSuccess.innerHTML = `
-          <div style="text-align: center; padding: 6px 0;">
-            <div style="font-weight: 700; color: #d4af37; font-size: 1rem; margin-bottom: 6px;">
-              ✓ Inquiry Dispatched to ${targetEmail}!
+      if (emailSentSuccessfully) {
+        // Successful EmailJS delivery
+        if (formSuccess) {
+          formSuccess.innerHTML = `
+            <div style="text-align: center; padding: 10px 4px;">
+              <div style="font-weight: 700; color: #d4af37; font-size: 1.05rem; margin-bottom: 6px;">
+                ✓ Inquiry Successfully Dispatched to ${targetEmail}!
+              </div>
+              <div style="font-size: 0.86rem; color: #e6f9ed; margin-bottom: 6px;">
+                Thank you, <strong>${name}</strong>. Our reservations desk has received your event request for <strong>${formattedDate}</strong>.
+              </div>
+              <div style="font-size: 0.82rem; color: #b7cebf; margin-bottom: 12px;">
+                Our event manager will contact you at <strong>${phone}</strong> promptly. For instant date blocking and catering menus, you can also chat with us directly on WhatsApp.
+              </div>
+              <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #04140A; padding: 9px 20px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; text-decoration: none; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/></svg>
+                <span>Instant WhatsApp Connect &amp; Brochure</span>
+              </a>
             </div>
-            <div style="font-size: 0.85rem; color: #b7cebf; margin-bottom: 8px;">
-              Our event concierge is also connecting via WhatsApp for priority date hold and instant assistance.
-            </div>
-            <div style="font-size: 0.82rem; color: #9bb5a4;">
-              If WhatsApp does not open automatically, <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="color: #25D366; text-decoration: underline; font-weight: 700;">tap here to open WhatsApp</a>.
-            </div>
-          </div>
-        `;
-        formSuccess.style.display = 'block';
-      }
+          `;
+          formSuccess.style.display = 'block';
+        }
 
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      if (isMobile) {
-        window.location.href = waUrl;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `✓ INQUIRY SENT`;
+          setTimeout(() => {
+            submitBtn.innerHTML = originalBtnHtml;
+          }, 6000);
+        }
+        inquiryForm.reset();
+        if (typeof showAdminToast === 'function') {
+          showAdminToast(`✓ Inquiry emailed to ${targetEmail}!`);
+        }
       } else {
-        const opened = window.open(waUrl, '_blank');
-        if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+        // Fallback flow (either pubKey not configured yet or EmailJS returned error)
+        if (formSuccess) {
+          formSuccess.innerHTML = `
+            <div style="text-align: center; padding: 8px 4px;">
+              <div style="font-weight: 700; color: #d4af37; font-size: 1rem; margin-bottom: 6px;">
+                ✓ Inquiry Details Prepared for ${targetEmail}!
+              </div>
+              <div style="font-size: 0.85rem; color: #b7cebf; margin-bottom: 8px;">
+                Connecting you directly with the Aura Event Concierge via WhatsApp for instant date availability & priority package pricing.
+              </div>
+              <div style="font-size: 0.82rem; color: #9bb5a4;">
+                If WhatsApp does not open automatically, <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="color: #25D366; text-decoration: underline; font-weight: 700;">tap here to open WhatsApp</a>.
+              </div>
+            </div>
+          `;
+          formSuccess.style.display = 'block';
+        }
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+        }
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
           window.location.href = waUrl;
+        } else {
+          const opened = window.open(waUrl, '_blank');
+          if (!opened || opened.closed || typeof opened.closed === 'undefined') {
+            window.location.href = waUrl;
+          }
         }
       }
     });
@@ -1675,6 +1754,85 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // EmailJS: Send Test Inquiry
+    const btnTestEmailjs = document.getElementById('btnTestEmailjs');
+    const emailjsTestFeedback = document.getElementById('emailjsTestFeedback');
+    if (btnTestEmailjs) {
+      btnTestEmailjs.addEventListener('click', async () => {
+        const toEmail = document.getElementById('cfgEmailjsToEmail')?.value.trim() || 'lohi8978019972@gmail.com';
+        const pubKey = document.getElementById('cfgEmailjsPublicKey')?.value.trim();
+        const serviceId = document.getElementById('cfgEmailjsServiceId')?.value.trim() || 'service_aura';
+        const templateId = document.getElementById('cfgEmailjsTemplateId')?.value.trim() || 'template_aura_inquiry';
+
+        if (!pubKey) {
+          if (emailjsTestFeedback) {
+            emailjsTestFeedback.style.display = 'block';
+            emailjsTestFeedback.style.background = 'rgba(239, 68, 68, 0.15)';
+            emailjsTestFeedback.style.border = '1px solid #EF4444';
+            emailjsTestFeedback.style.color = '#FCA5A5';
+            emailjsTestFeedback.innerHTML = '⚠️ Please enter your <strong>EmailJS Public Key</strong> above first, then click Test.';
+          }
+          return;
+        }
+
+        btnTestEmailjs.disabled = true;
+        btnTestEmailjs.textContent = '⏳ Testing EmailJS...';
+        if (emailjsTestFeedback) {
+          emailjsTestFeedback.style.display = 'block';
+          emailjsTestFeedback.style.background = 'rgba(197, 160, 89, 0.15)';
+          emailjsTestFeedback.style.border = '1px solid rgba(197, 160, 89, 0.5)';
+          emailjsTestFeedback.style.color = '#FFF2C6';
+          emailjsTestFeedback.innerHTML = `Sending test inquiry to <strong>${toEmail}</strong> using Service <code>${serviceId}</code> and Template <code>${templateId}</code>...`;
+        }
+
+        try {
+          if (typeof emailjs !== 'undefined') {
+            emailjs.init({ publicKey: pubKey });
+            const testParams = {
+              to_email: toEmail,
+              recipient: toEmail,
+              user_name: 'Aura Administrator (Test)',
+              from_name: 'Aura CMS Test Bot',
+              name: 'Aura Administrator (Test)',
+              user_phone: '+91 77779 98789',
+              phone: '+91 77779 98789',
+              user_email: toEmail,
+              from_email: toEmail,
+              email: toEmail,
+              reply_to: toEmail,
+              event_type: 'Test Connection Inquiry',
+              event_date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+              guest_count: '500 Guests',
+              guests: '500 Guests',
+              message: 'This is a test inquiry dispatched from the Aura Convention & Lawns Admin Portal to verify EmailJS connectivity.',
+              venue_name: 'Aura Convention & Lawns, Gachibowli',
+              subject: `[TEST] Aura Convention & Lawns EmailJS Integration Test`,
+              inquiry_time: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+            };
+
+            const response = await emailjs.send(serviceId, templateId, testParams, pubKey);
+            emailjsTestFeedback.style.background = 'rgba(74, 222, 128, 0.15)';
+            emailjsTestFeedback.style.border = '1px solid #4ADE80';
+            emailjsTestFeedback.style.color = '#86EFAC';
+            emailjsTestFeedback.innerHTML = `✓ <strong>Success!</strong> Test email dispatched to <strong>${toEmail}</strong> (Status: ${response.status} ${response.text}). Check your inbox!`;
+            showAdminToast('✓ EmailJS connection verified successfully!');
+          } else {
+            throw new Error('EmailJS SDK is not loaded in the browser.');
+          }
+        } catch (err) {
+          console.error('EmailJS test failed:', err);
+          const errorMsg = (err && (err.text || err.message)) ? (err.text || err.message) : JSON.stringify(err);
+          emailjsTestFeedback.style.background = 'rgba(239, 68, 68, 0.15)';
+          emailjsTestFeedback.style.border = '1px solid #EF4444';
+          emailjsTestFeedback.style.color = '#FCA5A5';
+          emailjsTestFeedback.innerHTML = `✕ <strong>EmailJS Error:</strong> ${errorMsg}. Please verify your Public Key, Service ID, and Template ID.`;
+        } finally {
+          btnTestEmailjs.disabled = false;
+          btnTestEmailjs.textContent = '⚡ Test EmailJS Dispatch';
+        }
+      });
+    }
+
     // SAVE & APPLY ALL CHANGES: Reads every input from all 9 tabs and applies live!
     const btnSaveAdmin = document.getElementById('btnSaveAdmin');
     if (btnSaveAdmin) {
@@ -1737,6 +1895,13 @@ document.addEventListener('DOMContentLoaded', () => {
         cfg.contact.address = document.getElementById('cfgAddress')?.value.trim() || cfg.contact.address;
         cfg.contact.mapsUrl = document.getElementById('cfgMapsUrl')?.value.trim() || cfg.contact.mapsUrl;
         cfg.contact.googleProfileUrl = document.getElementById('cfgGoogleProfileUrl')?.value.trim() || cfg.contact.googleProfileUrl;
+
+        // 5.5 EmailJS Settings
+        if (!cfg.emailjs) cfg.emailjs = { ...DEFAULT_AURA_CONFIG.emailjs };
+        cfg.emailjs.toEmail = document.getElementById('cfgEmailjsToEmail')?.value.trim() || cfg.emailjs.toEmail || 'lohi8978019972@gmail.com';
+        cfg.emailjs.publicKey = document.getElementById('cfgEmailjsPublicKey')?.value.trim() || '';
+        cfg.emailjs.serviceId = document.getElementById('cfgEmailjsServiceId')?.value.trim() || 'service_aura';
+        cfg.emailjs.templateId = document.getElementById('cfgEmailjsTemplateId')?.value.trim() || 'template_aura_inquiry';
 
         // 6. Footer
         if (!cfg.footer) cfg.footer = { ...DEFAULT_AURA_CONFIG.footer };
@@ -1874,6 +2039,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (mapsUrlInput) mapsUrlInput.value = cfg.contact.mapsUrl || '';
       if (googleProfileUrlInput) googleProfileUrlInput.value = cfg.contact.googleProfileUrl || '';
     }
+
+    // 6.5 EmailJS Settings
+    if (cfg.emailjs) {
+      const emailjsToInput = document.getElementById('cfgEmailjsToEmail');
+      const emailjsKeyInput = document.getElementById('cfgEmailjsPublicKey');
+      const emailjsServiceInput = document.getElementById('cfgEmailjsServiceId');
+      const emailjsTemplateInput = document.getElementById('cfgEmailjsTemplateId');
+      const recipientDisplay = document.getElementById('adminActiveEmailjsRecipient');
+
+      if (emailjsToInput) emailjsToInput.value = cfg.emailjs.toEmail || 'lohi8978019972@gmail.com';
+      if (emailjsKeyInput) emailjsKeyInput.value = cfg.emailjs.publicKey || '';
+      if (emailjsServiceInput) emailjsServiceInput.value = cfg.emailjs.serviceId || 'service_aura';
+      if (emailjsTemplateInput) emailjsTemplateInput.value = cfg.emailjs.templateId || 'template_aura_inquiry';
+      if (recipientDisplay) recipientDisplay.textContent = cfg.emailjs.toEmail || 'lohi8978019972@gmail.com';
+    }
+
     const footerCopyrightInput = document.getElementById('cfgFooterCopyright');
     if (footerCopyrightInput && cfg.footer) {
       footerCopyrightInput.value = cfg.footer.copyright || '';
