@@ -1223,6 +1223,20 @@ section {
   margin-top: 4px;
 }
 
+@media (max-width: 600px) {
+  .catering-side-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .catering-side-actions > .btn {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 .catering-image-side {
   border-radius: 12px;
   overflow: hidden;
