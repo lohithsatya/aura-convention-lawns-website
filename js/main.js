@@ -11,7 +11,7 @@
    - About Features Dynamic Management (Add, Edit, Delete Grid Cards)
    - Photo Gallery Manager (10 curated on homepage, all in modal, captions, spans, add/delete/file upload)
    - Complete Backup & Sync (Download JSON, Restore from File, Copy to Clipboard, Factory Reset)
-   - Direct EmailJS inquiry dispatch & WhatsApp Priority Routing
+   - EmailJS inquiry notifications and customer auto-replies
 */
 
 // Default fallback configuration for Aura Convention & Lawns
@@ -26,8 +26,8 @@ const DEFAULT_AURA_CONFIG = {
     btnSecondaryText: "EXPLORE SPACES",
     btnSecondaryLink: "#halls",
     bgImage: "assets/images/aura_drone_aerial_panorama.jpg",
-    badgeCapacity: "1000+ Guests Capacity",
-    badgeArea: "35,000+ Sq.Ft Area",
+    badgeCapacity: "800+ Guests Capacity",
+    badgeArea: "30,000+ Sq.Ft Area",
     badgeLocation: "Prime Gachibowli Location ↗",
     badgeParking: "200+ Spacious Inside Valet Parking"
   },
@@ -86,7 +86,7 @@ const DEFAULT_AURA_CONFIG = {
       badge: "OPULENT CLIMATE COMFORT",
       guests: "600 Guests",
       area: "6,000 sq.ft",
-      image: "assets/images/hall_grand_stage.jpg",
+      image: "assets/images/aura_banquet_hall_wedding_setup.png",
       desc: "For occasions that demand flawless climate-controlled comfort without sacrificing an ounce of grandeur, Aura Convention and Lawns proudly presents our pristine Indoor AC Banquet Hall. This opulent, fully air-conditioned space offers an elegant sanctuary for sophisticated celebrations, vibrant pre-wedding sangeets, and exclusive private galas. With plush interiors, customizable ambient lighting, and impeccable acoustics, the banquet hall ensures your guests remain immersed in absolute comfort and luxury, completely insulated from the seasons outside."
     }
   ],
@@ -151,14 +151,15 @@ const DEFAULT_AURA_CONFIG = {
     googleProfileUrl: "https://share.google/AniDRQuswFoXfx32N"
   },
   emailjs: {
-    serviceId: "service_aura",
-    templateId: "template_aura_inquiry",
-    publicKey: "",
+    serviceId: "service_k753g6o",
+    templateId: "template_svuyd2j",
+    autoReplyTemplateId: "template_f36k4ph",
+    publicKey: "-KmTU6-xesgifj8vr",
     toEmail: "lohi8978019972@gmail.com"
   },
   stats: {
-    area: "35,000+",
-    capacity: "1,000+",
+    area: "30,000+",
+    capacity: "800+",
     parking: "200+"
   },
   footer: {
@@ -370,6 +371,25 @@ window.deleteCateringBullet = function(idx) {
 };
 
 // Storage helper functions
+function getEmailJsConfig(savedConfig = {}) {
+  const config = { ...DEFAULT_AURA_CONFIG.emailjs, ...savedConfig };
+
+  if (!config.serviceId || config.serviceId === 'service_aura') {
+    config.serviceId = DEFAULT_AURA_CONFIG.emailjs.serviceId;
+  }
+  if (!config.templateId || config.templateId === 'template_aura_inquiry') {
+    config.templateId = DEFAULT_AURA_CONFIG.emailjs.templateId;
+  }
+  if (!config.autoReplyTemplateId) {
+    config.autoReplyTemplateId = DEFAULT_AURA_CONFIG.emailjs.autoReplyTemplateId;
+  }
+  if (!config.publicKey) {
+    config.publicKey = DEFAULT_AURA_CONFIG.emailjs.publicKey;
+  }
+
+  return config;
+}
+
 function getSiteConfig() {
   try {
     const saved = localStorage.getItem('aura_venue_config');
@@ -406,11 +426,23 @@ function getSiteConfig() {
         parsed.galleryHeader = { ...DEFAULT_AURA_CONFIG.galleryHeader, ...(parsed.galleryHeader || {}) };
         parsed.gallery = isLegacyGallery ? JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG.gallery)) : (parsed.gallery || DEFAULT_AURA_CONFIG.gallery);
         parsed.contact = { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) };
-        parsed.emailjs = { ...DEFAULT_AURA_CONFIG.emailjs, ...(parsed.emailjs || {}) };
+        parsed.emailjs = getEmailJsConfig(parsed.emailjs);
         parsed.stats = { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) };
         parsed.footer = { ...DEFAULT_AURA_CONFIG.footer, ...(parsed.footer || {}) };
         parsed.admin = { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) };
         if (parsed.stats) parsed.stats.parking = '200+';
+        try { localStorage.setItem('aura_venue_config', JSON.stringify(parsed)); } catch (e) {}
+      }
+
+      if (parsed.hero) {
+        parsed.hero.badgeCapacity = parsed.hero.badgeCapacity && parsed.hero.badgeCapacity.includes('1000+') ? '800+ Guests Capacity' : (parsed.hero.badgeCapacity || '800+ Guests Capacity');
+        parsed.hero.badgeArea = parsed.hero.badgeArea && parsed.hero.badgeArea.includes('35,000+') ? '30,000+ Sq.Ft Area' : (parsed.hero.badgeArea || '30,000+ Sq.Ft Area');
+      }
+
+      if (parsed.stats) {
+        parsed.stats.capacity = parsed.stats.capacity && parsed.stats.capacity.includes('1,000+') ? '800+' : (parsed.stats.capacity || '800+');
+        parsed.stats.area = parsed.stats.area && parsed.stats.area.includes('35,000+') ? '30,000+' : (parsed.stats.area || '30,000+');
+        parsed.stats.parking = '200+';
         try { localStorage.setItem('aura_venue_config', JSON.stringify(parsed)); } catch (e) {}
       }
 
@@ -431,7 +463,7 @@ function getSiteConfig() {
         galleryHeader: { ...DEFAULT_AURA_CONFIG.galleryHeader, ...(parsed.galleryHeader || {}) },
         gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
         contact: { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) },
-        emailjs: { ...DEFAULT_AURA_CONFIG.emailjs, ...(parsed.emailjs || {}) },
+        emailjs: getEmailJsConfig(parsed.emailjs),
         stats: { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) },
         footer: { ...DEFAULT_AURA_CONFIG.footer, ...(parsed.footer || {}) },
         admin: { ...DEFAULT_AURA_CONFIG.admin, ...(parsed.admin || {}) }
@@ -573,26 +605,12 @@ function hydrateDOM(cfg) {
       hHtml += `
         <div class="hall-card">
           <div class="hall-image">
-            <img src="${h.image || 'assets/images/hall_grand_stage.jpg'}" alt="${h.title}">
+            <img src="${h.image || 'assets/images/aura_banquet_hall_wedding_setup.png'}" alt="${h.title}">
             <span class="hall-badge-tag">${h.badge || (h.guests ? h.guests.toUpperCase() : 'EVENT SPACE')}</span>
           </div>
           <div class="hall-body">
             <h3 class="hall-title">${h.title}</h3>
-            <div class="hall-specs">
-              <div class="spec-item">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                <span>${h.guests}</span>
-              </div>
-              <div class="spec-item">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-                <span>${h.area}</span>
-              </div>
-            </div>
             <p class="hall-desc">${h.desc}</p>
-            <a href="#contact" class="hall-link">
-              VIEW DETAILS & PRICING
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
           </div>
         </div>`;
     });
@@ -981,87 +999,69 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }, { passive: true });
 
-  // 3. Inquiry Form Submission & Direct WhatsApp / EmailJS Routing
+  // 3. Inquiry Form Submission & EmailJS Routing
   const inquiryForm = document.getElementById('inquiryForm');
   const formSuccess = document.getElementById('formSuccess') || document.getElementById('formSuccessMsg');
 
   if (inquiryForm) {
-    inquiryForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    inquiryForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (inquiryForm.dataset.emailjsSubmitting === 'true') return;
+      inquiryForm.dataset.emailjsSubmitting = 'true';
+
       const cfg = getSiteConfig();
+      const emailjsCfg = getEmailJsConfig(cfg.emailjs);
       const submitBtn = inquiryForm.querySelector('button[type="submit"], .btn-submit-ref');
       const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'INQUIRE NOW';
+      const getValue = (name, fallbackSelector) =>
+        (inquiryForm.querySelector(`[name="${name}"], ${fallbackSelector}`)?.value || '').trim();
 
-      const name = (inquiryForm.querySelector('[name="name"], #guestName')?.value || '').trim() || 'Valued Guest';
-      const phone = (inquiryForm.querySelector('[name="phone"], #guestPhone')?.value || '').trim() || 'Not provided';
-      const email = (inquiryForm.querySelector('[name="email"], #guestEmail')?.value || '').trim();
-      const eventType = (inquiryForm.querySelector('[name="event_type"], #eventType')?.value || '').trim() || 'Celebration / Event';
-      const eventDate = (inquiryForm.querySelector('[name="event_date"], #eventDate')?.value || '').trim();
-      const guests = (inquiryForm.querySelector('[name="guests"], #guestCount')?.value || '').trim() || 'Flexible';
-      const message = (inquiryForm.querySelector('[name="message"], #guestMessage')?.value || '').trim();
+      const name = getValue('name', '#guestName');
+      const phone = getValue('phone', '#guestPhone');
+      const email = getValue('email', '#guestEmail');
+      const eventType = getValue('event_type', '#eventType');
+      const eventDate = getValue('event_date', '#eventDate');
+      const guests = getValue('guests', '#guestCount') || 'Not specified';
+      const message = getValue('message', '#guestMessage') || 'No additional requirements';
 
-      let formattedDate = eventDate || 'Date to be finalized';
-      if (eventDate) {
-        try {
-          const parts = eventDate.split('-');
-          if (parts.length === 3) {
-            const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-            if (!isNaN(d.getTime())) {
-              formattedDate = d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-            }
-          }
-        } catch (err) {}
+      let formattedDate = eventDate;
+      const dateParts = /^(\d{2})-(\d{2})-(\d{4})$/.exec(eventDate);
+      if (dateParts) {
+        const [, day, month, year] = dateParts;
+        const date = new Date(Number(year), Number(month) - 1, Number(day));
+        if (
+          date.getFullYear() === Number(year) &&
+          date.getMonth() === Number(month) - 1 &&
+          date.getDate() === Number(day)
+        ) {
+          formattedDate = date.toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          });
+        }
       }
 
-      const text =
-        `✨ *NEW VENUE INQUIRY - AURA CONVENTION & LAWNS* ✨\n\n` +
-        `👤 *Guest Name:* ${name}\n` +
-        `📱 *Phone Number:* ${phone}\n` +
-        `✉️ *Email Address:* ${email || 'Not provided'}\n` +
-        `🎉 *Event Type:* ${eventType}\n` +
-        `📅 *Preferred Date:* ${formattedDate}\n` +
-        `👥 *Estimated Guests:* ${guests}\n` +
-        `📝 *Special Requirements / Notes:*\n${message || 'Please share hall availability, brochure, and customized pricing packages.'}\n\n` +
-        `📍 *Venue:* Aura Convention & Lawns, Gachibowli, Hyderabad\n` +
-        `_Sent via Aura Website Reservation Form_`;
-
-      let activeWa = String(cfg.contact.whatsapp || cfg.contact.phone || '').replace(/\D/g, '');
-      if (activeWa.length === 10) activeWa = '91' + activeWa;
-      if (!activeWa) activeWa = '917777998789';
-
-      const waUrl = `https://wa.me/${activeWa}?text=${encodeURIComponent(text)}`;
-
-      // EmailJS Target & Configuration
-      const emailjsCfg = cfg.emailjs || DEFAULT_AURA_CONFIG.emailjs;
-      const targetEmail = (emailjsCfg.toEmail || 'lohi8978019972@gmail.com').trim();
-      const pubKey = (emailjsCfg.publicKey || '').trim();
-      const serviceId = (emailjsCfg.serviceId || 'service_aura').trim();
-      const templateId = (emailjsCfg.templateId || 'template_aura_inquiry').trim();
-
-      const emailParams = {
-        to_email: targetEmail,
-        recipient: targetEmail,
-        to_name: 'Aura Reservations Desk',
-        user_name: name,
-        from_name: name,
-        name: name,
-        user_phone: phone,
-        phone: phone,
-        user_email: email || 'Not provided',
-        from_email: email || 'Not provided',
-        email: email || 'Not provided',
-        reply_to: email || '',
-        event_type: eventType,
-        event_date: formattedDate,
-        guest_count: guests,
-        guests: guests,
-        message: message || 'Please share hall availability, brochure, and customized pricing packages.',
-        venue_name: 'Aura Convention & Lawns, Gachibowli, Hyderabad',
-        subject: `New Venue Inquiry for Aura Convention & Lawns: ${eventType} - ${name}`,
-        inquiry_time: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+      const templateParams = {
+        fullName: name,
+        email,
+        phone,
+        eventType,
+        eventDate: formattedDate,
+        guests,
+        requirements: message
+      };
+      const adminTemplateParams = {
+        ...templateParams,
+        to_email: emailjsCfg.toEmail,
+        recipient: emailjsCfg.toEmail
+      };
+      const autoReplyTemplateParams = {
+        ...templateParams,
+        to_email: email,
+        recipient: email
       };
 
-      // Set loading state on submit button
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `
@@ -1070,85 +1070,73 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }
 
-      let emailSentSuccessfully = false;
-
-      // Attempt EmailJS dispatch if SDK is present
-      if (typeof emailjs !== 'undefined' && typeof emailjs.send === 'function' && pubKey) {
-        try {
-          emailjs.init({ publicKey: pubKey });
-          const res = await emailjs.send(serviceId, templateId, emailParams, pubKey);
-          console.log('✓ EmailJS inquiry delivered successfully:', res.status, res.text);
-          emailSentSuccessfully = true;
-        } catch (err) {
-          console.warn('EmailJS dispatch attempt error:', err);
-        }
+      if (formSuccess) {
+        formSuccess.style.display = 'none';
+        formSuccess.textContent = '';
       }
 
-      if (emailSentSuccessfully) {
-        // Successful EmailJS delivery
+      try {
+        if (typeof emailjs === 'undefined' || typeof emailjs.send !== 'function') {
+          throw new Error('EmailJS SDK is not loaded.');
+        }
+        if (
+          !emailjsCfg.publicKey ||
+          !emailjsCfg.serviceId ||
+          !emailjsCfg.templateId ||
+          !emailjsCfg.autoReplyTemplateId
+        ) {
+          throw new Error('EmailJS service configuration is incomplete.');
+        }
+
+        emailjs.init({ publicKey: emailjsCfg.publicKey });
+        await emailjs.send(
+          emailjsCfg.serviceId,
+          emailjsCfg.templateId,
+          adminTemplateParams
+        );
+
+        let autoReplySent = false;
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1100));
+          await emailjs.send(
+            emailjsCfg.serviceId,
+            emailjsCfg.autoReplyTemplateId,
+            autoReplyTemplateParams
+          );
+          autoReplySent = true;
+        } catch (error) {
+          console.error('EmailJS customer confirmation failed:', error);
+        }
+
         if (formSuccess) {
-          formSuccess.innerHTML = `
-            <div style="text-align: center; padding: 10px 4px;">
-              <div style="font-weight: 700; color: #d4af37; font-size: 1.05rem; margin-bottom: 6px;">
-                ✓ Inquiry Successfully Dispatched to ${targetEmail}!
-              </div>
-              <div style="font-size: 0.86rem; color: #e6f9ed; margin-bottom: 6px;">
-                Thank you, <strong>${name}</strong>. Our reservations desk has received your event request for <strong>${formattedDate}</strong>.
-              </div>
-              <div style="font-size: 0.82rem; color: #b7cebf; margin-bottom: 12px;">
-                Our event manager will contact you at <strong>${phone}</strong> promptly. For instant date blocking and catering menus, you can also chat with us directly on WhatsApp.
-              </div>
-              <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px; background: #25D366; color: #04140A; padding: 9px 20px; border-radius: 20px; font-weight: 700; font-size: 0.82rem; text-decoration: none; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 15 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67Z"/></svg>
-                <span>Instant WhatsApp Connect &amp; Brochure</span>
-              </a>
-            </div>
-          `;
+          formSuccess.textContent = autoReplySent
+            ? `Thank you, ${name}. Your inquiry has been sent, and a confirmation email is on its way.`
+            : `Thank you, ${name}. We received your inquiry, but couldn't send the confirmation email.`;
+          formSuccess.style.color = autoReplySent ? '#86EFAC' : '#FFF2C6';
           formSuccess.style.display = 'block';
         }
 
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = `✓ INQUIRY SENT`;
-          setTimeout(() => {
-            submitBtn.innerHTML = originalBtnHtml;
-          }, 6000);
-        }
         inquiryForm.reset();
-        if (typeof showAdminToast === 'function') {
-          showAdminToast(`✓ Inquiry emailed to ${targetEmail}!`);
+        if (submitBtn) {
+          submitBtn.innerHTML = '✓ INQUIRY SENT';
         }
-      } else {
-        // Fallback flow (either pubKey not configured yet or EmailJS returned error)
+      } catch (error) {
+        console.error('EmailJS inquiry dispatch failed:', error);
         if (formSuccess) {
-          formSuccess.innerHTML = `
-            <div style="text-align: center; padding: 8px 4px;">
-              <div style="font-weight: 700; color: #d4af37; font-size: 1rem; margin-bottom: 6px;">
-                ✓ Inquiry Details Prepared for ${targetEmail}!
-              </div>
-              <div style="font-size: 0.85rem; color: #b7cebf; margin-bottom: 8px;">
-                Connecting you directly with the Aura Event Concierge via WhatsApp for instant date availability & priority package pricing.
-              </div>
-              <div style="font-size: 0.82rem; color: #9bb5a4;">
-                If WhatsApp does not open automatically, <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="color: #25D366; text-decoration: underline; font-weight: 700;">tap here to open WhatsApp</a>.
-              </div>
-            </div>
-          `;
+          formSuccess.textContent = 'Your inquiry was not sent. Please try again later.';
+          formSuccess.style.color = '#FCA5A5';
           formSuccess.style.display = 'block';
         }
-
+      } finally {
+        inquiryForm.dataset.emailjsSubmitting = 'false';
         if (submitBtn) {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnHtml;
-        }
-
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        if (isMobile) {
-          window.location.href = waUrl;
-        } else {
-          const opened = window.open(waUrl, '_blank');
-          if (!opened || opened.closed || typeof opened.closed === 'undefined') {
-            window.location.href = waUrl;
+          if (!formSuccess || !formSuccess.textContent.startsWith('Thank you,')) {
+            submitBtn.innerHTML = originalBtnHtml;
+          } else {
+            setTimeout(() => {
+              submitBtn.innerHTML = originalBtnHtml;
+            }, 6000);
           }
         }
       }
@@ -1761,10 +1749,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const emailjsTestFeedback = document.getElementById('emailjsTestFeedback');
     if (btnTestEmailjs) {
       btnTestEmailjs.addEventListener('click', async () => {
-        const toEmail = document.getElementById('cfgEmailjsToEmail')?.value.trim() || 'lohi8978019972@gmail.com';
-        const pubKey = document.getElementById('cfgEmailjsPublicKey')?.value.trim();
-        const serviceId = document.getElementById('cfgEmailjsServiceId')?.value.trim() || 'service_aura';
-        const templateId = document.getElementById('cfgEmailjsTemplateId')?.value.trim() || 'template_aura_inquiry';
+        const savedEmailjsConfig = getEmailJsConfig(getSiteConfig().emailjs);
+        const toEmail = document.getElementById('cfgEmailjsToEmail')?.value.trim() || savedEmailjsConfig.toEmail;
+        const pubKey = document.getElementById('cfgEmailjsPublicKey')?.value.trim() || savedEmailjsConfig.publicKey;
+        const serviceId = document.getElementById('cfgEmailjsServiceId')?.value.trim() || savedEmailjsConfig.serviceId;
+        const templateId = document.getElementById('cfgEmailjsTemplateId')?.value.trim() || savedEmailjsConfig.templateId;
 
         if (!pubKey) {
           if (emailjsTestFeedback) {
@@ -1793,26 +1782,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const testParams = {
               to_email: toEmail,
               recipient: toEmail,
-              user_name: 'Aura Administrator (Test)',
-              from_name: 'Aura CMS Test Bot',
-              name: 'Aura Administrator (Test)',
-              user_phone: '+91 77779 98789',
-              phone: '+91 77779 98789',
-              user_email: toEmail,
-              from_email: toEmail,
+              fullName: 'Aura Administrator (Test)',
               email: toEmail,
-              reply_to: toEmail,
-              event_type: 'Test Connection Inquiry',
-              event_date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
-              guest_count: '500 Guests',
+              phone: '+91 77779 98789',
+              eventType: 'Test Connection Inquiry',
+              eventDate: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
               guests: '500 Guests',
-              message: 'This is a test inquiry dispatched from the Aura Convention & Lawns Admin Portal to verify EmailJS connectivity.',
-              venue_name: 'Aura Convention & Lawns, Gachibowli',
-              subject: `[TEST] Aura Convention & Lawns EmailJS Integration Test`,
-              inquiry_time: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+              requirements: 'This is a test inquiry dispatched from the Aura Convention & Lawns Admin Portal to verify EmailJS connectivity.'
             };
 
-            const response = await emailjs.send(serviceId, templateId, testParams, pubKey);
+            const response = await emailjs.send(serviceId, templateId, testParams);
             emailjsTestFeedback.style.background = 'rgba(74, 222, 128, 0.15)';
             emailjsTestFeedback.style.border = '1px solid #4ADE80';
             emailjsTestFeedback.style.color = '#86EFAC';
@@ -1899,11 +1878,11 @@ document.addEventListener('DOMContentLoaded', () => {
         cfg.contact.googleProfileUrl = document.getElementById('cfgGoogleProfileUrl')?.value.trim() || cfg.contact.googleProfileUrl;
 
         // 5.5 EmailJS Settings
-        if (!cfg.emailjs) cfg.emailjs = { ...DEFAULT_AURA_CONFIG.emailjs };
-        cfg.emailjs.toEmail = document.getElementById('cfgEmailjsToEmail')?.value.trim() || cfg.emailjs.toEmail || 'lohi8978019972@gmail.com';
-        cfg.emailjs.publicKey = document.getElementById('cfgEmailjsPublicKey')?.value.trim() || '';
-        cfg.emailjs.serviceId = document.getElementById('cfgEmailjsServiceId')?.value.trim() || 'service_aura';
-        cfg.emailjs.templateId = document.getElementById('cfgEmailjsTemplateId')?.value.trim() || 'template_aura_inquiry';
+        cfg.emailjs = getEmailJsConfig(cfg.emailjs);
+        cfg.emailjs.toEmail = document.getElementById('cfgEmailjsToEmail')?.value.trim() || cfg.emailjs.toEmail;
+        cfg.emailjs.publicKey = document.getElementById('cfgEmailjsPublicKey')?.value.trim() || cfg.emailjs.publicKey;
+        cfg.emailjs.serviceId = document.getElementById('cfgEmailjsServiceId')?.value.trim() || cfg.emailjs.serviceId;
+        cfg.emailjs.templateId = document.getElementById('cfgEmailjsTemplateId')?.value.trim() || cfg.emailjs.templateId;
 
         // 6. Footer
         if (!cfg.footer) cfg.footer = { ...DEFAULT_AURA_CONFIG.footer };
@@ -2052,8 +2031,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (emailjsToInput) emailjsToInput.value = cfg.emailjs.toEmail || 'lohi8978019972@gmail.com';
       if (emailjsKeyInput) emailjsKeyInput.value = cfg.emailjs.publicKey || '';
-      if (emailjsServiceInput) emailjsServiceInput.value = cfg.emailjs.serviceId || 'service_aura';
-      if (emailjsTemplateInput) emailjsTemplateInput.value = cfg.emailjs.templateId || 'template_aura_inquiry';
+      if (emailjsServiceInput) emailjsServiceInput.value = cfg.emailjs.serviceId || DEFAULT_AURA_CONFIG.emailjs.serviceId;
+      if (emailjsTemplateInput) emailjsTemplateInput.value = cfg.emailjs.templateId || DEFAULT_AURA_CONFIG.emailjs.templateId;
       if (recipientDisplay) recipientDisplay.textContent = cfg.emailjs.toEmail || 'lohi8978019972@gmail.com';
     }
 
