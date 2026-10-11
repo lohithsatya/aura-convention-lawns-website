@@ -2779,13 +2779,13 @@ textarea.form-input-ref {
 
 
 /* ==========================================================================
-   PARTNER NOTIFICATION BADGE (Below Header at Top Left)
+   FIXED PARTNER NOTIFICATION BADGE
    ========================================================================== */
 .partner-notification-badge {
-  position: absolute;
-  top: 24px;
-  left: 32px;
-  z-index: 10;
+  position: fixed;
+  top: calc(var(--header-height) + 14px);
+  left: 24px;
+  z-index: 999;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -2862,21 +2862,23 @@ textarea.form-input-ref {
 
 @media (max-width: 768px) {
   .partner-notification-badge {
-    top: 14px;
-    left: 14px;
-    padding: 6px 14px 6px 8px;
-    gap: 8px;
+    top: calc(var(--header-height) + 6px);
+    left: 12px;
+    bottom: auto;
+    gap: 5px;
+    padding: 3px 8px 3px 5px;
+    max-width: calc(100vw - 24px);
   }
   .partner-noti-icon-circle {
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
   }
   .partner-noti-label {
-    font-size: 0.55rem;
-    letter-spacing: 1px;
+    font-size: 0.42rem;
+    letter-spacing: 0.4px;
   }
   .partner-noti-title {
-    font-size: 0.8rem;
+    font-size: 0.62rem;
   }
 }
 
