@@ -1075,50 +1075,12 @@ section {
   margin-bottom: 8px;
 }
 
-.hall-specs {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(197, 160, 89, 0.2);
-}
-
-.spec-item {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #D2E0D7;
-}
-
-.spec-item svg {
-  color: var(--gold);
-}
-
 .hall-desc {
   font-size: 0.84rem;
   color: #A2B5AA;
   line-height: 1.5;
   margin-bottom: 16px;
   flex-grow: 1;
-}
-
-.hall-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  color: var(--gold-light);
-}
-
-.hall-link:hover {
-  color: #FFFFFF;
-  gap: 10px;
 }
 
 /* 4. PHOTO GALLERY - Direct Match to Reference 2 */
