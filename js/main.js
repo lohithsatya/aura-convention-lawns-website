@@ -9,7 +9,7 @@
    - Halls & Spaces Dynamic CRUD (Add, Edit Specs, Replace Image via URL/File, Delete)
    - Food & Catering Dynamic Management (Story, Photos, Partner Link, Checklist CRUD)
    - About Features Dynamic Management (Add, Edit, Delete Grid Cards)
-   - Photo Gallery Manager (10 curated on homepage, all in modal, captions, spans, add/delete/file upload)
+   - Photo Gallery Manager (8 curated on homepage, all in modal, add/delete/file upload)
    - Complete Backup & Sync (Download JSON, Restore from File, Copy to Clipboard, Factory Reset)
    - EmailJS inquiry notifications and customer auto-replies
 */
@@ -172,29 +172,39 @@ const DEFAULT_AURA_CONFIG = {
 };
 
 // Global image compression helper (keeps localStorage safe and avoids browser quota limits)
-function compressImage(file, maxWidth, callback) {
-  if (!file) return;
+function compressImage(file, maxWidth, callback, onError = (error) => console.error('Could not process image:', error)) {
+  if (!file) {
+    onError(new Error('No image file was selected.'));
+    return;
+  }
   const reader = new FileReader();
+  reader.onerror = () => onError(reader.error || new Error('Could not read the selected image.'));
   reader.readAsDataURL(file);
   reader.onload = (event) => {
     const img = new Image();
     img.src = event.target.result;
+    img.onerror = () => onError(new Error('The selected file is not a supported image.'));
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
+      try {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
 
-      if (width > maxWidth) {
-        height = Math.round((height * maxWidth) / width);
-        width = maxWidth;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) throw new Error('Could not prepare the image for compression.');
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        callback(dataUrl);
+      } catch (error) {
+        onError(error);
       }
-
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
-      callback(dataUrl);
     };
   };
 }
@@ -209,10 +219,10 @@ window.deleteGalleryItem = function(idx) {
     const deletedItem = cfg.gallery[idx];
     const itemTitle = deletedItem?.title || ('Photo #' + (idx + 1));
     cfg.gallery.splice(idx, 1);
-    saveSiteConfig(cfg);
+    if (!saveSiteConfig(cfg)) return;
     hydrateDOM(cfg);
-    if (typeof renderAdminGalleryList === 'function') {
-      renderAdminGalleryList(cfg.gallery);
+    if (typeof window.renderAdminGalleryList === 'function') {
+      window.renderAdminGalleryList(cfg.gallery);
     }
     if (typeof showAdminToast === 'function') {
       showAdminToast(`✓ Deleted image: "${itemTitle}"`);
@@ -396,10 +406,7 @@ function getSiteConfig() {
     if (saved) {
       let parsed = JSON.parse(saved);
 
-      const isLegacyGallery = !parsed.gallery ||
-        !Array.isArray(parsed.gallery) ||
-        !parsed.gallery.length ||
-        !parsed.gallery.some(img => img.src && img.src.includes('aura_grand_entrance_arch_night'));
+      const isLegacyGallery = !Array.isArray(parsed.gallery);
 
       const isLegacyHalls = !parsed.halls ||
         !Array.isArray(parsed.halls) ||
@@ -424,7 +431,7 @@ function getSiteConfig() {
             : DEFAULT_AURA_CONFIG.catering.checklist
         };
         parsed.galleryHeader = { ...DEFAULT_AURA_CONFIG.galleryHeader, ...(parsed.galleryHeader || {}) };
-        parsed.gallery = isLegacyGallery ? JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG.gallery)) : (parsed.gallery || DEFAULT_AURA_CONFIG.gallery);
+        parsed.gallery = isLegacyGallery ? JSON.parse(JSON.stringify(DEFAULT_AURA_CONFIG.gallery)) : parsed.gallery;
         parsed.contact = { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) };
         parsed.emailjs = getEmailJsConfig(parsed.emailjs);
         parsed.stats = { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) };
@@ -461,7 +468,7 @@ function getSiteConfig() {
             : DEFAULT_AURA_CONFIG.catering.checklist
         },
         galleryHeader: { ...DEFAULT_AURA_CONFIG.galleryHeader, ...(parsed.galleryHeader || {}) },
-        gallery: (parsed.gallery && Array.isArray(parsed.gallery) && parsed.gallery.length) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
+        gallery: Array.isArray(parsed.gallery) ? parsed.gallery : DEFAULT_AURA_CONFIG.gallery,
         contact: { ...DEFAULT_AURA_CONFIG.contact, ...(parsed.contact || {}) },
         emailjs: getEmailJsConfig(parsed.emailjs),
         stats: { ...DEFAULT_AURA_CONFIG.stats, ...(parsed.stats || {}) },
@@ -675,47 +682,39 @@ function hydrateDOM(cfg) {
   }
 
   const galleryContainer = document.getElementById('auraGalleryGrid') || document.querySelector('.gallery-grid-ref');
-  if (galleryContainer && cfg.gallery && cfg.gallery.length) {
-    const homeImages = cfg.gallery.slice(0, 10);
+  if (galleryContainer) {
+    const homeImages = (cfg.gallery || []).slice(0, 8);
     const row1 = homeImages.slice(0, 4);
     const row2 = homeImages.slice(4, 8);
-    const row3 = homeImages.slice(8, 10);
+    galleryContainer.replaceChildren();
 
-    let html = '';
-    if (row1.length) {
-      html += '<div class="gallery-row-top">';
-      row1.forEach(item => {
-        html += `
-          <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
-            <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
-          </div>`;
+    [row1, row2].forEach(row => {
+      if (!row.length) return;
+      const rowElement = document.createElement('div');
+      rowElement.className = 'gallery-row-top';
+      row.forEach((item, index) => {
+        const thumb = document.createElement('button');
+        thumb.type = 'button';
+        thumb.className = 'gallery-thumb';
+        thumb.setAttribute('aria-label', `View ${item.title || `Aura Gallery photo ${index + 1}`}`);
+        thumb.addEventListener('click', () => window.openLightbox(item.src));
+
+        const image = document.createElement('img');
+        image.src = item.src;
+        image.alt = item.title || 'Aura Gallery';
+        image.loading = 'lazy';
+        thumb.appendChild(image);
+        rowElement.appendChild(thumb);
       });
-      html += '</div>';
-    }
+      galleryContainer.appendChild(rowElement);
+    });
 
-    if (row2.length) {
-      html += '<div class="gallery-row-top">';
-      row2.forEach(item => {
-        html += `
-          <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
-            <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
-          </div>`;
-      });
-      html += '</div>';
+    if (!homeImages.length) {
+      const emptyMessage = document.createElement('p');
+      emptyMessage.className = 'gallery-empty-state';
+      emptyMessage.textContent = 'Gallery photos will be added soon.';
+      galleryContainer.appendChild(emptyMessage);
     }
-
-    if (row3.length) {
-      html += '<div class="gallery-row-bottom">';
-      row3.forEach(item => {
-        html += `
-          <div class="gallery-thumb" onclick="openLightbox('${item.src}')" style="cursor: pointer;">
-            <img src="${item.src}" alt="${item.title || 'Aura Gallery'}" style="width: 100%; height: 100%; object-fit: cover;">
-          </div>`;
-      });
-      html += '</div>';
-    }
-
-    galleryContainer.innerHTML = html;
   }
 
   // Pre-populate Full Gallery Modal
@@ -837,36 +836,40 @@ function setupLightbox() {
 // ==============================================================================
 function renderFullGalleryModalGrid(galleryList) {
   const allGrid = document.getElementById('fullGalleryAllGrid');
-  const counterPill = document.getElementById('fullGalleryCounter');
   if (!allGrid) return;
 
-  const items = (galleryList && galleryList.length) ? galleryList : DEFAULT_AURA_CONFIG.gallery;
-  if (counterPill) {
-    counterPill.textContent = `Showing all ${items.length} Photos`;
+  const items = Array.isArray(galleryList) ? galleryList : DEFAULT_AURA_CONFIG.gallery;
+
+  allGrid.replaceChildren();
+  if (!items.length) {
+    const emptyMessage = document.createElement('p');
+    emptyMessage.className = 'gallery-empty-state';
+    emptyMessage.textContent = 'Gallery photos will be added soon.';
+    allGrid.appendChild(emptyMessage);
+    return;
   }
 
-  const isAuth = localStorage.getItem('aura_admin_logged_in') === 'true';
-
-  let html = '';
   items.forEach((item, index) => {
-    const isSpan2 = item.span === '2';
-    const spanClass = isSpan2 ? 'full-gallery-item-span2' : '';
-    const adminDelBtn = isAuth
-      ? `<button type="button" class="modal-admin-del-btn" onclick="event.stopPropagation(); if(confirm('Remove this photo from the gallery?')) deleteGalleryItem(${index});" title="Delete Photo (Admin)">&times;</button>`
-      : '';
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'full-gallery-item-card';
+    card.addEventListener('click', () => window.openLightbox(item.src));
 
-    html += `
-      <div class="full-gallery-item ${spanClass}" onclick="openLightbox('${item.src}')" style="position: relative;">
-        ${adminDelBtn}
-        <img src="${item.src}" alt="${item.title || 'Aura Photo ' + (index + 1)}" loading="lazy">
-        <div class="full-gallery-item-overlay">
-          <span class="full-gallery-item-title">${item.title || 'Aura Celebration'}</span>
-          <span class="full-gallery-item-zoom">🔍 Tap to Zoom</span>
-        </div>
-      </div>
-    `;
+    const image = document.createElement('img');
+    image.src = item.src;
+    image.alt = item.title || `Aura Photo ${index + 1}`;
+    image.loading = 'lazy';
+
+    const overlay = document.createElement('span');
+    overlay.className = 'full-gallery-item-overlay';
+    const title = document.createElement('span');
+    title.className = 'full-gallery-item-title';
+    title.textContent = item.title || 'Aura Celebration';
+    overlay.appendChild(title);
+
+    card.append(image, overlay);
+    allGrid.appendChild(card);
   });
-  allGrid.innerHTML = html;
 }
 
 function setupFullGalleryModal() {
@@ -1315,6 +1318,63 @@ document.addEventListener('DOMContentLoaded', () => {
             adminLoginError.textContent = 'Invalid credentials. If forgotten, click Reset Password below.';
             adminLoginError.style.display = 'block';
           }
+        }
+      });
+    }
+
+    const galleryUploadForm = document.getElementById('adminGalleryUploadForm');
+    if (galleryUploadForm) {
+      galleryUploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementById('adminGalleryFiles');
+        const titleInput = document.getElementById('adminGalleryTitle');
+        const status = document.getElementById('adminGalleryStatus');
+        const submitButton = galleryUploadForm.querySelector('button[type="submit"]');
+        const files = fileInput && fileInput.files ? Array.from(fileInput.files) : [];
+
+        if (!files.length) {
+          if (status) status.textContent = 'Choose one or more image files to upload.';
+          return;
+        }
+        if (files.some(file => !file.type.startsWith('image/'))) {
+          if (status) status.textContent = 'Only image files can be added to the gallery.';
+          return;
+        }
+
+        if (submitButton) submitButton.disabled = true;
+        if (status) status.textContent = `Preparing ${files.length} photo${files.length === 1 ? '' : 's'}...`;
+
+        try {
+          const compressedImages = await Promise.all(files.map(file => new Promise((resolve, reject) => {
+            compressImage(file, 1200, resolve, reject);
+          })));
+          const cfg = getSiteConfig();
+          const baseTitle = titleInput ? titleInput.value.trim() : '';
+          const newItems = compressedImages.map((src, index) => ({
+            src,
+            title: baseTitle
+              ? (files.length > 1 ? `${baseTitle} (${index + 1})` : baseTitle)
+              : files[index].name.replace(/\.[^.]+$/, ''),
+            span: '1'
+          }));
+
+          cfg.gallery = [...newItems, ...(Array.isArray(cfg.gallery) ? cfg.gallery : [])];
+          if (!saveSiteConfig(cfg)) {
+            if (status) status.textContent = 'The photos could not be saved. Remove some images and try again.';
+            return;
+          }
+
+          hydrateDOM(cfg);
+          renderAdminGalleryList(cfg.gallery);
+          fileInput.value = '';
+          if (titleInput) titleInput.value = '';
+          if (status) status.textContent = `Added ${newItems.length} photo${newItems.length === 1 ? '' : 's'}.`;
+          showAdminToast(`Added ${newItems.length} photo${newItems.length === 1 ? '' : 's'} to the gallery.`);
+        } catch (error) {
+          console.error('Could not add gallery photos:', error);
+          if (status) status.textContent = 'Could not process the selected photos. Please try different image files.';
+        } finally {
+          if (submitButton) submitButton.disabled = false;
         }
       });
     }
@@ -1912,7 +1972,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Admin Close Buttons
-    document.querySelectorAll('#btnAdminClose').forEach(btn => {
+    document.querySelectorAll('#btnAdminClose, #btnAdminLoginClose').forEach(btn => {
       btn.addEventListener('click', closeAdminPortal);
     });
   }
@@ -2186,54 +2246,47 @@ document.addEventListener('DOMContentLoaded', () => {
     const listContainer = document.getElementById('adminGalleryList');
     if (!listContainer) return;
 
-    const galleryItems = (items && Array.isArray(items) && items.length > 0)
-      ? items
-      : (DEFAULT_AURA_CONFIG.gallery || []);
+    const galleryItems = Array.isArray(items) ? items : [];
 
-    if (!galleryItems || !galleryItems.length) {
-      listContainer.innerHTML = '<p style="color: #999; font-size: 0.85rem; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 6px;">No images currently in gallery. Use the form below to add photos.</p>';
+    listContainer.replaceChildren();
+    if (!galleryItems.length) {
+      const emptyMessage = document.createElement('p');
+      emptyMessage.className = 'admin-gallery-empty';
+      emptyMessage.textContent = 'No photos in the gallery yet. Add photos above to get started.';
+      listContainer.appendChild(emptyMessage);
       return;
     }
 
-    let html = '';
-    galleryItems.forEach((item, idx) => {
-      const isHome = idx < 10;
-      const title = item.title || ('Gallery Image #' + (idx + 1));
-      const badge = isHome
-        ? `<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(74, 222, 128, 0.15); color: #4ADE80; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.72rem; border: 1px solid rgba(74, 222, 128, 0.3);">● Live on Homepage (#${idx + 1})</span>`
-        : `<span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(197, 160, 89, 0.15); color: #C5A059; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 0.72rem; border: 1px solid rgba(197, 160, 89, 0.3);">○ View Gallery Modal</span>`;
+    galleryItems.forEach((item, index) => {
+      const card = document.createElement('article');
+      card.className = 'admin-gallery-item-row';
 
-      html += `
-        <div class="admin-gallery-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: rgba(4, 15, 9, 0.85); border: 1px solid rgba(197, 160, 89, 0.25); border-radius: 8px; margin-bottom: 10px; gap: 12px; transition: border-color 0.2s ease;">
-          <div style="display: flex; flex-direction: column; gap: 4px; align-items: center; justify-content: center; flex-shrink: 0;">
-            <button type="button" class="btn-admin-reorder" onclick="moveGalleryItem(${idx}, -1)" ${idx === 0 ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''} title="Move Up (toward Homepage Top 10)">▲</button>
-            <button type="button" class="btn-admin-reorder" onclick="moveGalleryItem(${idx}, 1)" ${idx === galleryItems.length - 1 ? 'disabled style="opacity: 0.3; cursor: not-allowed;"' : ''} title="Move Down">▼</button>
-          </div>
-          <img src="${item.src}" class="admin-gallery-item-thumb" alt="thumb" style="width: 64px; height: 48px; object-fit: cover; border-radius: 6px; border: 1.5px solid rgba(197, 160, 89, 0.4); flex-shrink: 0;">
-          <div class="admin-gallery-item-details" style="flex: 1; min-width: 0;">
-            <div style="margin-bottom: 6px;">
-              <input type="text" value="${title}" placeholder="Photo caption" onchange="updateGalleryField(${idx}, 'title', this.value)" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(197,160,89,0.3); color: #fff; font-size: 0.82rem; padding: 4px 8px; border-radius: 4px; width: 100%;">
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              ${badge}
-              <select onchange="updateGalleryField(${idx}, 'span', this.value)" style="background: #040F09; color: #C5A059; border: 1px solid rgba(197,160,89,0.3); font-size: 0.72rem; padding: 2px 6px; border-radius: 4px;">
-                <option value="1" ${item.span === '1' || !item.span ? 'selected' : ''}>Standard Width (1 col)</option>
-                <option value="2" ${item.span === '2' ? 'selected' : ''}>Featured Wide (2 cols)</option>
-              </select>
-              <label class="admin-btn-secondary" style="font-size: 0.7rem; padding: 3px 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; border-radius: 4px;">
-                <span>Change Image</span>
-                <input type="file" accept="image/*" style="display: none;" onchange="uploadGalleryImage(${idx}, this)">
-              </label>
-            </div>
-          </div>
-          <button type="button" class="btn-admin-del" onclick="deleteGalleryItem(${idx})" title="Delete '${title}'" style="background: rgba(220, 53, 69, 0.25); border: 1px solid rgba(220, 53, 69, 0.6); color: #FFA0A0; padding: 7px 14px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-            Delete
-          </button>
-        </div>`;
+      const image = document.createElement('img');
+      image.className = 'admin-gallery-item-thumb';
+      image.src = item.src;
+      image.alt = item.title || `Gallery photo ${index + 1}`;
+      image.loading = 'lazy';
+
+      const title = document.createElement('p');
+      title.className = 'admin-gallery-item-title';
+      title.textContent = item.title || `Gallery photo ${index + 1}`;
+
+      const removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'admin-gallery-delete';
+      removeButton.textContent = 'Delete';
+      removeButton.setAttribute('aria-label', `Delete ${title.textContent}`);
+      removeButton.addEventListener('click', () => {
+        if (window.confirm(`Delete "${title.textContent}" from the gallery?`)) {
+          window.deleteGalleryItem(index);
+        }
+      });
+
+      card.append(image, title, removeButton);
+      listContainer.appendChild(card);
     });
-    listContainer.innerHTML = html;
   }
+  window.renderAdminGalleryList = renderAdminGalleryList;
 
   // Toast alert function
   function showAdminToast(msg) {

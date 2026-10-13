@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aura Convention & Lawns | Luxury Wedding Venue & Banquets in Gachibowli, Hyderabad</title>
   <meta name="description" content="Aura Convention & Lawns in Telecom Nagar Extension, Gachibowli, Hyderabad. Premium pillarless convention hall, lush outdoor lawns, in-house catering, and world-class amenities for weddings and corporate events.">
-  <link rel="stylesheet" href="css/style.css?v=51">
+  <link rel="stylesheet" href="css/style.css?v=53">
   <link rel="icon" type="image/jpeg" href="assets/images/aura_shield_emblem.jpg">
   <!-- EmailJS SDK for direct inquiry dispatch -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -289,47 +289,7 @@
       </div>
 
       <div class="gallery-grid-ref" id="auraGalleryGrid">
-        <!-- Row 1: 4 images (New Grand Entrance, LED Stage, Twilight Lawn Setup, Artisanal Salad Counter) -->
-        <div class="gallery-row-top">
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_grand_entrance_arch_night.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_grand_entrance_arch_night.jpg" alt="Illuminated Grand Entry Gate & Welcome Promenade">
-          </div>
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_stage_led_backdrop.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_stage_led_backdrop.jpg" alt="Grand Production Stage & LED Visual Backdrop">
-          </div>
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_evening_lawn_gala_setup.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_evening_lawn_gala_setup.jpg" alt="Twilight Lawn Banquet & LED Stage Setting">
-          </div>
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_artisanal_salad_counter.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_artisanal_salad_counter.jpg" alt="Artisanal Gourmet Salad & Live Cold Display by KateringKing">
-          </div>
-        </div>
-
-        <!-- Row 2: 4 images (Lush Lawns Seating, Live Fruit Counter, Artisanal Desserts, Royal Banquet Feast) -->
-        <div class="gallery-row-top">
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_lawns_banquet_setup.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_lawns_banquet_setup.jpg" alt="Lush Sprawling Lawns & Royal Banquet Seating">
-          </div>
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_live_fruit_counter.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_live_fruit_counter.jpg" alt="Exquisite Live Fruit Counter & Gourmet Display">
-          </div>
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_artisanal_dessert_display.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_artisanal_dessert_display.jpg" alt="Artisanal Dessert & Pastry Showcase by KateringKing">
-          </div>
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_royal_buffet_spread.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_royal_buffet_spread.jpg" alt="Royal Banquet Feast by KateringKing">
-          </div>
-        </div>
-
-        <!-- Row 3: 2 wide images (Spacious Canopy Dining & Valet Parking) -->
-        <div class="gallery-row-bottom">
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_canopy_buffet_hall.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_canopy_buffet_hall.jpg" alt="Spacious Canopy Dining & Grand Buffet Hall">
-          </div>
-          <div class="gallery-thumb" onclick="openLightbox('assets/images/aura_drone_aerial_parking.jpg')" style="cursor: pointer;">
-            <img src="assets/images/aura_drone_aerial_parking.jpg" alt="Expansive 200+ Inside Valet Parking Grounds">
-          </div>
-        </div>
+        <p class="gallery-empty-state">Loading gallery photos...</p>
       </div>
 
       <div class="gallery-footer" style="display: flex; justify-content: center; align-items: center; gap: 14px; flex-wrap: wrap;">
@@ -607,6 +567,73 @@
     </a>
   </div>
 
+  <!-- Full gallery modal -->
+  <div class="aura-full-gallery-modal" id="auraFullGalleryModal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="fullGalleryTitle">
+    <div class="aura-full-gallery-backdrop"></div>
+    <div class="aura-full-gallery-content">
+      <button type="button" class="aura-full-gallery-close" id="btnFullGalleryClose" aria-label="Close gallery">&times;</button>
+      <header class="full-gallery-modal-header">
+        <span class="section-tag">AURA MOMENTS</span>
+        <h2 class="full-gallery-modal-title" id="fullGalleryTitle">Photo Gallery</h2>
+        <p class="full-gallery-modal-subtitle">Explore celebrations, events, and unforgettable moments at Aura.</p>
+      </header>
+      <div class="full-gallery-all-grid" id="fullGalleryAllGrid"></div>
+    </div>
+  </div>
+
+  <!-- Gallery admin portal, opened at /#admin -->
+  <div class="aura-admin-portal" id="auraAdminPortal" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="adminPortalTitle">
+    <section class="aura-admin-login-card" id="adminLoginCard">
+      <button type="button" class="admin-portal-close admin-login-close" id="btnAdminLoginClose" aria-label="Close admin">&times;</button>
+      <img class="admin-login-logo" src="assets/images/aura_shield_emblem.jpg" alt="">
+      <h1 class="admin-login-title" id="adminPortalTitle">Aura Gallery Admin</h1>
+      <p class="admin-login-subtitle">Sign in to manage gallery photos.</p>
+      <form id="adminLoginForm">
+        <div class="admin-form-group">
+          <label for="adminUser">Username</label>
+          <input id="adminUser" name="username" type="text" autocomplete="username" required>
+        </div>
+        <div class="admin-form-group">
+          <label for="adminPass">Password</label>
+          <input id="adminPass" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <p class="admin-login-error" id="adminLoginError" style="display: none;" role="alert"></p>
+        <button type="submit" class="btn btn-primary admin-portal-submit">Sign in</button>
+      </form>
+    </section>
+
+    <section class="aura-admin-dashboard" id="adminDashboard" style="display: none;" aria-labelledby="adminDashboardTitle">
+      <header class="admin-gallery-header">
+        <div>
+          <span class="section-tag">CONTENT MANAGER</span>
+          <h2 class="admin-dashboard-title" id="adminDashboardTitle">Gallery Photos</h2>
+          <p class="admin-gallery-note">Photos are saved in this browser and shown in the public gallery on this device.</p>
+        </div>
+        <div class="admin-gallery-actions">
+          <button type="button" class="btn btn-outline-gold" id="btnAdminLogout">Log out</button>
+          <button type="button" class="admin-portal-close" id="btnAdminClose" aria-label="Close admin">&times;</button>
+        </div>
+      </header>
+      <div class="admin-dash-body">
+        <form class="admin-gallery-upload" id="adminGalleryUploadForm">
+          <div class="admin-gallery-field">
+            <label class="admin-gallery-file-label" for="adminGalleryFiles">Add photos</label>
+            <input id="adminGalleryFiles" name="photos" type="file" accept="image/*" multiple>
+          </div>
+          <div class="admin-gallery-field">
+            <label class="admin-gallery-file-label" for="adminGalleryTitle">Optional caption</label>
+            <input id="adminGalleryTitle" name="caption" type="text" maxlength="100" placeholder="Use each filename when left blank">
+          </div>
+          <p class="admin-gallery-note">Images are compressed before saving. Browser storage is limited; large uploads may need to be added in smaller batches.</p>
+          <button type="submit" class="btn btn-primary">Add to gallery</button>
+          <p class="admin-gallery-status" id="adminGalleryStatus" role="status" aria-live="polite"></p>
+        </form>
+        <h3 class="admin-gallery-list-heading">Current photos</h3>
+        <div class="admin-gallery-list" id="adminGalleryList"></div>
+      </div>
+    </section>
+  </div>
+
   <!-- PROPER FULLSCREEN LIGHTBOX (Hidden by default, zero broken icon) -->
   <div class="lightbox-modal" id="lightboxModal" style="display: none;">
     <div class="lightbox-backdrop"></div>
@@ -616,8 +643,6 @@
     </div>
   </div>
 
-  // secret admin portal
-
-  <script src="js/main.js?v=80"></script>
+  <script src="js/main.js?v=81"></script>
 </body>
 </html>
